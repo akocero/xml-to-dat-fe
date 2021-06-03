@@ -9,6 +9,7 @@
 </template>
 
 <style lang="scss">
-@import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
-@import '~admin-lte/dist/css/adminlte.min.css';
+@import "~admin-lte/plugins/fontawesome-free/css/all.min.css";
+@import "~admin-lte/dist/css/adminlte.min.css";
+@import "./sass/app.scss";
 </style>

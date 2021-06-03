@@ -1,17 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 import Login from '../views/login/Login'
 import AdminLTE from '../components/AdminLTE'
 import Dashboard from '../views/Dashboard'
-
+import Boiler from '../views/boiler/Boiler.vue'
+import CreateBoiler from '../views/boiler/Create.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/login',
     name: 'login',
     component: Login
   },
@@ -24,17 +19,19 @@ const routes = [
         path: 'dashboard',
         name: 'dashboard',
         component: Dashboard
-      }, 
+      },
+      {
+        path: 'boiler',
+        name: 'boiler',
+        component: Boiler
+      },
+      {
+        path: 'create_boiler',
+        name: 'create-boiler',
+        component: CreateBoiler
+      }
     ]
   },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
 ]
 
 const router = createRouter({
