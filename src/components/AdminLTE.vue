@@ -3,18 +3,20 @@
   <Sidebar></Sidebar>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-      <!-- Main content -->
-      <div class="content">
+    <ContentHeader />
+    <!-- Main content -->
+    <div class="content">
       <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-12">
-              <router-view></router-view>
-            </div>
+        <div class="row">
+          <div class="col-md-12">
+            <router-view></router-view>
           </div>
-          <!-- /.row -->
-      </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.row -->
       </div>
-      <!-- /.content -->
+      <!-- /.container-fluid -->
+    </div>
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <ControlSidebar></ControlSidebar>
@@ -22,17 +24,19 @@
 </template>
 
 <script>
-import Navbar from './layouts/Navbar'
-import Sidebar from './layouts/Sidebar'
-import ControlSidebar from './layouts/ControlSidebar'
-import Footer from './layouts/Footer'
+import Navbar from "./layouts/Navbar";
+import Sidebar from "./layouts/Sidebar";
+import ControlSidebar from "./layouts/ControlSidebar";
+import Footer from "./layouts/Footer";
+import ContentHeader from "./layouts/ContentHeader";
 export default {
-  name: 'AdminLTE',
+  name: "AdminLTE",
   components: {
     Navbar,
     Sidebar,
     ControlSidebar,
-    Footer
-  }
-}
+    ContentHeader,
+    Footer,
+  },
+};
 </script>
