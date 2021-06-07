@@ -2,7 +2,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="" class="brand-link text-sm">
-      <span class="brand-text font-weight-light pl-2">Brgy Sta. Maria</span>
+      <span class="brand-text font-weight-light pl-2">Payroll Ent Cloud</span>
     </a>
 
     <!-- Sidebar -->
