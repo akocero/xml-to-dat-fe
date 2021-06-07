@@ -55,14 +55,47 @@
               >We'll never share your email with anyone else.</small
             >
           </div>
+          <input type="file" @change="onFileChange">
+          
         </div>
       </form>
+      <button @click="onUpload">Upload</button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import axios from 'axios';
+export default {
+  name: 'CreateBoiler',
+  data() {
+    return {
+      selectedFile: null
+    }
+  },
+  methods: {
+    onFileChange(e) {
+      this.selectedFile = e.target.files[0];
+      
+    },
+    onUpload() {
+      const fd = new FormData();
+      fd.append("code", "John");
+      // fd.append("name", "John");
+      fd.append("address", "John");
+      fd.append("vat_reg", "MSSC2022");
+      fd.append("classification", "John");
+      fd.append("tel_no", "MSSC2022");
+      // axios.common.headers['Accept'] = 'application/json';
+      fd.append('image_path', this.selectedFile);
+      axios.post('https://payroll-ent-cloud.herokuapp.com/api/setupcompany', fd)
+      .then(res => console.log(res))
+      .catch(err => console.log(err.response.data));
+
+      console.log(fd);
+    }
+  }
+};
 </script>
 
 <style>

@@ -26,7 +26,7 @@ const routes = [
         component: Boiler
       },
       {
-        path: 'create_boiler',
+        path: 'create-boiler',
         name: 'create-boiler',
         component: CreateBoiler
       }

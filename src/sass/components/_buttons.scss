@@ -2,22 +2,22 @@
     
     &-custom-success {
         border-radius: 3rem;
-        border: 1px solid #071b53 !important;
+        border: 1px solid #1942b1 !important;
         transition: all .3s ease;
-        box-shadow: 0px 5px 10px rgba(#071b53, 0.4) !important;
-        background-color: #17317a;
+        box-shadow: 0px 5px 10px rgba(#244dbb, 0.4) !important;
+        background-color: #244dbb;
         color: white;
 
         &:hover {
             transform: translateY(-2px);
             color: white;
-            background-color: darken(#071b53, 2);
-            box-shadow: 0px 15px 20px rgba(#071b53, 0.4) !important;
+            background-color: darken(#244dbb, 2);
+            box-shadow: 0px 15px 20px rgba(#244dbb, 0.4) !important;
         }
 
         &:active {
             transform: translateY(0);
-            box-shadow: 0px 5px 10px rgba(#071b53, 0.4) !important;
+            box-shadow: 0px 5px 10px rgba(#244dbb, 0.4) !important;
         }
     }
 
