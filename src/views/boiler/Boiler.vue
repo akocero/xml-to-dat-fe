@@ -27,6 +27,7 @@
 </div>
   <div class="card boiler shadow-md">
     <div class="card-body pt-4">
+
       <div class="row mb-4">
         <div
           class="col-md-12 d-flex justify-content-between align-items-center"
@@ -37,7 +38,8 @@
           </button>
         </div>
       </div>
-      <div class="row">
+
+      <div class="row" v-if="data?.data?.length">
         <div class="col-12">
           <div class="table">
             <table>
@@ -51,7 +53,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in data" :key="item.id">
+                <tr v-for="item in data.data" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.full_name }}</td>
                   <td>{{ item.login_id }}</td>
@@ -71,30 +73,10 @@
             </table>
           </div>
         </div>
+        <Pagination :data="data" @paginate="paginate($event)"/>
       </div>
-
-      <div class="row">
-        <div class="col-12">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      <div v-else>
+        <Spinner />
       </div>
     </div>
   </div>
@@ -102,18 +84,27 @@
 
 <script>
 import { ref } from "vue";
-import getData from "../../composables/getData";
+// import getData from "../../composables/getData";
+import useFetch from '../../composables/useFetch'
 // // component imports
 // import PostList from '../components/PostList.vue'
 import Spinner from "../../components/Spinner.vue";
+import Pagination from "../../components/Pagination.vue";
 export default {
   name: "Boiler",
-  components: { Spinner },
+  components: { Spinner, Pagination },
   setup() {
-    const { data, error, load } = getData();
-    load();
+    const { data, error, fetch } = useFetch();
 
-    return { data, error };
+    fetch('https://payroll-ent-cloud.herokuapp.com/api/payrolluser?page=1');
+
+    const paginate = (url) => {
+     fetch(url);
+    }
+
+    
+
+    return { data, error, paginate };
   },
 };
 </script>
