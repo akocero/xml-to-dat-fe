@@ -1,10 +1,10 @@
 <template>
   <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLabel">New User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -33,7 +33,7 @@
           class="col-md-12 d-flex justify-content-between align-items-center"
         >
           <h4 class="h4 mb-0">User List</h4>
-          <button class="btn btn-custom-success float-right" data-toggle="modal" data-target="#exampleModal">
+          <button class="btn btn-custom-primary float-right" data-toggle="modal" data-target="#exampleModal">
             Create New User
           </button>
         </div>
@@ -84,25 +84,21 @@
 
 <script>
 import { ref } from "vue";
-// import getData from "../../composables/getData";
 import useFetch from '../../composables/useFetch'
-// // component imports
-// import PostList from '../components/PostList.vue'
 import Spinner from "../../components/Spinner.vue";
 import Pagination from "../../components/Pagination.vue";
+
 export default {
   name: "Boiler",
   components: { Spinner, Pagination },
   setup() {
-    const { data, error, fetch } = useFetch();
+    const { data, error, fetch, isPending } = useFetch();
 
-    fetch('https://payroll-ent-cloud.herokuapp.com/api/payrolluser?page=1');
+    fetch('payrolluser?page=1');
 
     const paginate = (url) => {
      fetch(url);
     }
-
-    
 
     return { data, error, paginate };
   },

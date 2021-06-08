@@ -1,6 +1,6 @@
 .btn {
     
-    &-custom-success {
+    &-custom-primary {
         border-radius: 3rem;
         border: 1px solid #1942b1 !important;
         transition: all .3s ease;
@@ -21,5 +21,35 @@
         }
     }
 
+    &-custom-success {
+        border-radius: 3rem;
+        min-width: 8rem;
+        border: 1px solid #47CA98 !important;
+        transition: all .3s ease;
+        box-shadow: 0px 5px 10px rgba(#47CA98, 0.4) !important;
+        background-color: #47CA98;
+        color: white;
+
+        &:hover {
+            transform: translateY(-2px);
+            color: white;
+            background-color: darken(#47CA98, 2);
+            box-shadow: 0px 15px 20px rgba(#47CA98, 0.4) !important;
+        }
+
+        &:active {
+            transform: translateY(0);
+            box-shadow: 0px 5px 10px rgba(#47CA98, 0.4) !important;
+        }
+    }
     
 }
+
+// .page-item.disabled .page-link {
+//     color: white;
+//     pointer-events: none;
+//     cursor: auto;
+//     background-color: #6c757d;
+//     border-color: #6c757d;
+//     text-shadow: none;
+// }

@@ -1,26 +1,38 @@
 import { ref } from 'vue'
-import axios from 'axios'
+import axios from '../axios/axios-instance'
 
-const data = ref([])
+const response = ref(null)
 const error = ref(null)
+const isPending = ref(false)
 
-const fetch = (url, payload) => {
-
+const create = (url, payload) => {
+    isPending.value = true
     axios.post(url, payload)
-        .then(function (response) {
+        .then(res => {
             // handle success
-            data.value = response.data.data;
-            console.log(response.data.data);
+            response.value = res.data;
+            isPending.value = false
+            error.value = null
+            console.log(res.data);
         })
-        .catch(function (error) {
+        .catch(err => {
+            isPending.value = false
+            // response.value = [];
             // handle error
-            console.log(error);
+            if(err.message.includes('422')) {
+                error.value = err.response.data
+                console.log(err.response.data)
+            }else{
+                error.value = error.message
+            }
+            
+            
         });
 }
 
 
 const useCreate = () => {
-    return { data, error, fetch }
+    return { response, error, create, isPending }
 }
 
 export default useCreate

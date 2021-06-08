@@ -33,6 +33,23 @@ label {
 }
 
 .form-control {
-    border-radius: 3rem !important;
+    // border-radius: 3rem !important;
     border: 1px solid #dbdbdb;
+}
+
+
+.multi-select {
+    overflow-y: auto;
+    max-height: 50vh;
+    padding-right: 1rem;
+    &-card {
+        padding: 1rem;
+        border: 1px dashed #dbdbdb;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+
+        p {
+            margin-bottom: 0;
+        }
+    }
 }
