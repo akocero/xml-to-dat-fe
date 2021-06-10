@@ -45,6 +45,7 @@
               <p>
                 Setup
                 <i class="right fas fa-angle-left"></i>
+                <!-- <i v-html="chevronLeft" class="right fe"></i> -->
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -208,6 +209,11 @@ export default {
   },
   methods: {},
   computed: {
+    chevronLeft: function () {
+      return feather.icons['chevron-left'].toSvg({
+        'width' : 16
+      })
+    },
     tool: function () {
       return feather.icons['tool'].toSvg({
         'width' : 20
