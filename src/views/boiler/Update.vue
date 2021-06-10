@@ -1,10 +1,11 @@
 <template>
   <Alert v-if="error" :status="'error'" :message="error.message" />
+  <Alert v-if="response" :status="'success'" :message="'User Updated'" />
   <div class="card boiler shadow-md">
     <div class="card-body">
       <div class="row mb-3">
         <div class="col-md-12 d-flex justify-content-between align-items-center">
-          <h5 class="h5 mb-0">New User</h5>
+          <h4 class="h4 mb-0">Update User</h4>
         </div>
       </div>
 
@@ -12,7 +13,7 @@
 
       <form action="" @submit.prevent="add">
 
-        <div class="row">
+        <div class="row" v-if="post">
           <div class="col-md-7">
             <div class="row pr-3">
                 <div class="form-group col-5">
@@ -23,8 +24,8 @@
                   :class="[error && error.errors.employee_id && 'is-invalid']"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
-                  placeholder="Ex. 1234567"
-                  v-model="employee_id"
+                  placeholder="Enter email"
+                  v-model="post.employee_id"
                 />
                 <small v-if="error && error.errors.employee_id" id="emailHelp" class="form-text text-danger">
                   {{ error.errors.employee_id[0] }}
@@ -40,8 +41,8 @@
                   :class="[error && error.errors.full_name && 'is-invalid']"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
-                  placeholder="Ex. John Doe"
-                  v-model="full_name"
+                  placeholder="Enter email"
+                  v-model="post.full_name"
                 />
                 <small v-if="error && error.errors.full_name" id="emailHelp" class="form-text text-danger">
                   {{ error.errors.full_name[0] }}
@@ -56,8 +57,8 @@
                   :class="[error && error.errors.login_id && 'is-invalid']"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
-                  placeholder="Ex. johndoe@example.com "
-                  v-model="login_id"
+                  placeholder="Enter email "
+                  v-model="post.login_id"
                 />
                 <small v-if="error && error.errors.login_id" id="emailHelp" class="form-text text-danger">
                   {{ error.errors.login_id[0] }}
@@ -71,7 +72,7 @@
                 id="" 
                 class="form-control" 
                 :class="[error && error.errors.login_type && 'is-invalid']"
-                v-model="login_type"
+                v-model="post.login_type"
                 >
                   <option value="">Choose ...</option>
                   <option value="employee">Employee</option>
@@ -124,9 +125,12 @@
           </div>
 
         </div>
+        <div class="row" v-else>
+            <Spinner />
+        </div>
         <hr>
         <div class="row col-12">
-          <button class="btn btn-custom-success" v-if="!isPending">Save</button>
+          <button class="btn btn-custom-success" v-if="!isPending">Save Changes</button>
           <button class="btn btn-custom-success" v-if="isPending" disabled>Loading ...</button>
 
         </div>
@@ -140,18 +144,17 @@
 <script>
 // import axios from 'axios';
 import { ref } from 'vue';
-import useCreate from '../../composables/useCreate'
+import useUpdate from '../../composables/useUpdate'
+import getItem from '../../composables/getItem'
 import Alert from '../../components/Alert'
+import { useRoute } from 'vue-router'
+import Spinner from "../../components/Spinner.vue";
 export default {
-  name: 'CreateBoiler',
+  name: 'UpdateBoiler',
   components: {
-    Alert
+    Alert,
+    Spinner,
   },
-  // data() {
-  //   return {
-  //     selectedFile: null
-  //   }
-  // },
   // methods: {
   //   onFileChange(e) {
   //     this.selectedFile = e.target.files[0];
@@ -175,35 +178,32 @@ export default {
   //   }
   // }
   setup() {
-
-    const { response, error, create, isPending } = useCreate();
-
-
-    const full_name = ref('');
-    const login_id = ref('');
-    const login_type = ref('');
-    const employee_id = ref('');
-
-    const data = ref(null)
+    const route = useRoute();
+    const { response, error, update, isPending } = useUpdate();
+    const { post, error: errorData, load } = getItem(route.params.id);
+    
+    load()
 
     const add = async () => {
-      data.value = {
-        full_name: full_name.value,
-        login_id: login_id.value,
-        login_type: login_type.value,
-        employee_id: employee_id.value,
+      const data = {
+        full_name: post.value.full_name,
+        login_id: post.value.login_id,
+        login_type: post.value.login_type,
+        employee_id: post.value.employee_id,
         active: 1,
         password: 'password',
       }
 
-      await create('payrolluser', data.value);
+        console.log(data);
+        await update(`payrolluser/${route.params.id}`, data);
 
       if(!error.value){
-        console.log('Created')
+        console.log('Updated')
       }
+    
     }
 
-    return  { add, full_name, login_id, login_type, employee_id, error, isPending, response }
+    return  { add, error, isPending, response, post }
   }
 };
 </script>

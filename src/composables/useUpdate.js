@@ -5,11 +5,11 @@ const response = ref(null)
 const error = ref(null)
 const isPending = ref(false)
 
-const create = async (url, payload) => {
+const update = async (url, payload) => {
     isPending.value = true
 
     try {
-        const res = await axios.post(url, payload);
+        const res = await axios.patch(url, payload);
         error.value = null
         response.value = res.data
         isPending.value = false
@@ -17,17 +17,19 @@ const create = async (url, payload) => {
     } catch (err) {
         isPending.value = false
         response.value = null
-        if(err.response.status === 422){
+        console.log(err.response.data)
+        if (err.response.status === 422) {
             error.value = err.response.data
-        }else{
+        } else {
             error.value = err.message
         }
-    } 
-    
+    }
+
 }
 
-const useCreate = () => {
-    return { response, error, create, isPending }
+
+const useUpdate = () => {
+    return { response, error, update, isPending }
 }
 
-export default useCreate
+export default useUpdate

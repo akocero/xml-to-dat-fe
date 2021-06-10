@@ -8,5 +8,4 @@ createApp(App).use(store).use(router).mount('#app')
 window.$ = window.jQuery = require('jquery');
 require('bootstrap');
 require('admin-lte');
-const feather = require('feather-icons');
 

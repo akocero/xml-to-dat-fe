@@ -1,24 +1,23 @@
 import { ref } from 'vue'
+import axios from '../axios/axios-instance'
 
-const getPost = (id) => {
+const getItem = (id) => {
 
     const post = ref(null)
     const error = ref(null)
-
     const load = async () => {
         try {
-            let data = await fetch('http://localhost:3000/posts/' + id)
-            if (!data.ok) {
-                throw Error('That post does not exist')
-            }
-            post.value = await data.json()
+           const res = await axios.get(`/payrolluser/${id}`);
+            console.log(res.data)
+            post.value = res.data
+           return res.data
         }
         catch (err) {
-            error.value = err.message
+            
         }
     }
 
     return { post, error, load }
 }
 
-export default getPost
+export default getItem
