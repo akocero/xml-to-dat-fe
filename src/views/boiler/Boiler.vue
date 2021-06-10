@@ -1,30 +1,4 @@
 <template>
-  <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New User</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
   <div class="card boiler shadow-md">
     <div class="card-body pt-4">
 
@@ -33,40 +7,39 @@
           class="col-md-12 d-flex justify-content-between align-items-center"
         >
           <h4 class="h4 mb-0">User List</h4>
-          <button class="btn btn-custom-primary float-right" data-toggle="modal" data-target="#exampleModal">
-            Create New User
-          </button>
+          <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link>
         </div>
       </div>
 
       <div class="row" v-if="data?.data?.length">
         <div class="col-12">
-          <div class="table">
-            <table>
+          <div class="table-responsive">
+            <table class="table">
               <thead>
-                <tr class="table100-head">
-                  <th>ID</th>
+                <tr class="text-secondary">
+                  <th class="text-center">ID</th>
                   <th>Name</th>
                   <th>Email</th>
-                  <th>Role</th>
-                  <th>Actions</th>
+                  <th class="text-center">Role</th>
+                  <th width="12%">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="item in data.data" :key="item.id">
-                  <td>{{ item.id }}</td>
+                  <td class="text-center">{{ item.id }}</td>
                   <td>{{ item.full_name }}</td>
                   <td>{{ item.login_id }}</td>
-                  <td>
-                    <span class="custom-badge" :class="[item.login_type === 'Admin' ? 'custom-badge-success' : 'custom-badge-warning']">&#9679;  {{ item.login_type }}</span>
+                  <td class="text-center">
+                    <span class="custom-badge" :class="[item.login_type === 'Admin' ? 'custom-badge-success' : 'custom-badge-warning']">  {{ item.login_type }}</span>
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-transparent">
+                    <router-link :to="{name: 'update-boiler', params: {id: item.id }}" class="btn btn-sm btn-transparent">
                       <i class="far fa-folder-open text-secondary"></i>
-                    </button>
-                    <button class="btn btn-sm btn-transparent">
+                    </router-link>
+                    <!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
+                    <router-link :to="{name: 'update-boiler', params: {id: item.id }}" class="btn btn-sm btn-transparent">
                       <i class="far fa-edit text-secondary"></i>
-                    </button>
+                    </router-link>
                   </td>
                 </tr>
               </tbody>
@@ -84,6 +57,7 @@
 
 <script>
 import { ref } from "vue";
+// import { router-link } from "vue-router"
 import useFetch from '../../composables/useFetch'
 import Spinner from "../../components/Spinner.vue";
 import Pagination from "../../components/Pagination.vue";
@@ -96,8 +70,8 @@ export default {
 
     fetch('payrolluser?page=1');
 
-    const paginate = (url) => {
-     fetch(url);
+    const paginate = async (url) => {
+     await fetch(url);
     }
 
     return { data, error, paginate };

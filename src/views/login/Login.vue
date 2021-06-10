@@ -1,6 +1,9 @@
 <template>
+<Alert v-if="error" :status="'error'" :message="error" />
 <div class="login-wrapper d-flex justify-content-center align-items-center">
+    
     <div class="container">
+    
     <div class="card login-card">
         <div class="card-body login-body">
         <div class="row h-100">
@@ -32,11 +35,9 @@
                 <div class="custom-from-group">
                     <input
                     type="email"
-                    :class="has_error ? 'input-custom has-error' : 'input-custom'"
                     id="input_login_email"
                     placeholder="Email"
-                    v-model="email"
-                    @keyup.enter="loginProcess"
+                    v-model="login_id"
                     />
                     <i class="fas fa-envelope"></i>
                 </div>
@@ -45,11 +46,9 @@
                 <div class="custom-from-group">
                     <input
                     type="password"
-                    :class="has_error ? 'input-custom has-error' : 'input-custom'"
                     id="input_login_password"
                     placeholder="Password"
                     v-model="password"
-                    @keyup.enter="loginProcess"
                     />
                     <i class="fas fa-lock"></i>
                 </div>
@@ -65,19 +64,16 @@
                 </div>
 
                 <div class="text-center mt-3">
-                <button 
-                v-if="$store.state.loading"
+                <!-- <button 
                 type="button"
                 class="custom-btn"
                 id="button_login"
-                disabled><Spinner/></button>
+                disabled>Loading ...</button> -->
                 <button 
-                v-else
-                type="button"
-                class="custom-btn"
-                id="button_login"
                 @click="loginProcess"
-                :disabled="redirecting">{{redirecting ? 'Redirecting..' : 'Log In'}}</button>
+                type="button"
+                class="custom-btn"
+                id="button_login">Login</button>
                 </div>
             </form>
             </div>
@@ -121,28 +117,54 @@
         </div>
     </div>
     </div>
-    <div v-if="$store.state.alert_triggered">
+    <!-- <div v-if="$store.state.alert_triggered">
         <Alert :message="$store.state.alert_message" :type="$store.state.alert_type"/>
-    </div>
+    </div> -->
 </div>
 
 </template>
 
 <script>
-import axios from 'axios'
+import { ref, computed } from 'vue';
+import useLogin from '../../composables/useLogin'
+import Alert from '../../components/Alert'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+
 export default {
     name: 'Login',
-    data() {
+    components: {
+        Alert,
     },
+    setup() {
 
-    computed: {
-        
-    },
-    
-    methods:
-    {
-        
+    const { response, error, login, isPending } = useLogin();
+
+    const login_id = ref('');
+    const password = ref('');
+    const router = useRouter();
+    const store = useStore();
+
+    const loginProcess = async () => {
+      const data = {
+        LoginID: login_id.value,
+        EmployeePassword: password.value,
+      }
+
+      await login('payrolluser/auth', data)
+      if(error.value){
+          console.log(error.value);
+      }else{
+        console.log(response.value.login_id)
+        store.commit('setUser', response.value.login_id)
+        //   router.push({path: '/app/dashboard'} )
+        window.location = 'http://localhost:8080/app/dashboard';
+      }
+      
     }
+
+    return  { loginProcess,  login_id, password, isPending, response, error }
+  }
 }
 
 </script>

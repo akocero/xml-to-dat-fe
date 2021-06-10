@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/login/Login'
 import AdminLTE from '../components/AdminLTE'
-import Dashboard from '../views/Dashboard'
-import Boiler from '../views/boiler/Boiler.vue'
-import CreateBoiler from '../views/boiler/Create.vue'
 const routes = [
   {
     path: '/',
@@ -18,17 +15,22 @@ const routes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: Dashboard
+        component: import('@/views/Dashboard')
       },
       {
         path: 'boiler',
         name: 'boiler',
-        component: Boiler
+        component: import('@/views/boiler/Boiler.vue')
       },
       {
         path: 'create-boiler',
         name: 'create-boiler',
-        component: CreateBoiler
+        component: import('@/views/boiler/Create.vue')
+      },
+      {
+        path: 'update-boiler/:id',
+        name: 'update-boiler',
+        component: import('@/views/boiler/Update.vue')
       }
     ]
   },
