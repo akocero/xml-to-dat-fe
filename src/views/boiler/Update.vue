@@ -1,6 +1,6 @@
 <template>
   <Alert v-if="error" :status="'error'" :message="error.message" />
-  <Alert v-if="response" :status="'success'" :message="'User Updated'" />
+  <Alert v-if="response" :status="'info'" :message="'User Updated'" />
   <div class="card boiler shadow-md">
     <div class="card-body">
       <div class="row mb-3">
