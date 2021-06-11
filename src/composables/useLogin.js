@@ -13,14 +13,17 @@ const login = async (url, payload) => {
     try {
         const res = await axios.post(url, payload);
         if(res.data === ''){
+            isPending.value = false
             error.value = 'Invalid Inputs'
         }else{
+            isPending.value = false
             error.value = null
             response.value = res.data
         }
 
         return res.data
     } catch (err) {
+        isPending.value = false
         console.log('error', err.message)
     }
     

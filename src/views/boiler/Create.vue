@@ -10,7 +10,7 @@
 
       <hr />
 
-      <form action="" @submit.prevent="add">
+      <form @submit.prevent="add" id="form_create_user">
 
         <div class="row">
           <div class="col-md-7">
@@ -126,7 +126,7 @@
         </div>
         <hr>
         <div class="row col-12">
-          <button class="btn btn-custom-success" v-if="!isPending">Save</button>
+          <input type="submit" class="btn btn-custom-success" v-if="!isPending" value="Save">
           <button class="btn btn-custom-success" v-if="isPending" disabled>Loading ...</button>
 
         </div>
@@ -184,10 +184,8 @@ export default {
     const login_type = ref('');
     const employee_id = ref('');
 
-    const data = ref(null)
-
     const add = async () => {
-      data.value = {
+      const data = {
         full_name: full_name.value,
         login_id: login_id.value,
         login_type: login_type.value,
@@ -196,7 +194,7 @@ export default {
         password: 'password',
       }
 
-      await create('payrolluser', data.value);
+      await create('payrolluser', data);
 
       if(!error.value){
         console.log('Created')
