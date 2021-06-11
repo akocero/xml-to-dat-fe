@@ -23,7 +23,7 @@
             v-if="forgot_password"
             class="col-md-6 p-4 right-col text-left d-flex justify-content-center align-items-center"
             >
-            <form>
+            <form @submit.prevent="loginProcess">
                 <h3 for="mb-4">Welcome,</h3>
                 <p for="" class="mb-4"
                 >Use your company email to sign in to your account.</p
@@ -70,8 +70,7 @@
                 id="button_login"
                 disabled>Loading ...</button> -->
                 <button 
-                @click="loginProcess"
-                type="button"
+                type="submit"
                 class="custom-btn"
                 id="button_login">Login</button>
                 </div>
@@ -117,15 +116,13 @@
         </div>
     </div>
     </div>
-    <!-- <div v-if="$store.state.alert_triggered">
-        <Alert :message="$store.state.alert_message" :type="$store.state.alert_type"/>
-    </div> -->
+
 </div>
 
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import useLogin from '../../composables/useLogin'
 import Alert from '../../components/Alert'
 import { useRouter } from 'vue-router'

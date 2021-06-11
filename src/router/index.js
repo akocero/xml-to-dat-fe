@@ -8,6 +8,11 @@ const routes = [
     component: Login
   },
   {
+    path: '/auth',
+    name: 'auth',
+    component: import('@/views/login/Auth')
+  },
+  {
     path: '/app',
     name: 'admin-lte',
     component: AdminLTE,
