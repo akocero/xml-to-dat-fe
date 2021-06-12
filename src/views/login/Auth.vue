@@ -5,7 +5,7 @@
             <h4 class="h3">Sign In</h4>
             <hr>
             <p>Welcome! Use your company email to sign in to your account.</p>
-            <Alert v-if="error" :status="'error'" :message="error" />
+            <Alert v-if="error" :status="'error'" :message="error"  @closeModal="handleCloseModal"/>
             <div class="form-group pt-2">
                 <label for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="login_id">
@@ -88,7 +88,12 @@ export default {
       
     }
 
-    return  { handleSubmit,  login_id, password, isPending, response, error }
+    const handleCloseModal = () => {
+        error.value = null
+        response.value = null
+    }
+
+    return  { handleSubmit,  login_id, password, isPending, response, error, handleCloseModal }
   }
 }
 
