@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/auth',
     name: 'auth',
-    component: import('@/views/login/Auth')
+    component: () => import('@/views/login/Auth')
   },
   {
     path: '/app',
@@ -20,22 +20,22 @@ const routes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        component: import('@/views/Dashboard')
+        component: () => import('@/views/Dashboard')
       },
       {
         path: 'boiler',
         name: 'boiler',
-        component: import('@/views/boiler/Boiler.vue')
+        component: () => import('@/views/boiler/Boiler.vue')
       },
       {
         path: 'create-boiler',
         name: 'create-boiler',
-        component: import('@/views/boiler/Create.vue')
+        component: () => import('@/views/boiler/Create.vue')
       },
       {
         path: 'update-boiler/:id',
         name: 'update-boiler',
-        component: import('@/views/boiler/Update.vue')
+        component: () => import('@/views/boiler/Update.vue')
       }
     ]
   },

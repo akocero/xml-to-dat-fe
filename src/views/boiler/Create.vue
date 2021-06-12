@@ -1,16 +1,24 @@
 <template>
-  <Alert v-if="error" :status="'error'" :message="error.message" />
+
+  <transition name="alert">
+    <Alert v-if="response" :status="'success'" :message="'User Added'" @closeModal="handleCloseModal" />
+  </transition>
+  <transition name="alert">
+    <Alert v-if="error && error.message" :status="'error'" :message="error.message" @closeModal="handleCloseModal" />
+  </transition>
+
   <div class="card boiler shadow-md">
     <div class="card-body">
       <div class="row mb-3">
         <div class="col-md-12 d-flex justify-content-between align-items-center">
-          <h5 class="h5 mb-0">New User</h5>
+          <h5 class="h4 mb-0">New User</h5>
+          <router-link class="btn btn-light" :to="{ name: 'boiler'}">User List <i v-html="chevronRight"></i> </router-link>
         </div>
       </div>
 
       <hr />
 
-      <form @submit.prevent="add" id="form_create_user">
+      <form @submit.prevent="handleSubmit" id="form_create_user">
 
         <div class="row">
           <div class="col-md-7">
@@ -139,13 +147,21 @@
 
 <script>
 // import axios from 'axios';
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import useCreate from '../../composables/useCreate'
+import feather from 'feather-icons'
 import Alert from '../../components/Alert'
 export default {
   name: 'CreateBoiler',
   components: {
     Alert
+  },
+  computed: {
+    chevronRight: function () {
+      return feather.icons['chevron-right'].toSvg({
+        'width' : 18
+      })
+    }
   },
   // data() {
   //   return {
@@ -178,13 +194,17 @@ export default {
 
     const { response, error, create, isPending } = useCreate();
 
-
     const full_name = ref('');
     const login_id = ref('');
     const login_type = ref('');
     const employee_id = ref('');
 
-    const add = async () => {
+    onUnmounted(() => {
+      error.value = null
+      response.value = null
+    })
+
+    const handleSubmit = async () => {
       const data = {
         full_name: full_name.value,
         login_id: login_id.value,
@@ -197,14 +217,37 @@ export default {
       await create('payrolluser', data);
 
       if(!error.value){
-        console.log('Created')
+        full_name.value = ''
+        login_id.value = ''
+        login_type.value = ''
+        employee_id.value = ''
+      }else{
+        window.scrollTo(0,0);
       }
     }
 
-    return  { add, full_name, login_id, login_type, employee_id, error, isPending, response }
+    const handleCloseModal = () => {
+      error.value.message = null
+      response.value = ""
+    }
+
+    return  { handleSubmit, full_name, login_id, login_type, employee_id, error, isPending, response, handleCloseModal }
   }
 };
 </script>
 
 <style>
+
+/* .alert-enter-from {
+    opacity: 0;
+    transition: transformY(-60px);
+}
+
+.alert-enter-to {
+    opacity: 1;
+    transition: transformY(0);
+} */
+
+
+
 </style>

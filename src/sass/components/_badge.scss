@@ -1,21 +1,20 @@
 .custom-badge {
     background-color: rgb(224, 224, 224);
-    // padding: 1rem;
     border-radius: 1rem;
-    color: grey;
+    color: rgb(165, 165, 165);
     font-size: 0.8rem;
     padding: 1px 8px;
-    border: 1px solid rgb(146, 146, 146);
+    border: 1px solid rgb(212, 212, 212);
 
     &-warning {
         background-color: #FDF5DD;
-        border: 1px solid #fdf0c7;
+        border: 1px solid #f0e4bc;
         color: #be8c0c;
     }
 
     &-success {
         background-color: #CFF6DD;
-        border: 1px solid #CFF6DD;
+        border: 1px solid #9eeebb;
         color: #4daf4d;
     }
 }
