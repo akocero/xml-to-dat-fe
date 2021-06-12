@@ -5,7 +5,9 @@
             <h4 class="h3">Sign In</h4>
             <hr>
             <p>Welcome! Use your company email to sign in to your account.</p>
+            <transition name="alert">
             <Alert v-if="error" :status="'error'" :message="error"  @closeModal="handleCloseModal"/>
+            </transition>
             <div class="form-group pt-2">
                 <label for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="login_id">

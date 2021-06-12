@@ -30,7 +30,12 @@
                   <td>{{ item.full_name }}</td>
                   <td>{{ item.login_id }}</td>
                   <td class="text-center">
-                    <span class="custom-badge" :class="[item.login_type === 'Admin' ? 'custom-badge-success' : 'custom-badge-warning']">  {{ item.login_type }}</span>
+                    <!-- <span class="custom-badge" :class="[item.login_type === 'Admin' ? 'custom-badge-success' : 'custom-badge-warning']">  {{ item.login_type }}</span> -->
+                    <Badge v-if="item.login_type.toLowerCase() === 'admin'" :type="item.login_type" :badge="'success'" />
+                    <Badge v-else-if="item.login_type.toLowerCase() === 'manager'" :type="item.login_type" :badge="'warning'" />
+                    <Badge v-else :type="item.login_type" :badge="''" />
+                    <!-- <Badge :type="item.login_type" :badge="'success'" />
+                    <Badge :type="item.login_type" :badge="'success'" /> -->
                   </td>
                   <td>
                     <router-link :to="{name: 'update-boiler', params: {id: item.id }}" class="btn btn-sm btn-transparent">
@@ -60,11 +65,12 @@ import { ref } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from '../../composables/useFetch'
 import Spinner from "../../components/Spinner.vue";
+import Badge from "../../components/Badge.vue";
 import Pagination from "../../components/Pagination.vue";
 
 export default {
   name: "Boiler",
-  components: { Spinner, Pagination },
+  components: { Spinner, Pagination, Badge },
   setup() {
     const { data, error, fetch, isPending } = useFetch();
 

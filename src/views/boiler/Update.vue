@@ -1,6 +1,10 @@
 <template>
+  <transition name="alert">
   <Alert v-if="error && error.message" :status="'error'" :message="error.message" @closeModal="handleCloseModal" />
-  <Alert v-if="response" :status="'info'" :message="'User Updated'" @closeModal="handleCloseModal" />
+  </transition>
+  <transition name="alert">
+    <Alert v-if="response" :status="'info'" :message="'User Updated'" @closeModal="handleCloseModal" />
+  </transition>
   <div class="card boiler shadow-md">
     <div class="card-body">
       <div class="row mb-3">
@@ -209,12 +213,11 @@ export default {
         active: 1,
         password: 'password',
       }
-
-        console.log(data);
-        await update(`payrolluser/${route.params.id}`, data);
-
+      
+      await update(`payrolluser/${route.params.id}`, data);
+      // this condition won't run until the await is resolve or rejected
       if(!error.value){
-        console.log('Updated')
+        window.scrollTo(0,0);
       }
     
     }

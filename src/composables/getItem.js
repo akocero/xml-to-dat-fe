@@ -13,7 +13,7 @@ const getItem = (id) => {
            return res.data
         }
         catch (err) {
-            
+            console.log(err.message)
         }
     }
 

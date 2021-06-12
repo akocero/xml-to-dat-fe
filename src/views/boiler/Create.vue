@@ -1,6 +1,12 @@
 <template>
-  <Alert v-if="response" :status="'success'" :message="'User Added'" @closeModal="handleCloseModal" />
-  <Alert v-if="error && error.message" :status="'error'" :message="error.message" @closeModal="handleCloseModal" />
+
+  <transition name="alert">
+    <Alert v-if="response" :status="'success'" :message="'User Added'" @closeModal="handleCloseModal" />
+  </transition>
+  <transition name="alert">
+    <Alert v-if="error && error.message" :status="'error'" :message="error.message" @closeModal="handleCloseModal" />
+  </transition>
+
   <div class="card boiler shadow-md">
     <div class="card-body">
       <div class="row mb-3">
@@ -215,6 +221,8 @@ export default {
         login_id.value = ''
         login_type.value = ''
         employee_id.value = ''
+      }else{
+        window.scrollTo(0,0);
       }
     }
 
@@ -229,4 +237,17 @@ export default {
 </script>
 
 <style>
+
+/* .alert-enter-from {
+    opacity: 0;
+    transition: transformY(-60px);
+}
+
+.alert-enter-to {
+    opacity: 1;
+    transition: transformY(0);
+} */
+
+
+
 </style>
