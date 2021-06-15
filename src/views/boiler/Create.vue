@@ -29,7 +29,7 @@
                   type="text"
                   class="form-control"
                   :class="[error && error.errors.employee_id && 'is-invalid']"
-                  id="exampleInputEmail1"
+                  id=""
                   aria-describedby="emailHelp"
                   placeholder="Ex. 1234567"
                   v-model="employee_id"
@@ -41,12 +41,12 @@
               </div>
                 <!-- <div class="error">{{ error }}</div> -->
                <div class="form-group col-7">
-                <label for="exampleInputEmail1">Full Name</label>
+                <label for="">Full Name</label>
                 <input
                   type="text"
                   class="form-control"
                   :class="[error && error.errors.full_name && 'is-invalid']"
-                  id="exampleInputEmail1"
+                  id=""
                   aria-describedby="emailHelp"
                   placeholder="Ex. John Doe"
                   v-model="full_name"
@@ -62,7 +62,7 @@
                   type="email"
                   class="form-control"
                   :class="[error && error.errors.login_id && 'is-invalid']"
-                  id="exampleInputEmail1"
+                  id=""
                   aria-describedby="emailHelp"
                   placeholder="Ex. johndoe@example.com "
                   v-model="login_id"

@@ -6,16 +6,21 @@
             <hr>
             <p>Welcome! Use your company email to sign in to your account.</p>
             <transition name="alert">
-            <Alert v-if="error" :status="'error'" :message="error"  @closeModal="handleCloseModal"/>
+            <Alert v-if="error" :status="'error'" :message="error.message"  @closeModal="handleCloseModal"/>
             </transition>
             <div class="form-group pt-2">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="login_id">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="login_id" :class="[error && error.errors.login_id && 'is-invalid']">
+                <small v-if="error && error.errors.login_id" id="emailHelp" class="form-text text-danger">
+                  {{ error.errors.login_id[0] }}
+                </small>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password">
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password" :class="[error && error.errors.password && 'is-invalid']">
+                <small v-if="error && error.errors.password" id="emailHelp" class="form-text text-danger">
+                  {{ error.errors.password[0] }}
+                </small>
             </div>
             <div class="mb-4">
                 <a href="" class="">Forgot Password?</a>
@@ -74,8 +79,8 @@ export default {
 
     const handleSubmit = async () => {
       const data = {
-        LoginID: login_id.value,
-        EmployeePassword: password.value,
+        login_id: login_id.value,
+        password: password.value,
       }
 
       await login('payrolluser/auth', data)
