@@ -6,19 +6,19 @@
             <hr>
             <p>Welcome! Use your company email to sign in to your account.</p>
             <transition name="alert">
-            <Alert v-if="error" :status="'error'" :message="error.message"  @closeModal="handleCloseModal"/>
+            <Alert v-if="error" :status="'error'" :message="'Invalid Inputs'"  @closeModal="handleCloseModal"/>
             </transition>
             <div class="form-group pt-2">
-                <label for="exampleInputEmail1">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" v-model="login_id" :class="[error && error.errors.login_id && 'is-invalid']">
-                <small v-if="error && error.errors.login_id" id="emailHelp" class="form-text text-danger">
+                <label for="">Email address</label>
+                <input type="email" class="form-control" id=""  placeholder="Enter email" v-model="login_id" :class="[error && error.errors?.login_id && 'is-invalid']">
+                <small v-if="error && error.errors?.login_id" id="emailHelp" class="form-text text-danger">
                   {{ error.errors.login_id[0] }}
                 </small>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password" :class="[error && error.errors.password && 'is-invalid']">
-                <small v-if="error && error.errors.password" id="emailHelp" class="form-text text-danger">
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" v-model="password" :class="[error && error.errors?.password && 'is-invalid']">
+                <small v-if="error && error.errors?.password" id="emailHelp" class="form-text text-danger">
                   {{ error.errors.password[0] }}
                 </small>
             </div>
@@ -50,10 +50,6 @@
     </div>
 </div>
 
-            
-
-
-
 </template>
 
 <script>
@@ -69,13 +65,11 @@ export default {
         Alert,
     },
     setup() {
-
-    const { response, error, login, isPending } = useLogin();
-
     const login_id = ref('');
     const password = ref('');
     const router = useRouter();
     const store = useStore();
+    const { response, error, login, isPending } = useLogin();
 
     const handleSubmit = async () => {
       const data = {
@@ -87,8 +81,8 @@ export default {
       if(error.value){
           console.log(error.value);
       }else{
-        console.log(response.value.login_id)
-        store.commit('setUser', response.value.login_id)
+        // console.log(response.value.login_id)
+        store.commit('setUser', response.value)
         //   router.push({path: '/app/dashboard'} )
         window.location = 'http://localhost:8080/app/dashboard';
       }

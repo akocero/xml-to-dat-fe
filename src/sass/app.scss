@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,400;0,600;0,700;1,400&display=swap');
 
 @import './components/buttons';
+@import './components/initial';
 @import './components/pagination';
 @import './components/tables';
 @import './components/badge';
@@ -22,7 +23,7 @@ body {
 }
 
 [class*=sidebar-dark] .brand-link {
-    border-bottom: 1px solid #041647;
+    border-bottom: 1px solid #1c344c;
 }
 
 label {
@@ -132,3 +133,13 @@ label {
   100% { transform: translateX(0); }
   
 }
+
+.role {
+    display: block;
+    margin-top: -5px;
+}
+    .info {
+        padding: 0 0 0 0.5rem !important;
+        margin-top: -2px;
+    }
+
