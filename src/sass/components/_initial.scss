@@ -1,0 +1,22 @@
+.initial {
+    color: rgb(219, 219, 219);
+    // background-color: white;
+    border: 1px solid rgb(219, 219, 219);
+    height: 2.1rem;
+    min-width: 2.1rem;
+    max-width: 2.1rem;
+    border-radius: 4.2rem;
+    margin-left: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // justify-content: center;
+    // align-items: center;
+    text-align: center;
+    font-weight: bold;
+
+}
+
+[class*=sidebar-dark] .user-panel {
+    border-bottom: 1px solid #1c344c;
+}

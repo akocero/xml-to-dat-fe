@@ -7,6 +7,19 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 d-flex">
+          <!-- <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          d -->
+          <div class="initial">
+           {{ userInitial }}
+          </div>
+
+        <div class="info">
+          <a href="#" class="d-block">{{user.full_name}}</a>
+          <small class="text-white role">{{user.login_type === 'admin' ? 'administrator' : user.login_type }}</small>
+        </div>
+      </div>
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul
@@ -17,7 +30,7 @@
         >
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-header ml-2 mt-2">MODULE 1</li>
+          <li class="nav-header ml-2">MODULE 1</li>
 
           <li class="nav-item">
             <a href="#" class="nav-link active">
@@ -200,14 +213,10 @@
 </template>
 <script>
 import feather from 'feather-icons'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 export default {
   name: "Sidebar",
-  data() {
-    return {
-      userInitials: "",
-    };
-  },
-  methods: {},
   computed: {
     chevronLeft: function () {
       return feather.icons['chevron-left'].toSvg({
@@ -249,6 +258,17 @@ export default {
         'width' : 20
       })
     },
+  }, 
+  setup() {
+    const store = useStore()
+    const user = computed(() => store.getters.getUser);
+    const user_name_array = user.value.full_name.split(" ");
+    //console.log(user_name_array)
+    const userInitial = `${user_name_array[0].substr(0, 1)}${user_name_array[user_name_array.length -1].substr(0, 1)}`
+    return {
+      // access a getter in computed function
+      user, userInitial
+    }
   }
 };
 </script>

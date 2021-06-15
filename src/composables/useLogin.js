@@ -12,20 +12,23 @@ const login = async (url, payload) => {
     // console.log(route)
     try {
         const res = await axios.post(url, payload);
-        
+
         isPending.value = false
         error.value = null
         response.value = res.data
-
+        console.log('sa resolve')
         return res.data
     } catch (err) {
         isPending.value = false
         response.value = null
+        console.log('sa reject')
         if (err.response.status === 422) {
             error.value = err.response.data
         } else {
             error.value = err.message
         }
+
+        console.log(isPending.value)
     }
     
         
