@@ -20,6 +20,7 @@
           <i v-html="home"></i>
         </router-link>
       </li>
+      
     </ul>
 
     <!-- Right navbar links -->
@@ -45,6 +46,11 @@
         </div>
       </li>
       <li class="nav-item">
+        <a class="nav-link" role="button" @click="logout">
+          <i v-html="logOut"></i>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
         <a
           class="nav-link"
           data-widget="control-sidebar"
@@ -52,10 +58,9 @@
           href="#"
           role="button"
         >
-          <!-- <i class="fas fa-th-large"></i> -->
           <i v-html="user"></i>
         </a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -63,6 +68,7 @@
 </template>
 <script>
 import feather from 'feather-icons'
+import { useStore } from 'vuex'
 export default {
   name: "Navbar",
   computed: {
@@ -91,6 +97,22 @@ export default {
         'width' : 18
       })
     },
+    logOut: function () {
+      return feather.icons['log-out'].toSvg({
+        'width' : 18
+      })
+    },
   },
+  setup() {
+
+    const store = useStore();
+
+    const logout = () => {
+      store.commit('removeUser')
+      window.location = 'http://localhost:8080/auth';
+    }
+
+    return { logout }
+  }
 };
 </script>

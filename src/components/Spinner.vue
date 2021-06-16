@@ -5,13 +5,13 @@
 <style>
 .spin {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   margin: 30px auto;
-  border: 3px solid transparent;
+  border: 4px solid rgb(218, 218, 218);
   border-radius: 50%;
-  border-top-color: #1f6de2;
-  animation: spin 1s ease infinite;
+  border-top-color: #1C344C;
+  animation: spin 1.1s ease infinite;
 }
 @keyframes spin {
   to {

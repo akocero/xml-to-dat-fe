@@ -1,21 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '../views/login/Login'
-import AdminLTE from '../components/AdminLTE'
+import store from '@/store'
+
+const authRequired = (to, from, next) => {
+  const user = store.getters.getUser ? next() : next({ name: 'auth' });
+}
+
+const noAuthRequired = (to, from, next) => {
+  const user = store.getters.getUser ? next({ name: 'dashboard' }) : next();
+}
+
 const routes = [
   {
     path: '/',
     name: 'login',
-    component: Login
+    component: () => import('@/views/login/Login'),
   },
   {
     path: '/auth',
     name: 'auth',
-    component: () => import('@/views/login/Auth')
+    component: () => import('@/views/login/Auth'),
+    beforeEnter: noAuthRequired
   },
   {
     path: '/app',
     name: 'admin-lte',
-    component: AdminLTE,
+    component: () => import('@/components/AdminLTE'),
+    beforeEnter: authRequired,
     children: [
       {
         path: 'dashboard',

@@ -10,7 +10,12 @@ export default createStore({
     setUser(state, payload) {
       state.user = payload;
       Cookies.set('user', JSON.stringify(payload), { expires: 7 })
-    }
+    },
+
+    removeUser(state) {
+      Cookies.remove('user')
+      state.user = null
+    },
   },
   actions: {
   },
