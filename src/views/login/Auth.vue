@@ -72,20 +72,22 @@ export default {
     const { response, error, login, isPending } = useLogin();
 
     const handleSubmit = async () => {
-      const data = {
-        login_id: login_id.value,
-        password: password.value,
-      }
+        error.value = null
+        
+        const data = {
+            login_id: login_id.value,
+            password: password.value,
+        }
 
-      await login('payrolluser/auth', data)
-      if(error.value){
-          console.log(error.value);
-      }else{
-        // console.log(response.value.login_id)
-        store.commit('setUser', response.value)
-        //   router.push({path: '/app/dashboard'} )
-        window.location = 'http://localhost:8080/app/dashboard';
-      }
+        await login('payrolluser/auth', data)
+        if(error.value){
+            console.log(error.value);
+        }else{
+            // console.log(response.value.login_id)
+            store.commit('setUser', response.value)
+            //   router.push({path: '/app/dashboard'} )
+            window.location = 'http://localhost:8080/app/dashboard';
+        }
       
     }
 

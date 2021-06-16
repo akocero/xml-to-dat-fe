@@ -17,7 +17,7 @@ const update = async (url, payload) => {
     } catch (err) {
         isPending.value = false
         response.value = null
-        console.log(err.response.data)
+
         if (err.response.status === 422) {
             error.value = err.response.data
         } else {

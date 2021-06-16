@@ -7,7 +7,6 @@ const isPending = ref(false)
 
 const create = async (url, payload) => {
     isPending.value = true
-
     try {
         const res = await axios.post(url, payload);
         error.value = null
