@@ -7,7 +7,7 @@
           class="col-md-12 d-flex justify-content-between align-items-center"
         >
           <h4 class="h4 mb-0">User List</h4>
-          <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link>
+          <router-link :to="{ name: 'create-boiler'}" class="btn btn-custom-primary">Create User</router-link>
         </div>
       </div>
 
