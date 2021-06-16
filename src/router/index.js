@@ -38,12 +38,12 @@ const routes = [
         component: () => import('@/views/boiler/Boiler.vue')
       },
       {
-        path: 'create-boiler',
+        path: 'boiler/create',
         name: 'create-boiler',
         component: () => import('@/views/boiler/Create.vue')
       },
       {
-        path: 'update-boiler/:id',
+        path: 'boiler/update/:id',
         name: 'update-boiler',
         component: () => import('@/views/boiler/Update.vue')
       }
