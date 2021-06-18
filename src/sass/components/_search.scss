@@ -1,0 +1,27 @@
+.mini-search-company {
+	display: block;
+
+	width: 100%;
+	border: 1px solid rgb(221, 221, 221);
+	border-radius: 3px;
+	margin-bottom: 1rem;
+	padding: 0.3rem 0.5rem;
+
+	&:focus {
+		outline: none;
+		// border-bottom: 2px solid #1c344c;
+	}
+}
+
+.input-custom-search {
+	display: block;
+	width: 100%;
+	border: 1px solid rgb(221, 221, 221);
+	padding: 0.3rem 0.5rem;
+	font-family: inherit;
+
+	&:focus {
+		outline: none;
+		// border-bottom: 2px solid #1c344c;
+	}
+}

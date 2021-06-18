@@ -12,11 +12,6 @@ const noAuthRequired = (to, from, next) => {
 const routes = [
   {
     path: '/',
-    name: 'login',
-    component: () => import('@/views/login/Login'),
-  },
-  {
-    path: '/auth',
     name: 'auth',
     component: () => import('@/views/login/Auth'),
     beforeEnter: noAuthRequired
@@ -35,7 +30,8 @@ const routes = [
       {
         path: 'user',
         name: 'user',
-        component: () => import('@/views/user/User.vue')
+        component: () => import('@/views/user/User.vue'),
+        props: true
       },
       {
         path: 'user/create',

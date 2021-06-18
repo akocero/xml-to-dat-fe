@@ -13,6 +13,25 @@
 					>
 				</div>
 			</div>
+			<form action="" @submit.prevent="HandleSearch" class="mb-3 d-flex">
+				<!-- <label for="">Search <span>(Hit Enter)</span></label> -->
+				<input
+					type="text"
+					v-model="search"
+					placeholder="Type company code, name, classification ..."
+					class="input-custom-search"
+					required
+				/>
+				<button type="submit" class="btn btn-default btn-flat">
+					<i class="fas fa-search"></i>
+				</button>
+				<a
+					class="btn btn-default btn-flat"
+					role="button"
+					@click="fetchAll"
+					><i class="fas fa-sync"></i
+				></a>
+			</form>
 
 			<div class="row" v-if="!isPending">
 				<div class="col-12">
@@ -62,7 +81,9 @@
 							</tbody>
 							<tbody v-else>
 								<tr>
-									<td>No data found!</td>
+									<td colspan="10" class="text-center">
+										No data found!
+									</td>
 								</tr>
 							</tbody>
 						</table>
@@ -78,7 +99,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "../../composables/useFetch";
 import Spinner from "../../components/Spinner.vue";
@@ -90,14 +111,34 @@ export default {
 	components: { Spinner, Pagination, Badge },
 	setup() {
 		const { data, error, fetch, isPending } = useFetch();
+		const search = ref("");
 
-		fetch("setupcompany?page=1");
+		onBeforeMount(() => {
+			fetchAll();
+		});
+
+		const fetchAll = () => {
+			search.value = "";
+			fetch("setupcompany");
+		};
 
 		const paginate = async (url) => {
 			await fetch(url);
 		};
 
-		return { data, error, paginate, isPending };
+		const HandleSearch = () => {
+			fetch(`setupcompany?search=${search.value}`);
+		};
+
+		return {
+			data,
+			error,
+			paginate,
+			isPending,
+			search,
+			HandleSearch,
+			fetchAll,
+		};
 	},
 };
 </script>
