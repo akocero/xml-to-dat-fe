@@ -149,16 +149,25 @@
 					</div>
 
 					<div class="col-md-6">
-						<label class="text-bold"
-							>Companies
-							<span class="text-danger text-bold">*</span>
-						</label>
+						<div>
+							<label class="text-bold"
+								>Companies
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								v-model="search"
+								class="mini-search-company"
+								placeholder="Company name..."
+							/>
+						</div>
+
 						<div
 							class="multi-select text-secondary"
 							v-if="!isPendingCompany && companies.data?.length"
 						>
 							<div
-								v-for="company in companies.data"
+								v-for="company in matchCompanies"
 								:key="company.id"
 								class="multi-select-card shadow-sm border"
 							>
@@ -201,12 +210,13 @@
 
 <script>
 // import axios from 'axios';
-import { ref, onUnmounted } from "vue";
+import { ref, onUnmounted, computed } from "vue";
 import useCreate from "../../composables/useCreate";
 import feather from "feather-icons";
 import Alert from "../../components/Alert";
 import Spinner from "../../components/Spinner";
 import useFetch from "../../composables/useFetch";
+import { useRouter } from "vue-router";
 export default {
 	name: "CreateUser",
 	components: {
@@ -228,8 +238,17 @@ export default {
 			isPending: isPendingCompany,
 		} = useFetch();
 		const { response, error, create, isPending } = useCreate();
+		const router = useRouter();
 
 		fetch("setupcompany?page=1");
+
+		const search = ref("");
+
+		const matchCompanies = computed(() => {
+			return companies.value.data.filter((item) =>
+				item.name.toLowerCase().includes(search.value.toLowerCase())
+			);
+		});
 
 		const companiesArray = ref([]);
 		const full_name = ref("");
@@ -255,10 +274,11 @@ export default {
 			await create("payrolluser", data);
 
 			if (!error.value) {
-				full_name.value = "";
-				login_id.value = "";
-				login_type.value = "";
-				employee_id.value = "";
+				// full_name.value = "";
+				// login_id.value = "";
+				// login_type.value = "";
+				// employee_id.value = "";
+				router.push({ name: "user", params: { userAdded: true } });
 			} else {
 				window.scrollTo(0, 0);
 			}
@@ -281,6 +301,9 @@ export default {
 			handleCloseModal,
 			companies,
 			companiesArray,
+			matchCompanies,
+			search,
+			isPendingCompany,
 		};
 	},
 };
@@ -291,7 +314,7 @@ export default {
     opacity: 0;
     transition: transformY(-60px);
 }
-
+.
 .alert-enter-to {
     opacity: 1;
     transition: transformY(0);

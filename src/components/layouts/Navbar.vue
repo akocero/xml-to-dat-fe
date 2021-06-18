@@ -135,7 +135,7 @@ export default {
 
 		const logout = () => {
 			store.commit("removeUser");
-			window.location = "http://localhost:8080/auth";
+			window.location = "http://localhost:8080/";
 		};
 
 		return { logout, toggleSidebarDocked };

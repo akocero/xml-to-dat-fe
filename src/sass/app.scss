@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,400;0,600;0,700;1,400&display=swap");
 
 @import "./components/buttons";
+@import "./components/search";
 @import "./components/initial";
 @import "./components/pagination";
 @import "./components/tables";
@@ -43,7 +44,7 @@ label {
 
 .multi-select {
 	overflow-y: auto;
-	max-height: 50vh;
+	max-height: 40vh;
 	padding: 0.5rem 1rem 0.5rem 0;
 
 	&-card {

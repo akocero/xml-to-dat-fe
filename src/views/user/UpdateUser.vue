@@ -32,7 +32,7 @@
 
 			<form action="" @submit.prevent="add">
 				<div class="row" v-if="item">
-					<div class="col-md-7">
+					<div class="col-md-6">
 						<div class="row pr-3">
 							<div class="form-group col-5">
 								<label>Employee ID</label>
@@ -137,14 +137,20 @@
 						</div>
 					</div>
 
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<label class="text-bold">Companies</label>
+						<input
+							type="text"
+							v-model="search"
+							class="mini-search-company"
+							placeholder="Company name..."
+						/>
 						<div
 							class="multi-select text-secondary"
 							v-if="!isPendingCompany && companies.data?.length"
 						>
 							<div
-								v-for="company in companies.data"
+								v-for="company in matchCompanies"
 								:key="company.id"
 								class="multi-select-card shadow-sm border"
 							>
@@ -186,7 +192,7 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted } from "vue";
+import { onUnmounted, computed, ref } from "vue";
 import useUpdate from "../../composables/useUpdate";
 import getItem from "../../composables/getItem";
 import Alert from "../../components/Alert";
@@ -237,7 +243,19 @@ export default {
 			fetch,
 			isPending: isPendingCompany,
 		} = useFetch();
+
 		const { response, error, update, isPending } = useUpdate();
+
+		fetch("setupcompany?page=1");
+
+		const search = ref("");
+
+		const matchCompanies = computed(() => {
+			return companies.value.data.filter((item) =>
+				item.name.toLowerCase().includes(search.value.toLowerCase())
+			);
+		});
+
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
 			"payrolluser"
@@ -248,7 +266,6 @@ export default {
 			response.value = null;
 		});
 
-		fetch("setupcompany?page=1");
 		load();
 
 		const add = async () => {
@@ -281,6 +298,9 @@ export default {
 			item,
 			handleCloseModal,
 			companies,
+			search,
+			matchCompanies,
+			isPendingCompany,
 		};
 	},
 };
