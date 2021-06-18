@@ -1,0 +1,299 @@
+<template>
+	<transition name="alert">
+		<Alert
+			v-if="response"
+			:status="'success'"
+			:message="'User Added'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
+	<transition name="alert">
+		<Alert
+			v-if="error && error.message"
+			:status="'error'"
+			:message="error.message"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
+
+	<div class="card boiler shadow-md">
+		<div class="card-body">
+			<div class="row mb-3">
+				<div
+					class="col-md-12 d-flex justify-content-between align-items-center"
+				>
+					<h5 class="h4 mb-0">New User</h5>
+					<router-link class="btn btn-light" :to="{ name: 'user' }"
+						>User List<i v-html="chevronRight"></i>
+					</router-link>
+				</div>
+			</div>
+
+			<hr />
+
+			<form @submit.prevent="handleSubmit" id="form_create_user">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="row pr-3">
+							<div class="form-group col-5">
+								<label
+									>Employee ID
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<input
+									type="text"
+									class="form-control"
+									:class="[
+										error &&
+											error.errors.employee_id &&
+											'is-invalid',
+									]"
+									id=""
+									aria-describedby="emailHelp"
+									placeholder="Ex. 1234567"
+									v-model="employee_id"
+								/>
+								<small
+									v-if="error && error.errors.employee_id"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.employee_id[0] }}
+								</small>
+							</div>
+							<!-- <div class="error">{{ error }}</div> -->
+							<div class="form-group col-7">
+								<label for=""
+									>Full Name
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<input
+									type="text"
+									class="form-control"
+									:class="[
+										error &&
+											error.errors.full_name &&
+											'is-invalid',
+									]"
+									id=""
+									aria-describedby="emailHelp"
+									placeholder="Ex. John Doe"
+									v-model="full_name"
+								/>
+								<small
+									v-if="error && error.errors.full_name"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.full_name[0] }}
+								</small>
+							</div>
+
+							<div class="form-group col-12">
+								<label
+									>Email
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<input
+									type="email"
+									class="form-control"
+									:class="[
+										error &&
+											error.errors.login_id &&
+											'is-invalid',
+									]"
+									id=""
+									aria-describedby="emailHelp"
+									placeholder="Ex. johndoe@example.com "
+									v-model="login_id"
+								/>
+								<small
+									v-if="error && error.errors.login_id"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.login_id[0] }}
+								</small>
+							</div>
+
+							<div class="form-group col-12">
+								<label for=""
+									>Role
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<select
+									name=""
+									id=""
+									class="form-control"
+									:class="[
+										error &&
+											error.errors.login_type &&
+											'is-invalid',
+									]"
+									v-model="login_type"
+								>
+									<option value="">Choose ...</option>
+									<option value="employee">Employee</option>
+									<option value="admin">Admin</option>
+									<option value="manager">Manager</option>
+								</select>
+								<small
+									v-if="error && error.errors.login_type"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.login_type[0] }}
+								</small>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<label class="text-bold"
+							>Companies
+							<span class="text-danger text-bold">*</span>
+						</label>
+						<div
+							class="multi-select text-secondary"
+							v-if="!isPendingCompany && companies.data?.length"
+						>
+							<div
+								v-for="company in companies.data"
+								:key="company.id"
+								class="multi-select-card shadow-sm border"
+							>
+								<input
+									type="checkbox"
+									name=""
+									:value="company.id"
+									v-model="companiesArray"
+								/>
+								<h6 class="h6 text-bold pb-0 mb-0">
+									{{ company.code }} - {{ company.name }}
+								</h6>
+							</div>
+						</div>
+						<div v-else>
+							<Spinner />
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="row col-12">
+					<input
+						type="submit"
+						class="btn btn-custom-success"
+						v-if="!isPending"
+						value="Save"
+					/>
+					<button
+						class="btn btn-custom-success"
+						v-if="isPending"
+						disabled
+					>
+						Loading ...
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</template>
+
+<script>
+// import axios from 'axios';
+import { ref, onUnmounted } from "vue";
+import useCreate from "../../composables/useCreate";
+import feather from "feather-icons";
+import Alert from "../../components/Alert";
+import Spinner from "../../components/Spinner";
+import useFetch from "../../composables/useFetch";
+export default {
+	name: "CreateUser",
+	components: {
+		Alert,
+		Spinner,
+	},
+	computed: {
+		chevronRight: function() {
+			return feather.icons["chevron-right"].toSvg({
+				width: 18,
+			});
+		},
+	},
+	setup() {
+		const {
+			data: companies,
+			error: errorCompany,
+			fetch,
+			isPending: isPendingCompany,
+		} = useFetch();
+		const { response, error, create, isPending } = useCreate();
+
+		fetch("setupcompany?page=1");
+
+		const companiesArray = ref([]);
+		const full_name = ref("");
+		const login_id = ref("");
+		const login_type = ref("");
+		const employee_id = ref("");
+
+		onUnmounted(() => {
+			error.value = null;
+			response.value = null;
+		});
+
+		const handleSubmit = async () => {
+			const data = {
+				full_name: full_name.value,
+				login_id: login_id.value,
+				login_type: login_type.value,
+				employee_id: employee_id.value,
+				active: 1,
+				password: "password",
+			};
+
+			await create("payrolluser", data);
+
+			if (!error.value) {
+				full_name.value = "";
+				login_id.value = "";
+				login_type.value = "";
+				employee_id.value = "";
+			} else {
+				window.scrollTo(0, 0);
+			}
+		};
+
+		const handleCloseModal = () => {
+			error.value.message = null;
+			response.value = "";
+		};
+
+		return {
+			handleSubmit,
+			full_name,
+			login_id,
+			login_type,
+			employee_id,
+			error,
+			isPending,
+			response,
+			handleCloseModal,
+			companies,
+			companiesArray,
+		};
+	},
+};
+</script>
+
+<style>
+/* .alert-enter-from {
+    opacity: 0;
+    transition: transformY(-60px);
+}
+
+.alert-enter-to {
+    opacity: 1;
+    transition: transformY(0);
+} */
+</style>

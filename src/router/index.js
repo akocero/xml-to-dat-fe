@@ -33,20 +33,35 @@ const routes = [
         component: () => import('@/views/Dashboard')
       },
       {
-        path: 'boiler',
-        name: 'boiler',
-        component: () => import('@/views/boiler/Boiler.vue')
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/user/User.vue')
       },
       {
-        path: 'boiler/create',
-        name: 'create-boiler',
-        component: () => import('@/views/boiler/Create.vue')
+        path: 'user/create',
+        name: 'create-user',
+        component: () => import('@/views/user/CreateUser.vue')
       },
       {
-        path: 'boiler/update/:id',
-        name: 'update-boiler',
-        component: () => import('@/views/boiler/Update.vue')
-      }
+        path: 'user/update/:id',
+        name: 'update-user',
+        component: () => import('@/views/user/UpdateUser.vue')
+      },
+      {
+        path: 'company',
+        name: 'company',
+        component: () => import('@/views/company/Company.vue')
+      },
+      {
+        path: 'company/create',
+        name: 'create-company',
+        component: () => import('@/views/company/CreateCompany.vue')
+      },
+      {
+        path: 'company/update/:id',
+        name: 'update-company',
+        component: () => import('@/views/company/UpdateCompany.vue')
+      },
     ]
   },
 ]
