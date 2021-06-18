@@ -469,6 +469,7 @@ export default {
 				code.value = "";
 				address.value = "";
 				classification.value = "";
+				window.scrollTo(0, 0);
 			} else {
 				window.scrollTo(0, 0);
 			}
