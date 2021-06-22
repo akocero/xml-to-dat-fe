@@ -269,6 +269,7 @@ export default {
 				employee_id: employee_id.value,
 				active: 1,
 				password: "password",
+				companies: companiesArray.value,
 			};
 
 			await create("payrolluser", data);

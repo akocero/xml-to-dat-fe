@@ -138,7 +138,7 @@
 					</div>
 
 					<div class="col-md-6">
-						<label class="text-bold">Companies</label>
+						<label class="text-bold">Companies </label>
 						<input
 							type="text"
 							v-model="search"
@@ -147,7 +147,7 @@
 						/>
 						<div
 							class="multi-select text-secondary"
-							v-if="!isPendingCompany && companies.data?.length"
+							v-if="!isPendingCompany && companies.data?.length && companiesArray.length"
 						>
 							<div
 								v-for="company in matchCompanies"
@@ -158,6 +158,7 @@
 									type="checkbox"
 									name=""
 									:value="company.id"
+									v-model="companiesArray"
 								/>
 								<h6 class="h6 text-bold pb-0 mb-0">
 									{{ company.code }} - {{ company.name }}
@@ -192,7 +193,7 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted, computed, ref } from "vue";
+import { onUnmounted, onMounted, computed, ref } from "vue";
 import useUpdate from "../../composables/useUpdate";
 import getItem from "../../composables/getItem";
 import Alert from "../../components/Alert";
@@ -249,6 +250,7 @@ export default {
 		fetch("setupcompany?page=1");
 
 		const search = ref("");
+		
 
 		const matchCompanies = computed(() => {
 			return companies.value.data.filter((item) =>
@@ -261,12 +263,28 @@ export default {
 			"payrolluser"
 		);
 
+		const companiesArray = ref([]);
+
+		const pushToCompaniesArray = async () => {
+			await load();
+			if(!errorData.value) {
+				console.log('companies', item?.value.setup_companies);
+				item?.value?.setup_companies.forEach(item => {
+					companiesArray.value.push(item.id)
+				});
+			}
+		}
+
+		onMounted(() => {
+			pushToCompaniesArray();
+		})
+	
+
 		onUnmounted(() => {
 			error.value = null;
 			response.value = null;
 		});
 
-		load();
 
 		const add = async () => {
 			const data = {
@@ -276,6 +294,7 @@ export default {
 				employee_id: item.value.employee_id,
 				active: 1,
 				password: "password",
+				companies: companiesArray.value,
 			};
 
 			await update(`payrolluser/${route.params.id}`, data);
@@ -301,6 +320,7 @@ export default {
 			search,
 			matchCompanies,
 			isPendingCompany,
+			companiesArray
 		};
 	},
 };
