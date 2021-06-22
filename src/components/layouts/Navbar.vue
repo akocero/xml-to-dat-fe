@@ -135,6 +135,7 @@ export default {
 
 		const logout = () => {
 			store.commit("removeUser");
+			store.commit("removeCompany");
 			window.location = "http://localhost:8080/";
 		};
 

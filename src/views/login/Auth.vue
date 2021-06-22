@@ -1,8 +1,8 @@
 <template>
 	<div class="row auth-container">
 		<div class="col-md-4 d-flex justify-content-center align-items-center">
-			<form class="w-75" @submit.prevent="handleSubmit">
-				<h4 class="h3">Sign In</h4>
+			<form class="w-75" @submit.prevent="handleSubmit" v-if="!user">
+				<h3 class="h3">Sign In</h3>
 				<hr />
 				<p>
 					Welcome! Use your company email to sign in to your account.
@@ -76,6 +76,7 @@
 					</button>
 				</div>
 			</form>
+			<SelectCompany v-if="user" :user="user?.id"/>
 		</div>
 		<div class="col-md-8 bg-navy-blue auth-right">
 			<div class="content">
@@ -115,9 +116,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import useLogin from "../../composables/useLogin";
 import Alert from "../../components/Alert";
+import SelectCompany from "./SelectCompany";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
@@ -125,6 +127,7 @@ export default {
 	name: "Auth",
 	components: {
 		Alert,
+		SelectCompany
 	},
 	setup() {
 		const login_id = ref("");
@@ -132,6 +135,7 @@ export default {
 		const router = useRouter();
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
+		const user = computed(() => store.getters.getUser);
 
 		const handleSubmit = async () => {
 			error.value = null;
@@ -145,10 +149,11 @@ export default {
 			if (error.value) {
 				console.log(error.value);
 			} else {
+				// user.value = response.value
 				// console.log(response.value.login_id)
 				store.commit("setUser", response.value);
 				//   router.push({path: '/app/dashboard'} )
-				window.location = "http://localhost:8080/app/dashboard";
+				// window.location = "http://localhost:8080/app/dashboard";
 			}
 		};
 
@@ -165,6 +170,7 @@ export default {
 			response,
 			error,
 			handleCloseModal,
+			user
 		};
 	},
 };
@@ -228,4 +234,6 @@ export default {
 	position: absolute;
 	bottom: 1rem;
 }
+
+
 </style>

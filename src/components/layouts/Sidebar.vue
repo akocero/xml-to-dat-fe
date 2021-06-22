@@ -2,8 +2,8 @@
 	<aside class="main-sidebar sidebar-dark-primary elevation-4">
 		<!-- Brand Logo -->
 		<a href="" class="brand-link text-sm">
-			<span class="brand-text font-weight-light pl-2"
-				>Payroll Ent Cloud</span
+			<span class="brand-text font-weight-bold pl-3"
+				>{{ company.name }}</span
 			>
 		</a>
 
@@ -291,6 +291,7 @@ export default {
 	setup() {
 		const store = useStore();
 		const user = computed(() => store.getters.getUser);
+		const company = computed(() => store.getters.getCompany);
 		const user_name_array = user.value.full_name.split(" ");
 		//console.log(user_name_array)
 		const userInitial = `${user_name_array[0].substr(
@@ -301,6 +302,7 @@ export default {
 		return {
 			user,
 			userInitial,
+			company
 		};
 	},
 };

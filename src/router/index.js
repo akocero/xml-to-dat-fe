@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import store from '@/store'
 
 const authRequired = (to, from, next) => {
-  const user = store.getters.getUser ? next() : next({ name: 'auth' });
+  const authorized = store.getters.getUser && store.getters.getCompany ? next() : next({ name: 'auth' });
 }
 
 const noAuthRequired = (to, from, next) => {
-  const user = store.getters.getUser ? next({ name: 'dashboard' }) : next();
+  const authorized = store.getters.getUser && store.getters.getCompany ? next({ name: 'dashboard' }) : next();
 }
 
 const routes = [
