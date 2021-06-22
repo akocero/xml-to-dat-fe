@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 export default createStore({
   state: {
     user: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
+    company: Cookies.get('company') ? JSON.parse(Cookies.get('company')) : null,
   },
   mutations: {
     setUser(state, payload) {
@@ -16,6 +17,16 @@ export default createStore({
       Cookies.remove('user')
       state.user = null
     },
+
+    setCompany(state, payload) {
+      state.company = payload;
+      Cookies.set('company', JSON.stringify(payload), { expires: 7 })
+    },
+
+    removeCompany(state) {
+      Cookies.remove('company')
+      state.company = null
+    },
   },
   actions: {
   },
@@ -24,6 +35,10 @@ export default createStore({
   getters: {
     getUser(state) {
       return state.user
+    },
+
+    getCompany(state) {
+      return state.company
     }
   }
 })

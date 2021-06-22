@@ -2,7 +2,7 @@
   <div class="dashboard">
     <transition name="alert">
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Welcome! </strong> {{ user.full_name }}
+        <strong>Welcome! you are logged in as </strong> {{ user.full_name }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
