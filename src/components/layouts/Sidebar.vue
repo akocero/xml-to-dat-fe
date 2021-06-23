@@ -36,13 +36,13 @@
 				>
 					<!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-					<li class="nav-header ml-2">MODULE 1</li>
+					<li class="nav-header ml-2">Administrator</li>
 
 					<li class="nav-item">
 						<a href="#" class="nav-link active">
 							<!-- <i class="nav-icon fas fa-chart-pie"></i> -->
 							<i
-								v-html="pieChart"
+								v-html="home"
 								class="nav-icon nav-icon fas pr-2"
 							></i>
 							<p>
@@ -102,7 +102,7 @@
 						</ul>
 					</li>
 
-					<li class="nav-header ml-2 mt-2">MODULE 2</li>
+					<li class="nav-header ml-2 mt-2">Data Entry</li>
 
 					<li class="nav-item">
 						<a href="#" class="nav-link">
@@ -257,8 +257,8 @@ export default {
 				width: 20,
 			});
 		},
-		pieChart: function() {
-			return feather.icons["pie-chart"].toSvg({
+		home: function() {
+			return feather.icons["home"].toSvg({
 				width: 20,
 			});
 		},

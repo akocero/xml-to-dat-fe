@@ -18,7 +18,7 @@
 				<input
 					type="text"
 					v-model="search"
-					placeholder="Type company code, name, classification ..."
+					placeholder="Type Company Code, Name, Classification"
 					class="input-custom-search"
 					required
 				/>
@@ -61,7 +61,7 @@
 											class="btn btn-sm btn-transparent"
 										>
 											<i
-												class="far fa-folder-open text-secondary"
+												class="far fa-eye text-secondary"
 											></i>
 										</router-link>
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
