@@ -154,3 +154,39 @@ label {
 	padding: 0 0 0 0.5rem !important;
 	margin-top: -2px;
 }
+
+#pills-tab {
+	border-bottom: 1px solid #cacaca;
+	
+	.nav-link {
+		position: relative;
+		border-radius: 4px 4px 0 0;
+		&.pr-4 {
+			padding-right: 1.7rem !important;
+		}
+		&.active {
+			background: #1C344C;
+		}
+
+		.icon-error {
+			position: absolute;
+			top: 0;
+			right: 5px;
+		}
+
+		// &.is-invalid {
+		// 	// background-color: red;
+		// 	// color: white;
+		// 	border: 1px solid salmon;
+		// 	color: salmon;
+		// }
+
+		// &.active.is-invalid {
+		// 	background: #1C344C;
+		// 	border: 1px solid #1C344C;
+		// 	color:white ;
+		// }
+	}
+
+	
+}

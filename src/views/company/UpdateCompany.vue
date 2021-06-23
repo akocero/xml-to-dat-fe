@@ -43,14 +43,21 @@
 							You can change your avatar here or remove the
 							current avatar to revert to gravatar.com
 						</label>
+						
 					</div>
 
 					<div class="col-md-2">
-						<img
+						<img v-if="!item.image_path"
 							src="../../assets/no-image.png"
 							alt=""
 							style="width: 90%;"
 						/>
+						<img
+							:src="'http://127.0.0.1:8000/storage/' + item.image_path"
+							alt=""
+							style="width: 90%;"
+						/>
+						
 					</div>
 
 					<div class="form-group col-md-6">

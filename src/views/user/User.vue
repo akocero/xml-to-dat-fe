@@ -26,7 +26,7 @@
 				<input
 					type="text"
 					v-model="search"
-					placeholder="Type user full name, email / login id ..."
+					placeholder="Type User Code, Full Name, Email / Login ID"
 					class="input-custom-search"
 					required
 				/>

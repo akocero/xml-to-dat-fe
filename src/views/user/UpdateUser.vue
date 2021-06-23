@@ -166,6 +166,10 @@
 							</div>
 						</div>
 						<div v-else>
+							<p class="text-danger">User Can't have 0 company related!</p>
+							<p class="text-danger">Click here to reload the page<a href=""> Reload</a></p>
+							
+							{{ disableSaveChanges }}
 							<Spinner />
 						</div>
 					</div>
@@ -175,7 +179,7 @@
 				</div>
 				<hr />
 				<div class="row col-12">
-					<button class="btn btn-custom-success" v-if="!isPending">
+					<button class="btn btn-custom-success" v-if="!isPending && !disabledSaveChanges">
 						Save Changes
 					</button>
 					<button
@@ -193,7 +197,7 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted, onMounted, computed, ref } from "vue";
+import { onUnmounted, onMounted, computed, ref, watch } from "vue";
 import useUpdate from "../../composables/useUpdate";
 import getItem from "../../composables/getItem";
 import Alert from "../../components/Alert";
@@ -214,28 +218,6 @@ export default {
 			});
 		},
 	},
-	// methods: {
-	//   onFileChange(e) {
-	//     this.selectedFile = e.target.files[0];
-
-	//   },
-	//   onUpload() {
-	//     const fd = new FormData();
-	//     fd.append("code", "John");
-	//     // fd.append("name", "John");
-	//     fd.append("address", "John");
-	//     fd.append("vat_reg", "MSSC2022");
-	//     fd.append("classification", "John");
-	//     fd.append("tel_no", "MSSC2022");
-	//     // axios.common.headers['Accept'] = 'application/json';
-	//     fd.append('image_path', this.selectedFile);
-	//     axios.item('https://payroll-ent-cloud.herokuapp.com/api/setupcompany', fd)
-	//     .then(res => console.log(res))
-	//     .catch(err => console.log(err.response.data));
-
-	//     console.log(fd);
-	//   }
-	// }
 	setup() {
 		const route = useRoute();
 		const {
@@ -250,6 +232,7 @@ export default {
 		fetch("setupcompany?page=1");
 
 		const search = ref("");
+		const disabledSaveChanges = ref(false)
 		
 
 		const matchCompanies = computed(() => {
@@ -263,17 +246,28 @@ export default {
 			"payrolluser"
 		);
 
-		const companiesArray = ref([]);
+		const companiesArray = ref([100]);
+
+		
 
 		const pushToCompaniesArray = async () => {
 			await load();
+			companiesArray.value = []
 			if(!errorData.value) {
-				console.log('companies', item?.value.setup_companies);
+				// console.log('companies', item?.value.setup_companies);
 				item?.value?.setup_companies.forEach(item => {
 					companiesArray.value.push(item.id)
 				});
 			}
 		}
+
+		const disableSaveChanges = computed(() => {
+			if(companiesArray.value.length < 1) {
+				disabledSaveChanges.value = true
+				
+			}
+			console.log(companiesArray.value.length)
+		});
 
 		onMounted(() => {
 			pushToCompaniesArray();
@@ -320,7 +314,9 @@ export default {
 			search,
 			matchCompanies,
 			isPendingCompany,
-			companiesArray
+			companiesArray,
+			disabledSaveChanges,
+			disableSaveChanges
 		};
 	},
 };

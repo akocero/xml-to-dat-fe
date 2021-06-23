@@ -22,7 +22,7 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<router-link class="nav-link" to="dashboard" role="button">
+				<router-link class="nav-link" :to="{name: 'dashboard'}" role="button">
 					<i v-html="home"></i>
 				</router-link>
 			</li>
@@ -56,7 +56,7 @@
 				</div>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" role="button" @click="logout">
+				<a class="nav-link text-danger" role="button" @click="logout">
 					<i v-html="logOut"></i>
 				</a>
 			</li>
@@ -109,7 +109,7 @@ export default {
 			});
 		},
 		logOut: function() {
-			return feather.icons["log-out"].toSvg({
+			return feather.icons["power"].toSvg({
 				width: 18,
 			});
 		},
@@ -134,9 +134,13 @@ export default {
 		};
 
 		const logout = () => {
-			store.commit("removeUser");
-			store.commit("removeCompany");
-			window.location = "http://localhost:8080/";
+
+			if (confirm('Are you sure you want to sign out?')) {
+				store.commit("removeUser");
+				store.commit("removeCompany");
+				window.location.reload();
+			}
+			
 		};
 
 		return { logout, toggleSidebarDocked };

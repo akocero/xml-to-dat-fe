@@ -64,7 +64,7 @@
 						class="btn btn-custom-primary"
 						v-if="!isPending"
 					>
-						Sing In
+						Sign In
 					</button>
 					<button
 						type="submit"
