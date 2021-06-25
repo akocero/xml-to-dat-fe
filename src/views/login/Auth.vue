@@ -7,6 +7,7 @@
 				<p>
 					Welcome! Use your company email to sign in to your account.
 				</p>
+				
 				<transition name="alert">
 					<Alert
 						v-if="error"
@@ -17,39 +18,48 @@
 				</transition>
 				<div class="form-group pt-2">
 					<label for="">Email address</label>
-					<input
-						type="email"
-						class="form-control"
-						id=""
-						placeholder="Enter email"
-						v-model="login_id"
-						:class="[
-							error && error.errors?.login_id && 'is-invalid',
-						]"
-					/>
+					<div style="position: relative;">
+						<input
+							type="email"
+							class="form-control"
+							id=""
+							placeholder="Enter email"
+							v-model="login_id"
+							:class="[
+								error && error.errors?.login_id && 'is-invalid',
+							]"
+						/>
+						<i v-html="mailIcon" class="input-icon"></i>
+					</div>
+					
+					
 					<small
 						v-if="error && error.errors?.login_id"
-						id="emailHelp"
+						id=""
 						class="form-text text-danger"
 					>
 						{{ error.errors.login_id[0] }}
 					</small>
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Password</label>
+					<label for="" >Password</label>
+					<div style="position: relative;">
 					<input
 						type="password"
 						class="form-control"
-						id="exampleInputPassword1"
+						id="password"
 						placeholder="Password"
 						v-model="password"
 						:class="[
 							error && error.errors?.password && 'is-invalid',
 						]"
 					/>
+						<i v-html="eye" class="input-icon" @click="handleShowPassword" v-if="showPassword"></i>
+						<i v-html="eyeOff" class="input-icon" @click="handleShowPassword" v-else></i>
+					</div>
 					<small
 						v-if="error && error.errors?.password"
-						id="emailHelp"
+						id=""
 						class="form-text text-danger"
 					>
 						{{ error.errors.password[0] }}
@@ -58,7 +68,7 @@
 				<div class="mb-4">
 					<a href="" class="">Forgot Password?</a>
 				</div>
-				<div class="text-center">
+				<div class="">
 					<button
 						type="submit"
 						class="btn btn-custom-primary"
@@ -122,16 +132,36 @@ import Alert from "../../components/Alert";
 import SelectCompany from "./SelectCompany";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import feather from "feather-icons";
 
 export default {
 	name: "Auth",
+
 	components: {
 		Alert,
-		SelectCompany
+		SelectCompany,
+	},
+	computed: {
+		mailIcon: function() {
+			return feather.icons['mail'].toSvg({
+				width: 18,
+			});
+		},
+		eye: function() {
+			return feather.icons['eye'].toSvg({
+				width: 19,
+			});
+		},
+		eyeOff: function() {
+			return feather.icons['eye-off'].toSvg({
+				width: 19,
+			});
+		},
 	},
 	setup() {
 		const login_id = ref("");
 		const password = ref("");
+		const showPassword = ref(false)
 		const router = useRouter();
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
@@ -157,6 +187,18 @@ export default {
 			}
 		};
 
+		const handleShowPassword = (e) => {
+			// console.log(e.target)
+			var x = document.getElementById("password");
+			if (x.type === "password") {
+				showPassword.value = true
+				x.type = "text";
+			} else {
+				showPassword.value = false
+				x.type = "password";
+			}
+		}
+
 		const handleCloseModal = () => {
 			error.value = null;
 			response.value = null;
@@ -170,13 +212,25 @@ export default {
 			response,
 			error,
 			handleCloseModal,
-			user
+			user,
+			showPassword,
+			handleShowPassword
 		};
 	},
 };
 </script>
 
-<style>
+<style scoped>
+.input-icon {
+	position: absolute;
+	top: 5px;
+	right: 0.6rem;
+	color: rgb(175, 175, 175);
+	cursor: pointer;
+}
+.input-icon:hover {
+	color: rgb(87, 87, 87);
+}
 .auth-right {
 	/* background-color: #04164767; */
 	background-image: url("../../assets/images/Corporate.jpg");

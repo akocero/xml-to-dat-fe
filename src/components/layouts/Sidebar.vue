@@ -118,7 +118,7 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="dashboard" class="nav-link">
+								<router-link :to="{name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Dashboard</p>
 								</router-link>
@@ -137,7 +137,7 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="boiler" class="nav-link">
+								<router-link :to="{ name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Users</p>
 								</router-link>
@@ -145,7 +145,7 @@
 						</ul>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="boiler" class="nav-link">
+								<router-link :to="{ name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Companies</p>
 								</router-link>
@@ -169,7 +169,7 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="dashboard" class="nav-link">
+								<router-link :to="{name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Dashboard</p>
 								</router-link>
@@ -199,7 +199,7 @@
 						</ul>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="boiler" class="nav-link">
+								<router-link :to="{ name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Companies</p>
 								</router-link>
@@ -218,7 +218,7 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="boiler" class="nav-link">
+								<router-link :to="{ name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Users</p>
 								</router-link>
@@ -226,7 +226,7 @@
 						</ul>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link to="boiler" class="nav-link">
+								<router-link :to="{ name: 'dashboard'}" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Companies</p>
 								</router-link>

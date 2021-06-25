@@ -1,8 +1,8 @@
 <template>
 <div class="select-company-container">
-    <h3 class="h3">Select Company</h3>
+    <h3 class="h3">Select a Company</h3>
 	<hr />
-    <p class="">Select a company to proceed to dashboard ...</p>
+    <p class="">Select a company to proceed to dashboard</p>
     <ul v-if="data && !isPending" class="select-company pt-4">
         <li v-for="company in data" :key="company.id" class="select-company__item shadow-sm border">
             <a href="" class="select-company__link" @click.prevent="handleClick(company)">{{ company.code }}- {{company.name}}</a>
