@@ -22,7 +22,7 @@
 				<div
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
-					<h5 class="h4 mb-0">New Company</h5>
+					<h5 class="h4 mb-0 text-primary">New Company</h5>
 					<router-link class="btn btn-light" :to="{ name: 'company' }"
 						>Cancel <i v-html="chevronRight"></i>
 					</router-link>
@@ -33,28 +33,23 @@
 				<div class="col-12">
 					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active" :class="error && error.errors.code || error && error.errors.name || error && error.errors.name || error && error.errors.vat_reg || error && error.errors.address ? 'pr-4' : ''" id="pills-main-tab" data-toggle="pill" href="#pills-main" role="tab" aria-controls="pills-main" aria-selected="true">Main
-							<i  v-if="error && error.errors.code || error && error.errors.name || error && error.errors.name || error && error.errors.vat_reg || error && error.errors.address" v-html="alertTriangle" class="text-danger icon-error"></i>
+							<a class="nav-link active" :class="mainTabHasError && 'pr-4'" id="pills-main-tab" data-toggle="pill" href="#pills-main" role="tab" aria-controls="pills-main" aria-selected="true">Main
+							<i  v-if="mainTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i>
 							</a>
 							
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" :class="error && error.errors.tel_no || error && error.errors.tel_no ? 'pr-4' : ''"  id="pills-comm-tab" data-toggle="pill" href="#pills-comm" role="tab" aria-controls="pills-comm" aria-selected="false">
+							<a class="nav-link" :class="commTabHasError && 'pr-4'"  id="pills-comm-tab" data-toggle="pill" href="#pills-comm" role="tab" aria-controls="pills-comm" aria-selected="false">
 							Communication
-							<i  v-if="error && error.errors.tel_no || error && error.errors.tel_no" v-html="alertTriangle" class="text-danger icon-error"></i> 
+							<i  v-if="commTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i> 
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" 
-							:class="error && error.errors.sss_no 
-							|| error && error.errors.phic_no 
-							|| error && error.errors.hdmf_no 
-							|| error && error.errors.tax_branch_code 
-							|| error && error.errors.alphalist_no 
-							? 'pr-4' : ''"  
+							:class="connTabHasError ? 'pr-4' : ''"  
 							id="pills-contri-tab" data-toggle="pill" href="#pills-contri" role="tab" aria-controls="pills-contri" aria-selected="false">
 							Contribution
-							<i  v-if="error && error.errors.sss_no || error && error.errors.phic_no || error && error.errors.hdmf_no || error && error.errors.tax_branch_code || error && error.errors.alphalist_no" v-html="alertTriangle" class="text-danger icon-error"></i>
+							<i  v-if="connTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -280,7 +275,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 02-8123-4567 "
 												v-model="tel_no"
 											/>
 											<small
@@ -303,7 +298,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 02-8123-4567 "
 												v-model="tel_no_alt"
 											/>
 											<small
@@ -367,7 +362,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. https://www.facebook.com/"
 												v-model="website"
 											/>
 											<small
@@ -391,7 +386,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
+												placeholder="Ex. https://www.facebook.com/hisoka.morow.904/"
 												v-model="facebook"
 											/>
 											<small
@@ -415,7 +410,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. https://www.twitter.com/hisoka.morow.904/ "
 												v-model="twitter"
 											/>
 											<small
@@ -455,7 +450,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 3484073113 "
 												v-model="sss_no"
 											/>
 											<small
@@ -478,7 +473,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex.  "
 												v-model="sss_initial"
 											/>
 											<small
@@ -503,7 +498,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex.  "
 												v-model="sss_doc_no"
 											/>
 											<small
@@ -528,7 +523,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex.  "
 												v-model="sss_emp_location_code"
 											/>
 											<small
@@ -568,7 +563,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 022500018635 "
 												v-model="phic_no"
 											/>
 											<small
@@ -591,7 +586,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. "
 												v-model="phic_initial"
 											/>
 											<small
@@ -616,7 +611,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex."
 												v-model="phic_signatory"
 											/>
 											<small
@@ -641,7 +636,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. "
 												v-model="phic_position"
 											/>
 											<small
@@ -680,7 +675,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex.123456789101 "
 												v-model="hdmf_no"
 											/>
 											<small
@@ -722,7 +717,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. "
 												v-model="tax_branch_code"
 											/>
 											<small
@@ -745,7 +740,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. "
 												v-model="alphalist_no"
 											/>
 											<small
@@ -774,7 +769,7 @@
 								v-if="isPending"
 								disabled
 							>
-								Loading ...
+								Saving...
 							</button>
 						</div>
 					</form>
@@ -788,7 +783,7 @@
 
 <script>
 // import axios from 'axios';
-import { ref, onUnmounted } from "vue";
+import { ref, onUnmounted, computed } from "vue";
 import useCreate from "../../composables/useCreate";
 import feather from "feather-icons";
 import Alert from "../../components/Alert";
@@ -809,33 +804,6 @@ export default {
 			});
 		},
 	},
-	// data() {
-	//   return {
-	//     selectedFile: null
-	//   }
-	// },
-	// methods: {
-	//   onFileChange(e) {
-	//     this.selectedFile = e.target.files[0];
-
-	//   },
-	//   onUpload() {
-	//     const fd = new FormData();
-	//     fd.append("code", "John");
-	//     // fd.append("name", "John");
-	//     fd.append("address", "John");
-	//     fd.append("vat_reg", "MSSC2022");
-	//     fd.append("classification", "John");
-	//     fd.append("tel_no", "MSSC2022");
-	//     // axios.common.headers['Accept'] = 'application/json';
-	//     fd.append('image_path', this.selectedFile);
-	//     axios.post('https://payroll-ent-cloud.herokuapp.com/api/setupcompany', fd)
-	//     .then(res => console.log(res))
-	//     .catch(err => console.log(err.response.data));
-
-	//     console.log(fd);
-	//   }
-	// }
 	setup() {
 		const { response, error, create, isPending } = useCreate();
 
@@ -904,26 +872,33 @@ export default {
 
 			if(selectedFile.value) {
 				form_data.append("image_path", selectedFile.value);
-				console.log('merong image', selectedFile)
+				// console.log('merong image', selectedFile)
 			}
-
+			// Checking form_data values
 			// for (var pair of form_data.entries()) {
 			// 	console.log(pair[0]+ ', ' + pair[1]); 
 			// }
-
 			
 			await create("setupcompany", form_data);
 
 			if (!error.value) {
-				name.value = "";
-				code.value = "";
-				address.value = "";
-				classification.value = "";
 				window.scrollTo(0, 0);
 			} else {
 				window.scrollTo(0, 0);
 			}
 		};
+
+		const commTabHasError = computed(() => {
+			return error.value && error.value.errors.email || error.value && error.value.errors.tel_no
+		});
+
+		const mainTabHasError = computed(() => {
+			return error.value && error.value.errors.code || error.value && error.value.errors.name || error.value && error.value.errors.vat_reg || error.value && error.value.errors.address
+		});
+
+		const connTabHasError = computed(() => {
+			return error.value && error.value.errors.sss_no || error.value && error.value.errors.phic_no || error.value && error.value.errors.hdmf_no || error.value && error.value.errors.tax_branch_code || error.value && error.value.errors.alphalist_no
+		});
 
 		const handleCloseModal = () => {
 			error.value.message = null;
@@ -967,6 +942,11 @@ export default {
 			response,
 			handleCloseModal,
 			onFileSelected,
+
+			commTabHasError,
+			mainTabHasError,
+			connTabHasError,
+
 		};
 	},
 };
