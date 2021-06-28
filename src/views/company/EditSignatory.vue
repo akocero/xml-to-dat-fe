@@ -1,17 +1,16 @@
 <template>
 	<div
 		class="modal fade"
-		id="create-signatory-modal"
+		id="update-signatory-modal"
 		tabindex="-1"
 		role="dialog"
-		aria-labelledby="exampleModalLabel"
 		aria-hidden="true"
 	>
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">
-						New Signatory
+						Edit Signatory
 					</h5>
 					<button
 						type="button"
@@ -25,17 +24,8 @@
 				</div>
 
 				<div class="modal-body">
-					<div class="row">
-						<div class="form-group col-12">
-							<label for="">Upload Signatory Image</label>
-							<input
-								type="file"
-								class="d-block"
-								id="input_signatory_image_path"
-							/>
-						</div>
-
-						<div class="form-group col-7">
+					<div class="row" v-if="signatory_id && item">
+						<div class="form-group col-5">
 							<label>
 								Prepared By:
 								<span class="text-danger text-bold">*</span>
@@ -48,37 +38,41 @@
 										error.errors.prepared_by &&
 										'is-invalid',
 								]"
-								id="input_signatory_prepared_by"
+								id="input_bank_code"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="prepared_by"
+								v-model="item.prepared_by"
 							/>
 							<small
 								v-if="error && error.errors.prepared_by"
+								id="emailHelp"
 								class="form-text text-danger"
 							>
 								{{ error.errors.prepared_by[0] }}
 							</small>
 						</div>
 
-						<div class="form-group col-md-5">
-							<label for=""
-								>Posistion
+						<div class="form-group col-7">
+							<label>
+								Position
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
-								name=""
+								type="text"
+								class="form-control"
 								:class="[
 									error &&
 										error.errors.position &&
 										'is-invalid',
 								]"
-								id="input_signatory_position"
-								class="form-control"
-								v-model="position"
+								id="input_bank_name"
+								aria-describedby="emailHelp"
+								placeholder="Ex. 1234567"
+								v-model="item.position"
 							/>
 							<small
 								v-if="error && error.errors.position"
+								id="emailHelp"
 								class="form-text text-danger"
 							>
 								{{ error.errors.position[0] }}
@@ -91,12 +85,17 @@
 					<button
 						type="button"
 						class="btn btn-custom-success"
+						@click="handleUpdate"
 						v-if="!isPending"
-						@click="handleCreate"
 					>
-						Save
+						Save Changes
 					</button>
-					<button type="button" class="btn btn-custom-success" v-else>
+					<button
+						v-else
+						type="button"
+						class="btn btn-custom-success"
+						disabled
+					>
 						Saving...
 					</button>
 				</div>
@@ -106,51 +105,59 @@
 </template>
 
 <script>
-import useCreate from "@/composables/useCreate.js";
-import { onUpdated, ref } from "vue";
+import useData from "@/composables/useData.js";
+import getItem from "@/composables/getItem.js";
+import { onUnmounted, ref } from "vue";
 import $ from "jquery";
-
 export default {
-	name: "CreateSignatory",
-	props: ["companyID"],
+	name: "EditSignatory",
+	props: ["signatory_id"],
 	components: {},
 	setup(props, { emit }) {
-		const { error, response, isPending, create } = useCreate();
+		const { error, response, isPending, update } = useData();
+		const { item, error: errorData, load } = getItem(
+			props.signatory_id,
+			"setupcompanysignatory"
+		);
 
-		const prepared_by = ref("");
-		const position = ref("");
+		load();
 
-		const handleCreate = async () => {
-			const newSignatory = {
-				setup_company_id: props.companyID,
-				prepared_by: prepared_by.value,
-				position: position.value,
+		const handleUpdate = async () => {
+			const updatedSignatory = {
+				setup_company_id: item.value.setup_company_id,
+				prepared_by: item.value.prepared_by,
+				position: item.value.position,
 			};
-			// console.log(newSignatory);
-			await create("setupcompanysignatory", newSignatory);
+
+			await update(
+				"setupcompanysignatory/" + props.signatory_id,
+				updatedSignatory
+			);
 
 			if (!error.value) {
-				$("#create-signatory-modal").modal("hide");
-				prepared_by.value = "";
-				position.value = "";
-				emit("signatoryAdded", response.value);
+				$("#update-signatory-modal").modal("hide");
+
+				emit("signatoryUpdated", response.value);
 			} else {
 				console.log("has error");
 			}
 		};
 
+		onUnmounted(() => {
+			item.value = null;
+		});
+
 		const closeModal = () => {
-			emit("hideCreateSignatory");
+			emit("hideEditSignatory");
 		};
 
 		return {
 			error,
 			isPending,
-			create,
-			handleCreate,
-			prepared_by,
-			position,
+			update,
+			handleUpdate,
 			closeModal,
+			item,
 		};
 	},
 };

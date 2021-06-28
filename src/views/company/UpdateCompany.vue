@@ -19,6 +19,15 @@
 
 	<transition name="alert">
 		<Alert
+			v-if="isBankUpdated"
+			:status="'info'"
+			:message="'Bank Updated'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
+
+	<transition name="alert">
+		<Alert
 			v-if="error && error.message"
 			:status="'error'"
 			:message="error.message"
@@ -34,12 +43,25 @@
 	/>
 
 	<EditBank
-		v-if="item"
-		:companyID="item.id"
-		:bank="forEditBank"
+		v-if="item && updatingBank"
+		:bank_id="update_bank_id"
 		@bankUpdated="bankUpdated($event)"
+		@hideEditBank="updatingBank = false"
 	/>
-	<!-- <CreateSignatory /> -->
+
+	<EditSignatory
+		v-if="item && updatingSignatory"
+		:signatory_id="update_signatory_id"
+		@signatoryUpdated="signatoryUpdated($event)"
+		@hideEditSignatory="updatingSignatory = false"
+	/>
+
+	<CreateSignatory
+		v-if="item && creatingSignatory"
+		:companyID="item.id"
+		@signatoryAdded="signatoryAdded($event)"
+		@hideCreateSignatory="creatingSignatory = false"
+	/>
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
@@ -803,7 +825,7 @@
 															.phic_signatory &&
 														'is-invalid',
 												]"
-												id="input_signatory"
+												id="input_phic_signatory"
 												placeholder="Ex."
 												v-model="item.phic_signatory"
 											/>
@@ -996,11 +1018,9 @@
 									<div
 										class="col-12 d-flex justify-content-between mb-3 align-items-center"
 									>
-										<div class="pl-2">
-											<h4 class="tab-pane-title">
-												Available Banks
-											</h4>
-										</div>
+										<h4 class="tab-pane-title">
+											Bank List
+										</h4>
 
 										<button
 											type="button"
@@ -1009,14 +1029,19 @@
 											data-target="#create-bank-modal"
 											data-backdrop="static"
 											data-keyboard="false"
-											@click="showCreateBank"
+											@click="showBankModal('create')"
 										>
 											Add Bank
 										</button>
 									</div>
 
 									<div class="col-md-12">
-										<div class="list">
+										<div
+											class="list"
+											v-if="
+												item.setup_company_banks.length
+											"
+										>
 											<div
 												class="list-item"
 												v-for="bank in item.setup_company_banks"
@@ -1058,8 +1083,13 @@
 														class="btn btn-sm btn-light"
 														data-toggle="modal"
 														data-target="#update-bank-modal"
+														data-backdrop="static"
+														data-keyboard="false"
 														@click="
-															forEditBank = bank
+															showBankModal(
+																'update',
+																bank.id
+															)
 														"
 													>
 														<i
@@ -1068,6 +1098,9 @@
 													</button>
 												</div>
 											</div>
+										</div>
+										<div v-else>
+											No bank available!
 										</div>
 									</div>
 								</div>
@@ -1083,48 +1116,84 @@
 									<div
 										class="col-12 d-flex justify-content-between mb-3 align-items-center"
 									>
-										<h4>Signatory list</h4>
+										<h4 class="tab-pane-title">
+											Signatory List
+										</h4>
 										<button
 											type="button"
 											class="btn btn-custom-primary btn-sm"
 											data-toggle="modal"
 											data-target="#create-signatory-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="
+												showSignatoryModal('create')
+											"
 										>
 											Add Signatory
 										</button>
 									</div>
 
 									<div class="col-md-12">
-										<table class="table">
-											<thead>
-												<tr>
-													<th scope="col">#</th>
-													<th scope="col">First</th>
-													<th scope="col">Last</th>
-													<th scope="col">Handle</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<th scope="row">1</th>
-													<td>Mark</td>
-													<td>Otto</td>
-													<td>@mdo</td>
-												</tr>
-												<tr>
-													<th scope="row">2</th>
-													<td>Jacob</td>
-													<td>Thornton</td>
-													<td>@fat</td>
-												</tr>
-												<tr>
-													<th scope="row">3</th>
-													<td>Larry</td>
-													<td>the Bird</td>
-													<td>@twitter</td>
-												</tr>
-											</tbody>
-										</table>
+										<div
+											class="list"
+											v-if="
+												item.setup_company_signatories
+													.length
+											"
+										>
+											<div
+												class="list-item"
+												v-for="signatory in item.setup_company_signatories"
+												:key="signatory.id"
+											>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>PREPARED BY:</label
+													>
+													<h4 class="list-value">
+														{{
+															signatory.prepared_by
+														}}
+													</h4>
+												</div>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>POSITION</label
+													>
+													<h4 class="list-value">
+														{{ signatory.position }}
+													</h4>
+												</div>
+												<div class="list-actions">
+													<button
+														type="button"
+														class="btn btn-sm btn-light"
+														data-toggle="modal"
+														data-target="#update-signatory-modal"
+														data-backdrop="static"
+														data-keyboard="false"
+														@click="
+															showSignatoryModal(
+																'update',
+																signatory.id
+															)
+														"
+													>
+														<i
+															class="far fa-edit"
+														></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div v-else>
+											No Signatory available!
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1169,6 +1238,7 @@ import Spinner from "@/components/Spinner.vue";
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
 import CreateSignatory from "./CreateSignatory";
+import EditSignatory from "./EditSignatory";
 
 import feather from "feather-icons";
 
@@ -1180,10 +1250,16 @@ export default {
 		CreateBank,
 		CreateSignatory,
 		EditBank,
+		EditSignatory,
 	},
 	computed: {
 		chevronRight: function() {
 			return feather.icons["chevron-right"].toSvg({
+				width: 18,
+			});
+		},
+		alertTriangle: function() {
+			return feather.icons["alert-circle"].toSvg({
 				width: 18,
 			});
 		},
@@ -1196,8 +1272,17 @@ export default {
 			"setupcompany"
 		);
 		const isBankAdded = ref(false);
-		const forEditBank = ref(null);
+		const isBankUpdated = ref(false);
+		const isSignatoryAdded = ref(false);
+		const isSignatoryUpdated = ref(false);
+
 		const creatingBank = ref(false);
+		const updatingBank = ref(false);
+		const creatingSignatory = ref(false);
+		const updatingSignatory = ref(false);
+
+		const update_bank_id = ref(null);
+		const update_signatory_id = ref(null);
 
 		onUnmounted(() => {
 			error.value = null;
@@ -1206,6 +1291,7 @@ export default {
 
 		load();
 
+		// methods/functions
 		const handleSubmit = async () => {
 			const data = {
 				name: item.value.name,
@@ -1239,11 +1325,81 @@ export default {
 			}
 		};
 
-		const showCreateBank = () => {
-			creatingBank.value = true;
-			console.log("sdsddd");
+		const showBankModal = (type, value = null) => {
+			if (type === "create") {
+				creatingBank.value = true;
+			} else {
+				updatingBank.value = true;
+				update_bank_id.value = value;
+				console.log(update_bank_id.value);
+			}
 		};
 
+		const showSignatoryModal = (type, value = null) => {
+			if (type === "create") {
+				creatingSignatory.value = true;
+			} else {
+				updatingSignatory.value = true;
+				update_signatory_id.value = value;
+				// console.log(update_bank_id.value);
+			}
+		};
+
+		const handleCloseModal = () => {
+			error.value = null;
+			response.value = "";
+			isBankAdded.value = false;
+			isBankUpdated.value = false;
+			isSignatoryAdded.value = false;
+			isSignatoryUpdated.value = false;
+		};
+
+		const bankAdded = (newBank) => {
+			creatingBank.value = false;
+			isBankAdded.value = true;
+			item.value.setup_company_banks = [
+				newBank,
+				...item.value.setup_company_banks,
+			];
+			console.log(newBank);
+			window.scrollTo(0, 0);
+		};
+
+		const bankUpdated = (updatedBank) => {
+			updatingBank.value = false;
+			isBankUpdated.value = true;
+			const newbanks = item.value.setup_company_banks.filter(
+				(bank) => bank.id !== updatedBank.id
+			);
+			item.value.setup_company_banks = [updatedBank, ...newbanks];
+			window.scrollTo(0, 0);
+		};
+
+		const signatoryAdded = (newSignatory) => {
+			creatingSignatory.value = false;
+			isSignatoryAdded.value = true;
+			item.value.setup_company_signatories = [
+				newSignatory,
+				...item.value.setup_company_signatories,
+			];
+			console.log(newSignatory);
+			window.scrollTo(0, 0);
+		};
+
+		const signatoryUpdated = (updatedSignatory) => {
+			updatingSignatory.value = false;
+			isSignatoryUpdated.value = true;
+			const newSignatories = item.value.setup_company_signatories.filter(
+				(signatory) => signatory.id !== updatedSignatory.id
+			);
+			item.value.setup_company_signatories = [
+				updatedSignatory,
+				...newSignatories,
+			];
+			window.scrollTo(0, 0);
+		};
+
+		// computed error handling
 		const commTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
@@ -1270,36 +1426,37 @@ export default {
 			);
 		});
 
-		const handleCloseModal = () => {
-			error.value = null;
-			response.value = "";
-			isBankAdded.value = false;
-		};
-
-		const bankAdded = (newBank) => {
-			creatingBank.value = false;
-			isBankAdded.value = true;
-			item.value.setup_company_banks = [
-				...item.value.setup_company_banks,
-				newBank,
-			];
-		};
-
 		return {
 			handleSubmit,
 			error,
 			isPending,
 			response,
 			item,
+
 			handleCloseModal,
+
 			isBankAdded,
+			isBankUpdated,
 			bankAdded,
-			forEditBank,
+			bankUpdated,
+			creatingBank,
+			updatingBank,
+			showBankModal,
+
+			isSignatoryAdded,
+			isSignatoryUpdated,
+			signatoryAdded,
+			signatoryUpdated,
+			creatingSignatory,
+			updatingSignatory,
+			showSignatoryModal,
+
+			update_bank_id,
+			update_signatory_id,
+
 			connTabHasError,
 			mainTabHasError,
 			commTabHasError,
-			creatingBank,
-			showCreateBank,
 		};
 	},
 };
