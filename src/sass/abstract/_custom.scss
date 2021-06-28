@@ -1,0 +1,57 @@
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+	background-color: $primary-color-light;
+	color: $light-color;
+}
+
+.form-control {
+	border: none;
+	border-radius: 0;
+	border-bottom: 2px solid $grey-color;
+	background-color: $light-color;
+}
+
+.form-group {
+	label {
+		font-size: 0.9rem;
+	}
+}
+
+.sidebar-dark-primary {
+	background-color: $primary-color;
+}
+
+.layout-navbar-fixed
+	.wrapper
+	.sidebar-dark-primary
+	.brand-link:not([class*="navbar"]) {
+	background-color: $primary-color;
+}
+
+[class*="sidebar-dark"] .brand-link {
+	border-bottom: 1px solid $primary-color-light;
+}
+
+#pills-tab {
+	border-bottom: 1px solid $grey-color;
+
+	.nav-link {
+		position: relative;
+		border-radius: 4px 4px 0 0;
+		&.pr-4 {
+			padding-right: 1.7rem !important;
+		}
+		&.active {
+			color: $primary-color-light;
+			font-weight: 600;
+			background: transparent;
+			border-bottom: 2px solid $primary-color-light;
+		}
+
+		.icon-error {
+			position: absolute;
+			top: 0;
+			right: 5px;
+		}
+	}
+}

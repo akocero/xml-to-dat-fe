@@ -1,24 +1,20 @@
 .custom-badge {
-    background-color: rgb(224, 224, 224);
-    border-radius: 1rem;
-    color: rgb(165, 165, 165);
-    font-size: 0.8rem;
-    padding: 1px 8px;
-    border: 1px solid rgb(212, 212, 212);
+	background-color: $light-color;
+	border-radius: 1rem;
+	color: $dark-grey-color;
+	font-size: 0.8rem;
+	padding: 1px 8px;
+	border: 1px solid $grey-color;
 
-    &-warning {
-        background-color: #FDF5DD;
-        border: 1px solid #f0e4bc;
-        color: #be8c0c;
-    }
+	&-warning {
+		background-color: #fdf5dd;
+		border: 1px solid #f0e4bc;
+		color: #be8c0c;
+	}
 
-    &-success {
-        background-color: #CFF6DD;
-        border: 1px solid #9eeebb;
-        color: #4daf4d;
-    }
+	&-success {
+		background-color: #cff6dd;
+		border: 1px solid #9eeebb;
+		color: #4daf4d;
+	}
 }
-
-
-
-
