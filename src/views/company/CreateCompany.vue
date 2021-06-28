@@ -31,70 +31,140 @@
 
 			<div class="row">
 				<div class="col-12">
-					<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+					<ul
+						class="nav nav-pills mb-3"
+						id="pills-tab"
+						role="tablist"
+					>
 						<li class="nav-item">
-							<a class="nav-link active" :class="mainTabHasError && 'pr-4'" id="pills-main-tab" data-toggle="pill" href="#pills-main" role="tab" aria-controls="pills-main" aria-selected="true">Main
-							<i  v-if="mainTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i>
+							<a
+								class="nav-link active"
+								:class="mainTabHasError && 'pr-4'"
+								id="pills-main-tab"
+								data-toggle="pill"
+								href="#pills-main"
+								role="tab"
+								aria-controls="pills-main"
+								aria-selected="true"
+								>Main
+								<i
+									v-if="mainTabHasError"
+									v-html="alertTriangle"
+									class="text-danger icon-error"
+								></i>
 							</a>
-							
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" :class="commTabHasError && 'pr-4'"  id="pills-comm-tab" data-toggle="pill" href="#pills-comm" role="tab" aria-controls="pills-comm" aria-selected="false">
-							Communication
-							<i  v-if="commTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i> 
+							<a
+								class="nav-link"
+								:class="commTabHasError && 'pr-4'"
+								id="pills-comm-tab"
+								data-toggle="pill"
+								href="#pills-comm"
+								role="tab"
+								aria-controls="pills-comm"
+								aria-selected="false"
+							>
+								Communication
+								<i
+									v-if="commTabHasError"
+									v-html="alertTriangle"
+									class="text-danger icon-error"
+								></i>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" 
-							:class="connTabHasError ? 'pr-4' : ''"  
-							id="pills-contri-tab" data-toggle="pill" href="#pills-contri" role="tab" aria-controls="pills-contri" aria-selected="false">
-							Contribution
-							<i  v-if="connTabHasError" v-html="alertTriangle" class="text-danger icon-error"></i>
+							<a
+								class="nav-link"
+								:class="connTabHasError ? 'pr-4' : ''"
+								id="pills-contri-tab"
+								data-toggle="pill"
+								href="#pills-contri"
+								role="tab"
+								aria-controls="pills-contri"
+								aria-selected="false"
+							>
+								Contribution
+								<i
+									v-if="connTabHasError"
+									v-html="alertTriangle"
+									class="text-danger icon-error"
+								></i>
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link disabled" id="pills-banks-tab" data-toggle="pill" href="#pills-banks" role="tab" aria-controls="pills-banks" aria-selected="false">Banks</a>
-							
+							<a
+								class="nav-link disabled"
+								id="pills-banks-tab"
+								data-toggle="pill"
+								href="#pills-banks"
+								role="tab"
+								aria-controls="pills-banks"
+								aria-selected="false"
+								>Banks</a
+							>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link disabled" id="pills-signatory-tab" data-toggle="pill" href="#pills-signatory" role="tab" aria-controls="pills-signatory" aria-selected="false">Signatory</a>
+							<a
+								class="nav-link disabled"
+								id="pills-signatory-tab"
+								data-toggle="pill"
+								href="#pills-signatory"
+								role="tab"
+								aria-controls="pills-signatory"
+								aria-selected="false"
+								>Signatory</a
+							>
 						</li>
 					</ul>
 					<form @submit.prevent="handleSubmit" id="form_create_user">
-
 						<div class="tab-content pt-3" id="pills-tabContent">
-							<div class="tab-pane fade show active" id="pills-main" role="tabpanel" aria-labelledby="pills-main-tab">
-								
+							<div
+								class="tab-pane fade show active"
+								id="pills-main"
+								role="tabpanel"
+								aria-labelledby="pills-main-tab"
+							>
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
 										<h5 class="h5">Company Image</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
 									<div class="col-md-2">
-										<img v-if="imageUrl"
+										<img
+											v-if="imageUrl"
 											:src="imageUrl"
-											
 											alt=""
-											style="width: 90%;"
+											style="width: 90%"
 										/>
-										<img v-else
+										<img
+											v-else
 											src="../../assets/no-image.png"
 											alt=""
-											style="width: 90%;"
+											style="width: 90%"
 										/>
 									</div>
 
 									<div class="form-group col-md-6">
 										<label for="">Upload Image</label>
-										<input type="file" class="d-block mt-2" @change="onFileSelected" />
-										<small>The maximum file size allowed is 200KB.</small
+										<input
+											type="file"
+											class="d-block mt-2"
+											@change="onFileSelected"
+										/>
+										<small
+											>The maximum file size allowed is
+											200KB.</small
 										><br /><br />
 										<small
-											v-if="error && error.errors.image_path"
+											v-if="
+												error && error.errors.image_path
+											"
 											id="emailHelp"
 											class="form-text text-danger"
 										>
@@ -109,8 +179,9 @@
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -118,13 +189,18 @@
 										<div class="form-group col-4">
 											<label>
 												Code
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.code && 'is-invalid',
+													error &&
+														error.errors.code &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -132,7 +208,9 @@
 												v-model="code"
 											/>
 											<small
-												v-if="error && error.errors.code"
+												v-if="
+													error && error.errors.code
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -143,13 +221,18 @@
 										<div class="form-group col-8">
 											<label for=""
 												>Name
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.name && 'is-invalid',
+													error &&
+														error.errors.name &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -157,7 +240,9 @@
 												v-model="name"
 											/>
 											<small
-												v-if="error && error.errors.name"
+												v-if="
+													error && error.errors.name
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -168,7 +253,10 @@
 										<div class="form-group col-4">
 											<label
 												>Vat Registration
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
@@ -184,7 +272,10 @@
 												v-model="vat_reg"
 											/>
 											<small
-												v-if="error && error.errors.vat_reg"
+												v-if="
+													error &&
+														error.errors.vat_reg
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -192,19 +283,21 @@
 											</small>
 										</div>
 
-										
-
 										<div class="form-group col-8">
 											<label
 												>Classification
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.classification &&
+														error.errors
+															.classification &&
 														'is-invalid',
 												]"
 												id=""
@@ -213,18 +306,28 @@
 												v-model="classification"
 											/>
 											<small
-												v-if="error && error.errors.classification"
+												v-if="
+													error &&
+														error.errors
+															.classification
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.classification[0] }}
+												{{
+													error.errors
+														.classification[0]
+												}}
 											</small>
 										</div>
 
 										<div class="col-md-12">
 											<label for=""
 												>Address
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<textarea
 												name=""
@@ -238,7 +341,10 @@
 												v-model="address"
 											></textarea>
 											<small
-												v-if="error && error.errors.address"
+												v-if="
+													error &&
+														error.errors.address
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -246,16 +352,21 @@
 											</small>
 										</div>
 									</div>
-								</div>					
-				
+								</div>
 							</div>
-							<div class="tab-pane fade" id="pills-comm" role="tabpanel" aria-labelledby="pills-comm-tab">
+							<div
+								class="tab-pane fade"
+								id="pills-comm"
+								role="tabpanel"
+								aria-labelledby="pills-comm-tab"
+							>
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -263,7 +374,10 @@
 										<div class="form-group col-6">
 											<label
 												>Tel No.
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
@@ -279,7 +393,9 @@
 												v-model="tel_no"
 											/>
 											<small
-												v-if="error && error.errors.tel_no"
+												v-if="
+													error && error.errors.tel_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -293,7 +409,8 @@
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.tel_no_alt &&
+														error.errors
+															.tel_no_alt &&
 														'is-invalid',
 												]"
 												id=""
@@ -302,7 +419,10 @@
 												v-model="tel_no_alt"
 											/>
 											<small
-												v-if="error && error.errors.tel_no_alt"
+												v-if="
+													error &&
+														error.errors.tel_no_alt
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -313,13 +433,18 @@
 										<div class="form-group col-6">
 											<label
 												>Email
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="email"
 												class="form-control"
 												:class="[
-													error && error.errors.email && 'is-invalid',
+													error &&
+														error.errors.email &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -327,16 +452,15 @@
 												v-model="email"
 											/>
 											<small
-												v-if="error && error.errors.email"
+												v-if="
+													error && error.errors.email
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
 												{{ error.errors.email[0] }}
 											</small>
 										</div>
-
-										
-								
 									</div>
 								</div>
 								<hr />
@@ -344,8 +468,9 @@
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -366,7 +491,10 @@
 												v-model="website"
 											/>
 											<small
-												v-if="error && error.errors.website"
+												v-if="
+													error &&
+														error.errors.website
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -390,7 +518,10 @@
 												v-model="facebook"
 											/>
 											<small
-												v-if="error && error.errors.facebook"
+												v-if="
+													error &&
+														error.errors.facebook
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -414,7 +545,10 @@
 												v-model="twitter"
 											/>
 											<small
-												v-if="error && error.errors.twitter"
+												v-if="
+													error &&
+														error.errors.twitter
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -424,13 +558,19 @@
 									</div>
 								</div>
 							</div>
-							<div class="tab-pane fade" id="pills-contri" role="tabpanel" aria-labelledby="pills-contri-tab">
+							<div
+								class="tab-pane fade"
+								id="pills-contri"
+								role="tabpanel"
+								aria-labelledby="pills-contri-tab"
+							>
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">SSS Info</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -438,7 +578,10 @@
 										<div class="form-group col-6">
 											<label
 												>SSS Number
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
@@ -454,7 +597,9 @@
 												v-model="sss_no"
 											/>
 											<small
-												v-if="error && error.errors.sss_no"
+												v-if="
+													error && error.errors.sss_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -468,7 +613,8 @@
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.sss_initial &&
+														error.errors
+															.sss_initial &&
 														'is-invalid',
 												]"
 												id=""
@@ -477,24 +623,35 @@
 												v-model="sss_initial"
 											/>
 											<small
-												v-if="error && error.errors.sss_initial"
+												v-if="
+													error &&
+														error.errors.sss_initial
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.sss_initial[0] }}
+												{{
+													error.errors.sss_initial[0]
+												}}
 											</small>
 										</div>
 
 										<div class="form-group col-6">
 											<label
 												>SSS Doc No
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.sss_doc_no && 'is-invalid',
+													error &&
+														error.errors
+															.sss_doc_no &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -502,7 +659,10 @@
 												v-model="sss_doc_no"
 											/>
 											<small
-												v-if="error && error.errors.sss_doc_no"
+												v-if="
+													error &&
+														error.errors.sss_doc_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -513,13 +673,19 @@
 										<div class="form-group col-6">
 											<label
 												>SSS Employer Location Code
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.sss_emp_location_code && 'is-invalid',
+													error &&
+														error.errors
+															.sss_emp_location_code &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -527,14 +693,20 @@
 												v-model="sss_emp_location_code"
 											/>
 											<small
-												v-if="error && error.errors.sss_emp_location_code"
+												v-if="
+													error &&
+														error.errors
+															.sss_emp_location_code
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.sss_emp_location_code[0] }}
+												{{
+													error.errors
+														.sss_emp_location_code[0]
+												}}
 											</small>
 										</div>
-
 									</div>
 								</div>
 								<hr class="pb-3" />
@@ -542,8 +714,9 @@
 									<div class="col-4">
 										<h5 class="h5">Philhealth Info</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -551,7 +724,10 @@
 										<div class="form-group col-6">
 											<label
 												>Philhealth Number
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
@@ -567,7 +743,10 @@
 												v-model="phic_no"
 											/>
 											<small
-												v-if="error && error.errors.phic_no"
+												v-if="
+													error &&
+														error.errors.phic_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
@@ -581,7 +760,8 @@
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.phic_initial &&
+														error.errors
+															.phic_initial &&
 														'is-invalid',
 												]"
 												id=""
@@ -590,24 +770,36 @@
 												v-model="phic_initial"
 											/>
 											<small
-												v-if="error && error.errors.phic_initial"
+												v-if="
+													error &&
+														error.errors
+															.phic_initial
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.phic_initial[0] }}
+												{{
+													error.errors.phic_initial[0]
+												}}
 											</small>
 										</div>
 
 										<div class="form-group col-6">
 											<label
 												>Philhealth Signatory
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.phic_signatory && 'is-invalid',
+													error &&
+														error.errors
+															.phic_signatory &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -615,24 +807,37 @@
 												v-model="phic_signatory"
 											/>
 											<small
-												v-if="error && error.errors.phic_signatory"
+												v-if="
+													error &&
+														error.errors
+															.phic_signatory
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.phic_signatory[0] }}
+												{{
+													error.errors
+														.phic_signatory[0]
+												}}
 											</small>
 										</div>
 
 										<div class="form-group col-6">
 											<label
 												>Philhealth Position
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.phic_position && 'is-invalid',
+													error &&
+														error.errors
+															.phic_position &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -640,14 +845,20 @@
 												v-model="phic_position"
 											/>
 											<small
-												v-if="error && error.errors.phic_position"
+												v-if="
+													error &&
+														error.errors
+															.phic_position
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.phic_position[0] }}
+												{{
+													error.errors
+														.phic_position[0]
+												}}
 											</small>
 										</div>
-
 									</div>
 								</div>
 								<hr class="pb-3" />
@@ -655,23 +866,28 @@
 									<div class="col-4">
 										<h5 class="h5">Pag-ibig Info</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
 									<div class="row col-8">
-
 										<div class="form-group col-6">
 											<label
 												>Pag-ibig Number
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
-													error && error.errors.hdmf_no && 'is-invalid',
+													error &&
+														error.errors.hdmf_no &&
+														'is-invalid',
 												]"
 												id=""
 												aria-describedby="emailHelp"
@@ -679,14 +895,16 @@
 												v-model="hdmf_no"
 											/>
 											<small
-												v-if="error && error.errors.hdmf_no"
+												v-if="
+													error &&
+														error.errors.hdmf_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
 												{{ error.errors.hdmf_no[0] }}
 											</small>
 										</div>
-
 									</div>
 								</div>
 
@@ -694,10 +912,13 @@
 
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Other Conributon Details</h5>
+										<h5 class="h5">
+											Other Conributon Details
+										</h5>
 										<label for="">
-											You can change your avatar here or remove the
-											current avatar to revert to gravatar.com
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
 										</label>
 									</div>
 
@@ -705,14 +926,18 @@
 										<div class="form-group col-6">
 											<label
 												>Tax Branch Code
-												<span class="text-danger text-bold">*</span>
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
 											</label>
 											<input
 												type="text"
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.tax_branch_code &&
+														error.errors
+															.tax_branch_code &&
 														'is-invalid',
 												]"
 												id=""
@@ -721,11 +946,18 @@
 												v-model="tax_branch_code"
 											/>
 											<small
-												v-if="error && error.errors.tax_branch_code"
+												v-if="
+													error &&
+														error.errors
+															.tax_branch_code
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.tax_branch_code[0] }}
+												{{
+													error.errors
+														.tax_branch_code[0]
+												}}
 											</small>
 										</div>
 										<div class="form-group col-6">
@@ -735,7 +967,8 @@
 												class="form-control"
 												:class="[
 													error &&
-														error.errors.alphalist_no &&
+														error.errors
+															.alphalist_no &&
 														'is-invalid',
 												]"
 												id=""
@@ -744,14 +977,19 @@
 												v-model="alphalist_no"
 											/>
 											<small
-												v-if="error && error.errors.alphalist_no"
+												v-if="
+													error &&
+														error.errors
+															.alphalist_no
+												"
 												id="emailHelp"
 												class="form-text text-danger"
 											>
-												{{ error.errors.alphalist_no[0] }}
+												{{
+													error.errors.alphalist_no[0]
+												}}
 											</small>
 										</div>
-
 									</div>
 								</div>
 							</div>
@@ -774,9 +1012,7 @@
 						</div>
 					</form>
 				</div>
-				
 			</div>
-			
 		</div>
 	</div>
 </template>
@@ -866,19 +1102,19 @@ export default {
 				alphalist_no: alphalist_no.value,
 			};
 
-			for ( var key in data ) {
+			for (var key in data) {
 				form_data.append(key, data[key]);
 			}
 
-			if(selectedFile.value) {
+			if (selectedFile.value) {
 				form_data.append("image_path", selectedFile.value);
 				// console.log('merong image', selectedFile)
 			}
 			// Checking form_data values
 			// for (var pair of form_data.entries()) {
-			// 	console.log(pair[0]+ ', ' + pair[1]); 
+			// 	console.log(pair[0]+ ', ' + pair[1]);
 			// }
-			
+
 			await create("setupcompany", form_data);
 
 			if (!error.value) {
@@ -889,15 +1125,29 @@ export default {
 		};
 
 		const commTabHasError = computed(() => {
-			return error.value && error.value.errors.email || error.value && error.value.errors.tel_no
+			return (
+				(error.value && error.value.errors.email) ||
+				(error.value && error.value.errors.tel_no)
+			);
 		});
 
 		const mainTabHasError = computed(() => {
-			return error.value && error.value.errors.code || error.value && error.value.errors.name || error.value && error.value.errors.vat_reg || error.value && error.value.errors.address
+			return (
+				(error.value && error.value.errors.code) ||
+				(error.value && error.value.errors.name) ||
+				(error.value && error.value.errors.vat_reg) ||
+				(error.value && error.value.errors.address)
+			);
 		});
 
 		const connTabHasError = computed(() => {
-			return error.value && error.value.errors.sss_no || error.value && error.value.errors.phic_no || error.value && error.value.errors.hdmf_no || error.value && error.value.errors.tax_branch_code || error.value && error.value.errors.alphalist_no
+			return (
+				(error.value && error.value.errors.sss_no) ||
+				(error.value && error.value.errors.phic_no) ||
+				(error.value && error.value.errors.hdmf_no) ||
+				(error.value && error.value.errors.tax_branch_code) ||
+				(error.value && error.value.errors.alphalist_no)
+			);
 		});
 
 		const handleCloseModal = () => {
@@ -908,7 +1158,7 @@ export default {
 		const onFileSelected = (e) => {
 			selectedFile.value = e.target.files[0];
 			imageUrl.value = URL.createObjectURL(selectedFile.value);
-		}
+		};
 
 		return {
 			code,
@@ -946,7 +1196,6 @@ export default {
 			commTabHasError,
 			mainTabHasError,
 			connTabHasError,
-
 		};
 	},
 };

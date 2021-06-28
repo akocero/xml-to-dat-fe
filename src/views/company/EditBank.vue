@@ -1,31 +1,29 @@
 <template>
 	<div
 		class="modal fade"
-		id="create-bank-modal"
+		id="update-bank-modal"
 		tabindex="-1"
 		role="dialog"
-		aria-labelledby="exampleModalLabel"
 		aria-hidden="true"
 	>
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">
-						New Bank
+						Edit Bank
 					</h5>
 					<button
 						type="button"
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 
 				<div class="modal-body">
-					<div class="row">
+					<div class="row" v-if="bank">
 						<div class="form-group col-5">
 							<label>
 								Code
@@ -42,7 +40,7 @@
 								id="input_bank_code"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="bank_code"
+								v-model="bank.bank_code"
 							/>
 							<small
 								v-if="error && error.errors.bank_code"
@@ -67,7 +65,7 @@
 								id="input_bank_name"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="name"
+								v-model="bank.name"
 							/>
 							<small
 								v-if="error && error.errors.name"
@@ -92,7 +90,7 @@
 								]"
 								id="input_bank_description"
 								class="form-control"
-								v-model="description"
+								v-model="bank.description"
 							></textarea>
 							<small
 								v-if="error && error.errors.description"
@@ -109,9 +107,9 @@
 					<button
 						type="button"
 						class="btn btn-custom-success"
-						@click="handleCreate"
+						@click="handleUpdate"
 					>
-						Save
+						Save Changes
 					</button>
 				</div>
 			</div>
@@ -120,55 +118,40 @@
 </template>
 
 <script>
-import useCreate from "@/composables/useCreate.js";
-import { onUpdated, ref } from "vue";
+import useData from "@/composables/useData.js";
+import { ref } from "vue";
 import $ from "jquery";
-
 export default {
-	name: "CreateBank",
-	props: ["companyID"],
+	name: "EditBank",
+	props: ["companyID", "bank"],
 	components: {},
 	setup(props, { emit }) {
-		const { error, isPending, create } = useCreate();
+		const { error, item, isPending, update } = useData();
 
-		const bank_code = ref("");
-		const name = ref("");
-		const description = ref("");
-
-		const handleCreate = async () => {
-			const newBank = {
+		const handleUpdate = async () => {
+			const updatedBank = {
 				setup_company_id: props.companyID,
-				bank_code: bank_code.value,
-				name: name.value,
-				description: description.value,
+				bank_code: props.bank.bank_code,
+				name: props.bank.name,
+				description: props.bank.description,
 			};
 			// console.log(newBank);
-			await create("setupcompanybank", newBank);
+			await update(`setupcompanybank/${props.bank.id}`, updatedBank);
 
 			if (!error.value) {
-				$("#create-bank-modal").modal("hide");
-				bank_code.value = "";
-				name.value = "";
-				description.value = "";
-				emit("bankAdded", newBank);
+				$("#update-bank-modal").modal("hide");
+
+				emit("bankUpdated", updatedBank);
 			} else {
 				console.log("has error");
 			}
 		};
 
-		const closeModal = () => {
-			emit("hideCreateBank");
-		};
-
 		return {
 			error,
 			isPending,
-			create,
-			handleCreate,
-			bank_code,
-			name,
-			description,
-			closeModal,
+			update,
+			handleUpdate,
 		};
 	},
 };
