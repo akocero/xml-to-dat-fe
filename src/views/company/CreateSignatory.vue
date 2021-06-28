@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="modal fade"
-		id="create-bank-modal"
+		id="create-signatory-modal"
 		tabindex="-1"
 		role="dialog"
 		aria-labelledby="exampleModalLabel"
@@ -10,15 +10,14 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">
-						New Bank
+					<h5 class="modal-title" id="exampleModalLabel">
+						New Signatory
 					</h5>
 					<button
 						type="button"
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -35,21 +34,19 @@
 								type="text"
 								class="form-control"
 								:class="[
-									error &&
-										error.errors.bank_code &&
-										'is-invalid',
+									error && error.errors.code && 'is-invalid',
 								]"
-								id="input_bank_code"
+								id=""
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="bank_code"
+								v-model="code"
 							/>
 							<small
-								v-if="error && error.errors.bank_code"
+								v-if="error && error.errors.code"
 								id="emailHelp"
 								class="form-text text-danger"
 							>
-								{{ error.errors.bank_code[0] }}
+								{{ error.errors.code[0] }}
 							</small>
 						</div>
 
@@ -62,19 +59,19 @@
 								type="text"
 								class="form-control"
 								:class="[
-									error && error.errors.name && 'is-invalid',
+									error && error.errors.code && 'is-invalid',
 								]"
-								id="input_bank_name"
+								id=""
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="name"
+								v-model="code"
 							/>
 							<small
-								v-if="error && error.errors.name"
+								v-if="error && error.errors.code"
 								id="emailHelp"
 								class="form-text text-danger"
 							>
-								{{ error.errors.name[0] }}
+								{{ error.errors.code[0] }}
 							</small>
 						</div>
 
@@ -87,30 +84,26 @@
 								name=""
 								:class="[
 									error &&
-										error.errors.description &&
+										error.errors.address &&
 										'is-invalid',
 								]"
-								id="input_bank_description"
+								id=""
 								class="form-control"
-								v-model="description"
+								v-model="address"
 							></textarea>
 							<small
-								v-if="error && error.errors.description"
+								v-if="error && error.errors.address"
 								id="emailHelp"
 								class="form-text text-danger"
 							>
-								{{ error.errors.description[0] }}
+								{{ error.errors.address[0] }}
 							</small>
 						</div>
 					</div>
 				</div>
 
 				<div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-custom-success"
-						@click="handleCreate"
-					>
+					<button type="button" class="btn btn-custom-success">
 						Save
 					</button>
 				</div>
@@ -120,57 +113,8 @@
 </template>
 
 <script>
-import useCreate from "@/composables/useCreate.js";
-import { onUpdated, ref } from "vue";
-import $ from "jquery";
-
 export default {
-	name: "CreateBank",
-	props: ["companyID"],
-	components: {},
-	setup(props, { emit }) {
-		const { error, isPending, create } = useCreate();
-
-		const bank_code = ref("");
-		const name = ref("");
-		const description = ref("");
-
-		const handleCreate = async () => {
-			const newBank = {
-				setup_company_id: props.companyID,
-				bank_code: bank_code.value,
-				name: name.value,
-				description: description.value,
-			};
-			// console.log(newBank);
-			await create("setupcompanybank", newBank);
-
-			if (!error.value) {
-				$("#create-bank-modal").modal("hide");
-				bank_code.value = "";
-				name.value = "";
-				description.value = "";
-				emit("bankAdded", newBank);
-			} else {
-				console.log("has error");
-			}
-		};
-
-		const closeModal = () => {
-			emit("hideCreateBank");
-		};
-
-		return {
-			error,
-			isPending,
-			create,
-			handleCreate,
-			bank_code,
-			name,
-			description,
-			closeModal,
-		};
-	},
+	name: "CreateSignatory",
 };
 </script>
 

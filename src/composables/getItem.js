@@ -8,7 +8,7 @@ const getItem = (id, url) => {
     const load = async () => {
         try {
            const res = await axios.get(`${url}/${id}`);
-            // console.log(res.data)
+            console.log(res.data)
             item.value = res.data
            return res.data
         }

@@ -1,0 +1,54 @@
+.list {
+	&-item {
+		position: relative;
+		padding: 0.5rem 1.5rem;
+		display: grid;
+		grid-template-columns: 1.5fr 2fr 4fr;
+		// box-shadow: 0 0.225rem 0.25rem rgba(0, 0, 0, 0.075);
+		border: 1px solid rgba(0, 0, 0, 0.062);
+		margin-bottom: 0.7rem;
+	}
+
+	&-col {
+		margin-right: 2rem;
+	}
+
+	&-actions {
+		// background-color: red;
+		position: absolute;
+		top: 1.2rem;
+		right: 1.5rem;
+	}
+
+	&-label {
+		font-size: 0.7rem;
+		letter-spacing: 0.9px;
+		font-weight: 700 !important;
+		color: rgb(173, 173, 173);
+	}
+
+	&-value {
+		font-weight: 600;
+		font-size: 0.96rem;
+		letter-spacing: 0.3px;
+		color: rgb(59, 59, 59);
+	}
+}
+
+.tab-pane {
+	&-title {
+		font-weight: 600;
+		font-size: 1.2rem;
+		letter-spacing: 0.3px;
+		margin-bottom: 0;
+		color: rgb(59, 59, 59);
+	}
+
+	&-subtitle {
+		font-size: 0.8rem;
+		letter-spacing: 0.9px;
+		font-weight: 700 !important;
+		color: rgb(194, 194, 194);
+		margin-bottom: 0;
+	}
+}
