@@ -110,8 +110,12 @@
 						type="button"
 						class="btn btn-custom-success"
 						@click="handleCreate"
+						v-if="!isPending"
 					>
 						Save
+					</button>
+					<button type="button" class="btn btn-custom-success" v-else>
+						Saving...
 					</button>
 				</div>
 			</div>
@@ -129,7 +133,7 @@ export default {
 	props: ["companyID"],
 	components: {},
 	setup(props, { emit }) {
-		const { error, isPending, create } = useCreate();
+		const { error, response, isPending, create } = useCreate();
 
 		const bank_code = ref("");
 		const name = ref("");
@@ -150,7 +154,7 @@ export default {
 				bank_code.value = "";
 				name.value = "";
 				description.value = "";
-				emit("bankAdded", newBank);
+				emit("bankAdded", response.value);
 			} else {
 				console.log("has error");
 			}
