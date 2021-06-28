@@ -13,7 +13,7 @@ const routes = [
   {
     path: '/',
     name: 'auth',
-    component: () => import('@/views/login/Auth'),
+    component: () => import('@/views/auth/Auth'),
     beforeEnter: noAuthRequired
   },
   {

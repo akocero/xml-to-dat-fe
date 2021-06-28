@@ -7,7 +7,7 @@
 				<p>
 					Welcome! Use your company email to sign in to your account.
 				</p>
-				
+
 				<transition name="alert">
 					<Alert
 						v-if="error"
@@ -31,8 +31,7 @@
 						/>
 						<i v-html="mailIcon" class="input-icon"></i>
 					</div>
-					
-					
+
 					<small
 						v-if="error && error.errors?.login_id"
 						id=""
@@ -42,20 +41,30 @@
 					</small>
 				</div>
 				<div class="form-group">
-					<label for="" >Password</label>
+					<label for="">Password</label>
 					<div style="position: relative;">
-					<input
-						type="password"
-						class="form-control"
-						id="password"
-						placeholder="Password"
-						v-model="password"
-						:class="[
-							error && error.errors?.password && 'is-invalid',
-						]"
-					/>
-						<i v-html="eye" class="input-icon" @click="handleShowPassword" v-if="showPassword"></i>
-						<i v-html="eyeOff" class="input-icon" @click="handleShowPassword" v-else></i>
+						<input
+							type="password"
+							class="form-control"
+							id="password"
+							placeholder="Password"
+							v-model="password"
+							:class="[
+								error && error.errors?.password && 'is-invalid',
+							]"
+						/>
+						<i
+							v-html="eye"
+							class="input-icon"
+							@click="handleShowPassword"
+							v-if="showPassword"
+						></i>
+						<i
+							v-html="eyeOff"
+							class="input-icon"
+							@click="handleShowPassword"
+							v-else
+						></i>
 					</div>
 					<small
 						v-if="error && error.errors?.password"
@@ -86,7 +95,7 @@
 					</button>
 				</div>
 			</form>
-			<SelectCompany v-if="user" :user="user?.id"/>
+			<SelectCompany v-if="user" :user="user?.id" />
 		</div>
 		<div class="col-md-8 bg-navy-blue auth-right">
 			<div class="content">
@@ -100,25 +109,8 @@
 				<p>
 					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
 					Modi nostrum, exercitationem necessitatibus veniam ratione
-					deleniti expedita ipsum ducimus, iure officia aliquam
-					architecto. Ab delectus accusantium saepe fugiat inventore
-					ad incidunt.
+					deleniti expedita ipsum ducimus.
 				</p>
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-					Modi nostrum, exercitationem necessitatibus veniam ratione
-					deleniti.
-				</p>
-
-				<h4 class="h5 mt-5 pb-2">Lorem, Ipsum 2</h4>
-				<p>
-					Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-					Consequatur ut ducimus officiis vero rerum ipsam! Magnam
-					accusamus ipsam sequi itaque illo. Consequatur ut ducimus
-					officiis vero rerum ipsam! Magnam accusamus ipsam sequi
-					itaque illo
-				</p>
-
 				<h5 class="h6 mt-auto">Version 1.0.1</h5>
 			</div>
 		</div>
@@ -127,8 +119,8 @@
 
 <script>
 import { ref, computed } from "vue";
-import useLogin from "../../composables/useLogin";
-import Alert from "../../components/Alert";
+import useLogin from "@/composables/useLogin";
+import Alert from "@/components/Alert";
 import SelectCompany from "./SelectCompany";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -143,17 +135,17 @@ export default {
 	},
 	computed: {
 		mailIcon: function() {
-			return feather.icons['mail'].toSvg({
+			return feather.icons["mail"].toSvg({
 				width: 18,
 			});
 		},
 		eye: function() {
-			return feather.icons['eye'].toSvg({
+			return feather.icons["eye"].toSvg({
 				width: 19,
 			});
 		},
 		eyeOff: function() {
-			return feather.icons['eye-off'].toSvg({
+			return feather.icons["eye-off"].toSvg({
 				width: 19,
 			});
 		},
@@ -161,7 +153,7 @@ export default {
 	setup() {
 		const login_id = ref("");
 		const password = ref("");
-		const showPassword = ref(false)
+		const showPassword = ref(false);
 		const router = useRouter();
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
@@ -191,13 +183,13 @@ export default {
 			// console.log(e.target)
 			var x = document.getElementById("password");
 			if (x.type === "password") {
-				showPassword.value = true
+				showPassword.value = true;
 				x.type = "text";
 			} else {
-				showPassword.value = false
+				showPassword.value = false;
 				x.type = "password";
 			}
-		}
+		};
 
 		const handleCloseModal = () => {
 			error.value = null;
@@ -214,7 +206,7 @@ export default {
 			handleCloseModal,
 			user,
 			showPassword,
-			handleShowPassword
+			handleShowPassword,
 		};
 	},
 };
@@ -288,6 +280,4 @@ export default {
 	position: absolute;
 	bottom: 1rem;
 }
-
-
 </style>
