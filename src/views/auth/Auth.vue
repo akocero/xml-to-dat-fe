@@ -251,19 +251,21 @@ export default {
 }
 
 .auth-right .content {
-	position: absolute;
-	height: calc(100% - 5rem);
+	position: relative;
+	/* height: calc(100% - 5rem); */
 	z-index: 100;
-	margin-top: 5rem;
-	margin-left: 2rem;
-	color: white;
+	/* margin-top: 5rem; */
+	/* margin-left: 2rem; */
+	/* color: white; */
+	text-align: center;
 }
 
 .auth-right .content .mssc {
 	margin-top: -28px;
-	padding-bottom: 1.5rem;
+	padding-bottom: 3rem;
 }
 .auth-right .content .pec-logo {
+	margin-top: 10rem;
 	width: 40%;
 	margin-bottom: 2rem;
 }
@@ -273,11 +275,11 @@ export default {
 .auth-right .content h4 {
 	color: white;
 	width: 70%;
-	margin-left: 10px;
+	margin: 0 auto;
+	/* margin-left: 10px; */
 }
 
 .auth-right .content h5 {
-	position: absolute;
-	bottom: 1rem;
+	padding-top: 3rem;
 }
 </style>
