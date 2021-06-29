@@ -79,6 +79,7 @@
 							</small>
 						</div>
 					</div>
+					<Spinner v-else />
 				</div>
 
 				<div class="modal-footer">
@@ -107,6 +108,7 @@
 <script>
 import useData from "@/composables/useData.js";
 import getItem from "@/composables/getItem.js";
+import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
 import $ from "jquery";
 export default {

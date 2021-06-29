@@ -1,6 +1,23 @@
 <template>
 	<div class="row auth-container">
-		<div class="col-md-4 d-flex justify-content-center align-items-center">
+		<div class="col-8 bg-navy-blue auth-right">
+			<div class="content">
+				<img
+					src="@/assets/images/Payroll-Pro-Logo-white.png"
+					alt=""
+					class="pec-logo"
+				/>
+				<p class="mssc">By Mustard Seed Systems Corporation</p>
+				<h4 class="h5 pb-2">Lorem, Ipsum</h4>
+				<p>
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+					Modi nostrum, exercitationem necessitatibus veniam ratione
+					deleniti expedita ipsum ducimus.
+				</p>
+				<h5 class="h6 mt-auto">Version 1.0.1</h5>
+			</div>
+		</div>
+		<div class="col-4 d-flex justify-content-center align-items-center">
 			<form class="w-75" @submit.prevent="handleSubmit" v-if="!user">
 				<h3 class="h3">Sign In</h3>
 				<hr />
@@ -96,23 +113,6 @@
 				</div>
 			</form>
 			<SelectCompany v-if="user" :user="user?.id" />
-		</div>
-		<div class="col-md-8 bg-navy-blue auth-right">
-			<div class="content">
-				<img
-					src="@/assets/images/Payroll-Pro-Logo-white.png"
-					alt=""
-					class="pec-logo"
-				/>
-				<p class="mssc">By Mustard Seed Systems Corporation</p>
-				<h4 class="h5 pb-2">Lorem, Ipsum</h4>
-				<p>
-					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-					Modi nostrum, exercitationem necessitatibus veniam ratione
-					deleniti expedita ipsum ducimus.
-				</p>
-				<h5 class="h6 mt-auto">Version 1.0.1</h5>
-			</div>
 		</div>
 	</div>
 </template>

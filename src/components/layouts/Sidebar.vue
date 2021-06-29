@@ -2,9 +2,9 @@
 	<aside class="main-sidebar sidebar-dark-primary elevation-4">
 		<!-- Brand Logo -->
 		<a href="" class="brand-link text-sm">
-			<span class="brand-text font-weight-bold pl-3"
-				>{{ company.name }}</span
-			>
+			<span class="brand-text font-weight-bold pl-3">{{
+				company.name
+			}}</span>
 		</a>
 
 		<!-- Sidebar -->
@@ -36,7 +36,7 @@
 				>
 					<!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-					<li class="nav-header ml-2">Administrator</li>
+					<li class="nav-header ml-2">ADMINISTRATOR</li>
 
 					<li class="nav-item">
 						<a href="#" class="nav-link active">
@@ -84,7 +84,7 @@
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
 									<!-- <i class="far fa-circle nav-icon"></i> -->
-									<p>Users</p>
+									<p>User</p>
 								</router-link>
 							</li>
 						</ul>
@@ -96,14 +96,36 @@
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
 									<!-- <i class="far fa-circle nav-icon"></i> -->
-									<p>Companies</p>
+									<p>Company</p>
+								</router-link>
+							</li>
+						</ul>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<router-link
+									:to="{ name: 'employee' }"
+									class="nav-link"
+								>
+									<i class="nav-icon far pr-2">&#9679;</i>
+									<!-- <i class="far fa-circle nav-icon"></i> -->
+									<p>Employee</p>
 								</router-link>
 							</li>
 						</ul>
 					</li>
 
-					<li class="nav-header ml-2 mt-2">Data Entry</li>
-
+					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
+					<li class="nav-item">
+						<a href="" class="nav-link">
+							<i
+								v-html="users"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								Employee Management
+							</p>
+						</a>
+					</li>
 					<li class="nav-item">
 						<a href="#" class="nav-link">
 							<!-- <i class="nav-icon fas fa-box"></i> -->
@@ -118,117 +140,12 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<router-link :to="{name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Dashboard</p>
-								</router-link>
-							</li>
-						</ul>
-					</li>
-
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<!-- <i class="nav-icon fas fa-folder-open"></i> -->
-							<i v-html="tool" class="nav-icon fas pr-2"></i>
-							<p>
-								Tools
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{ name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Users</p>
-								</router-link>
-							</li>
-						</ul>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{ name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Companies</p>
-								</router-link>
-							</li>
-						</ul>
-					</li>
-
-					<li class="nav-header ml-2 mt-2">MODULE 3</li>
-
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<!-- <i class="nav-icon fas fa-box"></i> -->
-							<i
-								v-html="messageCircle"
-								class="nav-icon nav-icon fas pr-2"
-							></i>
-							<p>
-								Announcement
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Dashboard</p>
-								</router-link>
-							</li>
-						</ul>
-					</li>
-
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<!-- <i class="nav-icon fas fa-folder-open"></i> -->
-							<i v-html="bell" class="nav-icon fas pr-2"></i>
-							<p>
-								Notifications
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
 								<router-link
-									:to="{ name: 'user' }"
+									:to="{ name: 'dashboard' }"
 									class="nav-link"
 								>
 									<i class="far fa-circle nav-icon"></i>
-									<p>Users</p>
-								</router-link>
-							</li>
-						</ul>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{ name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Companies</p>
-								</router-link>
-							</li>
-						</ul>
-					</li>
-
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<!-- <i class="nav-icon fas fa-folder-open"></i> -->
-							<i v-html="fileText" class="nav-icon fas pr-2"></i>
-							<p>
-								Reports
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{ name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Users</p>
-								</router-link>
-							</li>
-						</ul>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link :to="{ name: 'dashboard'}" class="nav-link">
-									<i class="far fa-circle nav-icon"></i>
-									<p>Companies</p>
+									<p>Dashboard</p>
 								</router-link>
 							</li>
 						</ul>
@@ -287,6 +204,11 @@ export default {
 				width: 20,
 			});
 		},
+		users: function() {
+			return feather.icons["users"].toSvg({
+				width: 20,
+			});
+		},
 	},
 	setup() {
 		const store = useStore();
@@ -302,7 +224,7 @@ export default {
 		return {
 			user,
 			userInitial,
-			company
+			company,
 		};
 	},
 };
