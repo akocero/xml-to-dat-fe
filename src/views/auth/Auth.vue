@@ -91,7 +91,7 @@
 						{{ error.errors.password[0] }}
 					</small>
 				</div>
-				<div class="mb-4">
+				<div class="mb-4 text-right">
 					<a href="" class="">Forgot Password?</a>
 				</div>
 				<div class="">
@@ -257,7 +257,7 @@ export default {
 	/* margin-top: 5rem; */
 	/* margin-left: 2rem; */
 	/* color: white; */
-	text-align: center;
+	/* text-align: center; */
 }
 
 .auth-right .content .mssc {
@@ -266,6 +266,7 @@ export default {
 }
 .auth-right .content .pec-logo {
 	margin-top: 10rem;
+	margin-left: 8rem;
 	width: 40%;
 	margin-bottom: 2rem;
 }
