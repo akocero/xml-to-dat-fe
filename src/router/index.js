@@ -58,6 +58,11 @@ const routes = [
         name: 'update-company',
         component: () => import('@/views/company/UpdateCompany.vue')
       },
+      {
+        path: 'employee',
+        name: 'employee',
+        component: () => import('@/views/employee/Employee.vue')
+      },
     ]
   },
 ]

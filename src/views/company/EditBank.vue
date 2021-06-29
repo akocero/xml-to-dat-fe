@@ -102,6 +102,7 @@
 							</small>
 						</div>
 					</div>
+					<Spinner v-else />
 				</div>
 
 				<div class="modal-footer">
@@ -130,12 +131,15 @@
 <script>
 import useData from "@/composables/useData.js";
 import getItem from "@/composables/getItem.js";
+import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
 import $ from "jquery";
 export default {
 	name: "EditBank",
 	props: ["bank_id"],
-	components: {},
+	components: {
+		Spinner,
+	},
 	setup(props, { emit }) {
 		const { error, response, isPending, update } = useData();
 		const { item, error: errorData, load } = getItem(

@@ -1023,6 +1023,7 @@ import { ref, onUnmounted, computed } from "vue";
 import useCreate from "../../composables/useCreate";
 import feather from "feather-icons";
 import Alert from "../../components/Alert";
+import { useRouter } from "vue-router";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -1042,6 +1043,7 @@ export default {
 	},
 	setup() {
 		const { response, error, create, isPending } = useCreate();
+		const router = useRouter();
 
 		const name = ref("");
 		const code = ref("");
@@ -1118,7 +1120,12 @@ export default {
 			await create("setupcompany", form_data);
 
 			if (!error.value) {
-				window.scrollTo(0, 0);
+				router.push({
+					name: "update-company",
+					params: { id: response.value.id },
+				});
+
+				// window.scrollTo(0, 0);
 			} else {
 				window.scrollTo(0, 0);
 			}

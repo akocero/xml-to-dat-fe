@@ -25,6 +25,13 @@
 				</div>
 
 				<div class="modal-body">
+					<div
+						class="alert alert-danger"
+						role="alert"
+						v-if="unknownError"
+					>
+						{{ unknownError }}
+					</div>
 					<div class="row">
 						<div class="form-group col-5">
 							<label>
@@ -124,7 +131,7 @@
 </template>
 
 <script>
-import useCreate from "@/composables/useCreate.js";
+import axios from "@/axios/axios-instance";
 import { onUpdated, ref } from "vue";
 import $ from "jquery";
 
@@ -133,30 +140,55 @@ export default {
 	props: ["companyID"],
 	components: {},
 	setup(props, { emit }) {
-		const { error, response, isPending, create } = useCreate();
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		const bank_code = ref("");
 		const name = ref("");
 		const description = ref("");
 
 		const handleCreate = async () => {
+			isPending.value = true;
+
 			const newBank = {
 				setup_company_id: props.companyID,
 				bank_code: bank_code.value,
 				name: name.value,
 				description: description.value,
 			};
-			// console.log(newBank);
-			await create("setupcompanybank", newBank);
 
-			if (!error.value) {
+			try {
+				const res = await axios.post("setupcompanybanks", newBank);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+
 				$("#create-bank-modal").modal("hide");
+
 				bank_code.value = "";
 				name.value = "";
 				description.value = "";
+
 				emit("bankAdded", response.value);
-			} else {
-				console.log("has error");
+
+				isPending.value = false;
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else if (err.message.includes("404")) {
+					unknownError.value =
+						"Server Error: Please contact your system administrator";
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 			}
 		};
 
@@ -166,8 +198,8 @@ export default {
 
 		return {
 			error,
+			unknownError,
 			isPending,
-			create,
 			handleCreate,
 			bank_code,
 			name,

@@ -28,6 +28,24 @@
 
 	<transition name="alert">
 		<Alert
+			v-if="isSignatoryAdded"
+			:status="'success'"
+			:message="'Signatory Added'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
+
+	<transition name="alert">
+		<Alert
+			v-if="isSignatoryUpdated"
+			:status="'info'"
+			:message="'Signatory Updated'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
+
+	<transition name="alert">
+		<Alert
 			v-if="error && error.message"
 			:status="'error'"
 			:message="error.message"
