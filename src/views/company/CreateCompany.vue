@@ -1018,12 +1018,12 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import { ref, onUnmounted, computed } from "vue";
-import useCreate from "../../composables/useCreate";
+
 import feather from "feather-icons";
 import Alert from "../../components/Alert";
 import { useRouter } from "vue-router";
+import axios from "@/axios/axios-instance";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -1042,8 +1042,12 @@ export default {
 		},
 	},
 	setup() {
-		const { response, error, create, isPending } = useCreate();
 		const router = useRouter();
+
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		const name = ref("");
 		const code = ref("");
@@ -1071,14 +1075,8 @@ export default {
 		const selectedFile = ref(null);
 		const imageUrl = ref(null);
 
-		onUnmounted(() => {
-			error.value = null;
-			response.value = null;
-		});
-
 		const handleSubmit = async () => {
 			const form_data = new FormData();
-			// form_data.append("name", name.value);
 			const data = {
 				name: name.value,
 				code: code.value,
@@ -1110,23 +1108,35 @@ export default {
 
 			if (selectedFile.value) {
 				form_data.append("image_path", selectedFile.value);
-				// console.log('merong image', selectedFile)
 			}
+
 			// Checking form_data values
 			// for (var pair of form_data.entries()) {
 			// 	console.log(pair[0]+ ', ' + pair[1]);
 			// }
 
-			await create("setupcompany", form_data);
-
-			if (!error.value) {
+			try {
+				const res = await axios.post("setupcompany", form_data);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+				isPending.value = false;
 				router.push({
 					name: "update-company",
 					params: { id: response.value.id },
 				});
+			} catch (err) {
+				isPending.value = false;
 
-				// window.scrollTo(0, 0);
-			} else {
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 				window.scrollTo(0, 0);
 			}
 		};

@@ -1247,7 +1247,6 @@
 import { onUnmounted, computed, ref } from "vue";
 import { useRoute } from "vue-router";
 
-import useUpdate from "@/composables/useUpdate";
 import getItem from "@/composables/getItem";
 
 import Alert from "@/components/Alert";
@@ -1259,6 +1258,7 @@ import CreateSignatory from "./CreateSignatory";
 import EditSignatory from "./EditSignatory";
 
 import feather from "feather-icons";
+import axios from "@/axios/axios-instance";
 
 export default {
 	name: "UpdateCompany",
@@ -1284,11 +1284,16 @@ export default {
 	},
 	setup() {
 		const route = useRoute();
-		const { response, error, update, isPending } = useUpdate();
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
 			"setupcompany"
 		);
+
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
+
 		const isBankAdded = ref(false);
 		const isBankUpdated = ref(false);
 		const isSignatoryAdded = ref(false);
@@ -1302,15 +1307,11 @@ export default {
 		const update_bank_id = ref(null);
 		const update_signatory_id = ref(null);
 
-		onUnmounted(() => {
-			error.value = null;
-			response.value = null;
-		});
-
 		load();
 
 		// methods/functions
 		const handleSubmit = async () => {
+			response.value = null;
 			const data = {
 				name: item.value.name,
 				code: item.value.code,
@@ -1336,9 +1337,28 @@ export default {
 				alphalist_no: item.value.alphalist_no,
 			};
 
-			await update(`setupcompany/${route.params.id}`, data);
+			try {
+				const res = await axios.patch(
+					`setupcompany/${route.params.id}`,
+					data
+				);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+				isPending.value = false;
+				window.scrollTo(0, 0);
+			} catch (err) {
+				isPending.value = false;
 
-			if (!error.value) {
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 				window.scrollTo(0, 0);
 			}
 		};
