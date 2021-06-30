@@ -129,7 +129,7 @@
 </template>
 
 <script>
-import useData from "@/composables/useData.js";
+import axios from "@/axios/axios-instance";
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
@@ -141,11 +141,14 @@ export default {
 		Spinner,
 	},
 	setup(props, { emit }) {
-		const { error, response, isPending, update } = useData();
 		const { item, error: errorData, load } = getItem(
 			props.bank_id,
 			"setupcompanybank"
 		);
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		load();
 
@@ -157,14 +160,32 @@ export default {
 				description: item.value.description,
 			};
 
-			await update("setupcompanybank/" + props.bank_id, updatedBank);
+			try {
+				const res = await axios.patch(
+					"setupcompanybank/" + props.bank_id,
+					updatedBank
+				);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
 
-			if (!error.value) {
 				$("#update-bank-modal").modal("hide");
 
 				emit("bankUpdated", response.value);
-			} else {
-				console.log("has error");
+
+				isPending.value = false;
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 			}
 		};
 
@@ -179,9 +200,9 @@ export default {
 		return {
 			error,
 			isPending,
-			update,
 			handleUpdate,
 			closeModal,
+			unknownError,
 			item,
 		};
 	},

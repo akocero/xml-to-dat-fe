@@ -5,6 +5,7 @@ const getItem = (id, url) => {
 
     const item = ref(null)
     const error = ref(null)
+    
     const load = async () => {
         try {
            const res = await axios.get(`${url}/${id}`);

@@ -211,12 +211,13 @@
 <script>
 // import axios from 'axios';
 import { ref, onUnmounted, computed } from "vue";
-import useCreate from "../../composables/useCreate";
+// import useCreate from "../../composables/useCreate";
 import feather from "feather-icons";
 import Alert from "../../components/Alert";
 import Spinner from "../../components/Spinner";
 import useFetch from "../../composables/useFetch";
 import { useRouter } from "vue-router";
+import axios from "@/axios/axios-instance";
 export default {
 	name: "CreateUser",
 	components: {
@@ -237,7 +238,12 @@ export default {
 			fetch,
 			isPending: isPendingCompany,
 		} = useFetch();
-		const { response, error, create, isPending } = useCreate();
+		// const { response, error, create, isPending } = useCreate();
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
+
 		const router = useRouter();
 
 		fetch("setupcompany?page=1");
@@ -256,11 +262,6 @@ export default {
 		const login_type = ref("");
 		const employee_id = ref("");
 
-		onUnmounted(() => {
-			error.value = null;
-			response.value = null;
-		});
-
 		const handleSubmit = async () => {
 			const data = {
 				full_name: full_name.value,
@@ -272,15 +273,25 @@ export default {
 				companies: companiesArray.value,
 			};
 
-			await create("payrolluser", data);
-
-			if (!error.value) {
-				// full_name.value = "";
-				// login_id.value = "";
-				// login_type.value = "";
-				// employee_id.value = "";
+			try {
+				const res = await axios.post("payrolluser", data);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+				isPending.value = false;
 				router.push({ name: "user", params: { userAdded: true } });
-			} else {
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 				window.scrollTo(0, 0);
 			}
 		};
@@ -309,15 +320,3 @@ export default {
 	},
 };
 </script>
-
-<style>
-/* .alert-enter-from {
-    opacity: 0;
-    transition: transformY(-60px);
-}
-.
-.alert-enter-to {
-    opacity: 1;
-    transition: transformY(0);
-} */
-</style>

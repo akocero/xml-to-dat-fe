@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import useCreate from "@/composables/useCreate.js";
+import axios from "@/axios/axios-instance";
 import { onUpdated, ref } from "vue";
 import $ from "jquery";
 
@@ -115,7 +115,10 @@ export default {
 	props: ["companyID"],
 	components: {},
 	setup(props, { emit }) {
-		const { error, response, isPending, create } = useCreate();
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		const prepared_by = ref("");
 		const position = ref("");
@@ -126,16 +129,36 @@ export default {
 				prepared_by: prepared_by.value,
 				position: position.value,
 			};
-			// console.log(newSignatory);
-			await create("setupcompanysignatory", newSignatory);
 
-			if (!error.value) {
+			try {
+				const res = await axios.post(
+					"setupcompanysignatory",
+					newSignatory
+				);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+
 				$("#create-signatory-modal").modal("hide");
+
 				prepared_by.value = "";
 				position.value = "";
+
 				emit("signatoryAdded", response.value);
-			} else {
-				console.log("has error");
+
+				isPending.value = false;
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 			}
 		};
 
@@ -146,11 +169,11 @@ export default {
 		return {
 			error,
 			isPending,
-			create,
 			handleCreate,
 			prepared_by,
 			position,
 			closeModal,
+			unknownError,
 		};
 	},
 };

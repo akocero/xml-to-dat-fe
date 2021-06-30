@@ -30,7 +30,7 @@
 
 			<hr />
 
-			<form action="" @submit.prevent="add">
+			<form action="" @submit.prevent="handleSubmit">
 				<div class="row" v-if="item">
 					<div class="col-md-6">
 						<div class="row pr-3">
@@ -147,7 +147,11 @@
 						/>
 						<div
 							class="multi-select text-secondary"
-							v-if="!isPendingCompany && companies.data?.length && companiesArray.length"
+							v-if="
+								!isPendingCompany &&
+									companies.data?.length &&
+									companiesArray.length
+							"
 						>
 							<div
 								v-for="company in matchCompanies"
@@ -166,9 +170,15 @@
 							</div>
 						</div>
 						<div v-else>
-							<p class="text-danger">User Can't have 0 company related!</p>
-							<p class="text-danger">Click here to reload the page<a href=""> Reload</a></p>
-							
+							<p class="text-danger">
+								User Can't have 0 company related!
+							</p>
+							<p class="text-danger">
+								Click here to reload the page<a href="">
+									Reload</a
+								>
+							</p>
+
 							{{ disableSaveChanges }}
 							<Spinner />
 						</div>
@@ -179,7 +189,10 @@
 				</div>
 				<hr />
 				<div class="row col-12">
-					<button class="btn btn-custom-success" v-if="!isPending && !disabledSaveChanges">
+					<button
+						class="btn btn-custom-success"
+						v-if="!isPending && !disabledSaveChanges"
+					>
 						Save Changes
 					</button>
 					<button
@@ -196,15 +209,14 @@
 </template>
 
 <script>
-// import axios from 'axios';
-import { onUnmounted, onMounted, computed, ref, watch } from "vue";
-import useUpdate from "../../composables/useUpdate";
+import { onMounted, computed, ref, watch } from "vue";
 import getItem from "../../composables/getItem";
 import Alert from "../../components/Alert";
 import { useRoute } from "vue-router";
 import Spinner from "../../components/Spinner.vue";
 import feather from "feather-icons";
 import useFetch from "../../composables/useFetch";
+import axios from "@/axios/axios-instance";
 export default {
 	name: "UpdateUser",
 	components: {
@@ -227,13 +239,15 @@ export default {
 			isPending: isPendingCompany,
 		} = useFetch();
 
-		const { response, error, update, isPending } = useUpdate();
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		fetch("setupcompany?page=1");
 
 		const search = ref("");
-		const disabledSaveChanges = ref(false)
-		
+		const disabledSaveChanges = ref(false);
 
 		const matchCompanies = computed(() => {
 			return companies.value.data.filter((item) =>
@@ -248,39 +262,28 @@ export default {
 
 		const companiesArray = ref([100]);
 
-		
-
 		const pushToCompaniesArray = async () => {
 			await load();
-			companiesArray.value = []
-			if(!errorData.value) {
-				// console.log('companies', item?.value.setup_companies);
-				item?.value?.setup_companies.forEach(item => {
-					companiesArray.value.push(item.id)
+			companiesArray.value = [];
+			if (!errorData.value) {
+				item?.value?.setup_companies.forEach((item) => {
+					companiesArray.value.push(item.id);
 				});
 			}
-		}
+		};
 
 		const disableSaveChanges = computed(() => {
-			if(companiesArray.value.length < 1) {
-				disabledSaveChanges.value = true
-				
+			if (companiesArray.value.length < 1) {
+				disabledSaveChanges.value = true;
 			}
-			console.log(companiesArray.value.length)
+			console.log(companiesArray.value.length);
 		});
 
 		onMounted(() => {
 			pushToCompaniesArray();
-		})
-	
-
-		onUnmounted(() => {
-			error.value = null;
-			response.value = null;
 		});
 
-
-		const add = async () => {
+		const handleSubmit = async () => {
 			const data = {
 				full_name: item.value.full_name,
 				login_id: item.value.login_id,
@@ -291,9 +294,28 @@ export default {
 				companies: companiesArray.value,
 			};
 
-			await update(`payrolluser/${route.params.id}`, data);
-			// this condition won't run until the await is resolve or rejected
-			if (!error.value) {
+			try {
+				const res = await axios.patch(
+					`payrolluser/${route.params.id}`,
+					data
+				);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
+				isPending.value = false;
+				window.scrollTo(0, 0);
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 				window.scrollTo(0, 0);
 			}
 		};
@@ -304,7 +326,7 @@ export default {
 		};
 
 		return {
-			add,
+			handleSubmit,
 			error,
 			isPending,
 			response,
@@ -316,7 +338,7 @@ export default {
 			isPendingCompany,
 			companiesArray,
 			disabledSaveChanges,
-			disableSaveChanges
+			disableSaveChanges,
 		};
 	},
 };

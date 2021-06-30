@@ -106,21 +106,27 @@
 </template>
 
 <script>
-import useData from "@/composables/useData.js";
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
+import axios from "@/axios/axios-instance";
 import $ from "jquery";
 export default {
 	name: "EditSignatory",
 	props: ["signatory_id"],
-	components: {},
+	components: {
+		Spinner,
+	},
 	setup(props, { emit }) {
-		const { error, response, isPending, update } = useData();
 		const { item, error: errorData, load } = getItem(
 			props.signatory_id,
 			"setupcompanysignatory"
 		);
+
+		const error = ref(null);
+		const unknownError = ref(null);
+		const response = ref(null);
+		const isPending = ref(false);
 
 		load();
 
@@ -131,17 +137,32 @@ export default {
 				position: item.value.position,
 			};
 
-			await update(
-				"setupcompanysignatory/" + props.signatory_id,
-				updatedSignatory
-			);
+			try {
+				const res = await axios.patch(
+					"setupcompanysignatory/" + props.signatory_id,
+					updatedSignatory
+				);
+				response.value = res.data;
+				error.value = null;
+				unknownError.value = null;
 
-			if (!error.value) {
 				$("#update-signatory-modal").modal("hide");
 
 				emit("signatoryUpdated", response.value);
-			} else {
-				console.log("has error");
+
+				isPending.value = false;
+			} catch (err) {
+				isPending.value = false;
+
+				if (err.message.includes("422")) {
+					error.value = err.response.data;
+					unknownError.value = null;
+				} else {
+					unknownError.value =
+						"Please check your internet connection";
+					error.value = null;
+					response.value = null;
+				}
 			}
 		};
 
@@ -156,7 +177,6 @@ export default {
 		return {
 			error,
 			isPending,
-			update,
 			handleUpdate,
 			closeModal,
 			item,
