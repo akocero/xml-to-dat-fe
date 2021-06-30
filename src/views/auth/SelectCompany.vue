@@ -50,7 +50,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .select-company {
 	list-style-type: none;
 	padding: 0;

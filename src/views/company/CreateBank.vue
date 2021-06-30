@@ -160,7 +160,7 @@ export default {
 			};
 
 			try {
-				const res = await axios.post("setupcompanybanks", newBank);
+				const res = await axios.post("setupcompanybank", newBank);
 				response.value = res.data;
 				error.value = null;
 				unknownError.value = null;
@@ -180,9 +180,6 @@ export default {
 				if (err.message.includes("422")) {
 					error.value = err.response.data;
 					unknownError.value = null;
-				} else if (err.message.includes("404")) {
-					unknownError.value =
-						"Server Error: Please contact your system administrator";
 				} else {
 					unknownError.value =
 						"Please check your internet connection";

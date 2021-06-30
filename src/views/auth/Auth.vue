@@ -18,7 +18,11 @@
 			</div>
 		</div>
 		<div class="col-4 d-flex justify-content-center align-items-center">
-			<form class="w-75" @submit.prevent="handleSubmit" v-if="!user">
+			<form
+				class="w-75 auth-form"
+				@submit.prevent="handleSubmit"
+				v-if="!user && !showForgotPassword"
+			>
 				<h3 class="h3">Sign In</h3>
 				<hr />
 				<p>
@@ -91,8 +95,10 @@
 						{{ error.errors.password[0] }}
 					</small>
 				</div>
-				<div class="mb-4">
-					<a href="" class="">Forgot Password?</a>
+				<div class="mb-4 text-right">
+					<a role="button" class="" @click="showForgotPassword = true"
+						>Forgot Password?</a
+					>
 				</div>
 				<div class="">
 					<button
@@ -113,6 +119,10 @@
 				</div>
 			</form>
 			<SelectCompany v-if="user" :user="user?.id" />
+			<ForgotPassword
+				v-if="showForgotPassword"
+				@cancelForgotPassword="showForgotPassword = false"
+			/>
 		</div>
 	</div>
 </template>
@@ -122,6 +132,7 @@ import { ref, computed } from "vue";
 import useLogin from "@/composables/useLogin";
 import Alert from "@/components/Alert";
 import SelectCompany from "./SelectCompany";
+import ForgotPassword from "./ForgotPassword";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import feather from "feather-icons";
@@ -132,6 +143,7 @@ export default {
 	components: {
 		Alert,
 		SelectCompany,
+		ForgotPassword,
 	},
 	computed: {
 		mailIcon: function() {
@@ -157,6 +169,7 @@ export default {
 		const router = useRouter();
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
+		const showForgotPassword = ref(false);
 		const user = computed(() => store.getters.getUser);
 
 		const handleSubmit = async () => {
@@ -207,6 +220,7 @@ export default {
 			user,
 			showPassword,
 			handleShowPassword,
+			showForgotPassword,
 		};
 	},
 };
@@ -251,19 +265,22 @@ export default {
 }
 
 .auth-right .content {
-	position: absolute;
-	height: calc(100% - 5rem);
+	position: relative;
+	/* height: calc(100% - 5rem); */
 	z-index: 100;
-	margin-top: 5rem;
-	margin-left: 2rem;
-	color: white;
+	/* margin-top: 5rem; */
+	/* margin-left: 2rem; */
+	/* color: white; */
+	/* text-align: center; */
 }
 
 .auth-right .content .mssc {
 	margin-top: -28px;
-	padding-bottom: 1.5rem;
+	padding-bottom: 3rem;
 }
 .auth-right .content .pec-logo {
+	margin-top: 10rem;
+	margin-left: 8rem;
 	width: 40%;
 	margin-bottom: 2rem;
 }
@@ -273,11 +290,11 @@ export default {
 .auth-right .content h4 {
 	color: white;
 	width: 70%;
-	margin-left: 10px;
+	margin: 0 auto;
+	/* margin-left: 10px; */
 }
 
 .auth-right .content h5 {
-	position: absolute;
-	bottom: 1rem;
+	padding-top: 3rem;
 }
 </style>
