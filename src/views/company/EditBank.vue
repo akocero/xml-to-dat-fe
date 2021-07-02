@@ -24,6 +24,39 @@
 				</div>
 
 				<div class="modal-body">
+					<div
+						class="alert alert-danger alert-dismissible fade show"
+						role="alert"
+						v-if="detailError"
+					>
+						<strong>Error:</strong> Please fill out details field
+						<button
+							type="button"
+							class="close"
+							data-dismiss="alert"
+							aria-label="Close"
+							@click="closeDetailAlert"
+						>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div
+						class="alert alert-info alert-dismissible fade show"
+						role="alert"
+						v-if="detailSuccess"
+					>
+						<strong>Info:</strong> Please hit save changes to save
+						additional details
+						<button
+							type="button"
+							class="close"
+							data-dismiss="alert"
+							aria-label="Close"
+							@click="closeDetailAlert"
+						>
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
 					<div class="row" v-if="bank_id && item">
 						<div class="form-group col-5">
 							<label>
@@ -101,9 +134,82 @@
 								{{ error.errors.description[0] }}
 							</small>
 						</div>
+						<div
+							class="col-12 d-flex justify-content-between align-items-center pb-2"
+						>
+							<h5 class="h6 mb-0">Additional Details</h5>
+							<button
+								class="btn btn-sm btn-default"
+								@click="addingDetail = !addingDetail"
+							>
+								Add Details
+							</button>
+						</div>
+						<div class="col-12">
+							<hr class="m-0 p-0 mb-2" />
+							<div class="row d-flex col-12">
+								<label
+									for=""
+									class="text-sm font-weight-bold w-25"
+									>Label</label
+								>
+
+								<label
+									for=""
+									class="text-sm font-weight-bold pl-5"
+									>Value</label
+								>
+							</div>
+						</div>
+						<div
+							class="form-group col-md-12 d-flex"
+							v-if="addingDetail"
+						>
+							<input
+								type="text"
+								v-model="detailLabel"
+								class="form-control mr-2 w-50 text-primary"
+							/>
+							<input
+								type="text"
+								v-model="detailValue"
+								class="form-control mr-2"
+							/>
+							<button
+								class="btn btn-sm btn-default"
+								@click="addBankDetail"
+							>
+								<i v-html="save"></i>
+							</button>
+						</div>
+						<div
+							v-for="(item, index) in item.additional_details"
+							:key="index"
+							class="form-group col-md-12 d-flex"
+						>
+							<input
+								type="text"
+								:value="index"
+								class="form-control mr-2 w-50 text-primary"
+								disabled
+							/>
+							<input
+								type="text"
+								:value="item"
+								class="form-control mr-2"
+								disabled
+							/>
+							<button
+								class="btn btn-sm btn-default"
+								@click="deleteDetail(index)"
+							>
+								<i v-html="trash"></i>
+							</button>
+						</div>
 					</div>
-					<Spinner v-else />
 				</div>
+
+				<Spinner v-if="!bank_id && !item" />
 
 				<div class="modal-footer">
 					<button
@@ -133,12 +239,25 @@ import axios from "@/axios/axios-instance";
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
+import feather from "feather-icons";
 import $ from "jquery";
 export default {
 	name: "EditBank",
 	props: ["bank_id"],
 	components: {
 		Spinner,
+	},
+	computed: {
+		trash: function() {
+			return feather.icons["trash"].toSvg({
+				width: 18,
+			});
+		},
+		save: function() {
+			return feather.icons["save"].toSvg({
+				width: 18,
+			});
+		},
 	},
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
@@ -150,6 +269,12 @@ export default {
 		const response = ref(null);
 		const isPending = ref(false);
 
+		const addingDetail = ref(false);
+		const detailLabel = ref(null);
+		const detailValue = ref(null);
+		const detailError = ref(null);
+		const detailSuccess = ref(null);
+
 		load();
 
 		const handleUpdate = async () => {
@@ -158,6 +283,8 @@ export default {
 				bank_code: item.value.bank_code,
 				name: item.value.name,
 				description: item.value.description,
+				branch_code: "2344",
+				additional_details: item.value.additional_details,
 			};
 
 			try {
@@ -197,16 +324,73 @@ export default {
 			emit("hideEditBank");
 		};
 
+		const makeid = (length) => {
+			var result = "";
+			var characters =
+				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			var charactersLength = characters.length;
+			for (var i = 0; i < length; i++) {
+				result += characters.charAt(
+					Math.floor(Math.random() * charactersLength)
+				);
+			}
+			return result;
+		};
+
+		const addBankDetail = () => {
+			detailError.value = false;
+			detailSuccess.value = false;
+			if (detailLabel.value && detailValue.value) {
+				item.value.additional_details = {
+					...item.value.additional_details,
+					[detailLabel.value]: detailValue.value,
+				};
+				addingDetail.value = false;
+				detailLabel.value = null;
+				detailValue.value = null;
+				detailSuccess.value = true;
+			} else {
+				detailError.value = true;
+			}
+		};
+
+		const deleteDetail = (detail) => {
+			var data = item.value.additional_details;
+			for (var key in data) {
+				if (key === detail) {
+					delete data[detail];
+				}
+			}
+		};
+		const closeDetailAlert = () => {
+			detailError.value = false;
+			detailSuccess.value = false;
+		};
+
 		return {
 			error,
 			isPending,
 			handleUpdate,
 			closeModal,
+			deleteDetail,
 			unknownError,
+			addBankDetail,
+			addingDetail,
+			closeDetailAlert,
+			detailValue,
+			detailLabel,
+			detailError,
+			detailSuccess,
+			alert,
 			item,
 		};
 	},
 };
 </script>
 
-<style></style>
+<style>
+.modal-body {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+</style>

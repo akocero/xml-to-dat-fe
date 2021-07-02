@@ -184,7 +184,7 @@
 					</ul>
 					<form
 						@submit.prevent="handleSubmit"
-						id="form_update_comapny"
+						id="form_update_company"
 						v-if="item"
 					>
 						<div class="tab-content pt-3" id="pills-tabContent">
@@ -206,11 +206,17 @@
 
 									<div class="col-md-2">
 										<img
-											v-if="item.image_path"
+											v-if="item.image_path && !imageUrl"
 											:src="
 												'http://127.0.0.1:8000/storage/' +
 													item.image_path
 											"
+											alt=""
+											style="width: 90%"
+										/>
+										<img
+											v-else-if="imageUrl"
+											:src="imageUrl"
 											alt=""
 											style="width: 90%"
 										/>
@@ -225,6 +231,7 @@
 									<div class="form-group col-md-6">
 										<label for="">Upload Image</label>
 										<input
+											ref="input_image"
 											type="file"
 											class="d-block mt-2"
 											@change="onFileSelected"
@@ -241,6 +248,14 @@
 										>
 											{{ error.errors.image_path[0] }}
 										</small>
+										<button
+											v-if="item.image_path"
+											class="btn btn-sm btn-danger"
+											@click="deleteImage(item.id)"
+											type="button"
+										>
+											Delete Image
+										</button>
 									</div>
 								</div>
 
@@ -411,6 +426,90 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.address[0] }}
+											</small>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="row pb-3">
+									<div class="col-4">
+										<h5 class="h5">Company Settings</h5>
+										<label for="">
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
+										</label>
+									</div>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<label>
+												Decimal Place
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
+											</label>
+											<input
+												type="number"
+												class="form-control"
+												:class="[
+													error &&
+														error.errors
+															.decimal_place &&
+														'is-invalid',
+												]"
+												id="input_decimal_place"
+												aria-describedby="emailHelp"
+												placeholder="Ex. 1234567"
+												v-model="item.decimal_place"
+											/>
+											<small
+												v-if="
+													error &&
+														error.errors
+															.decimal_place
+												"
+												id="emailHelp"
+												class="form-text text-danger"
+											>
+												{{
+													error.errors
+														.decimal_place[0]
+												}}
+											</small>
+										</div>
+										<!-- <div class="error">{{ error }}</div> -->
+										<div class="form-group col-4">
+											<label for=""
+												>Currency
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
+											</label>
+											<input
+												type="text"
+												class="form-control"
+												:class="[
+													error &&
+														error.errors.currency &&
+														'is-invalid',
+												]"
+												id="input_currency"
+												aria-describedby="emailHelp"
+												placeholder="Ex. John Doe"
+												v-model="item.currency"
+											/>
+											<small
+												v-if="
+													error &&
+														error.errors.currency
+												"
+												id="emailHelp"
+												class="form-text text-danger"
+											>
+												{{ error.errors.currency[0] }}
 											</small>
 										</div>
 									</div>
@@ -1288,7 +1387,7 @@ export default {
 			route.params.id,
 			"setupcompany"
 		);
-
+		const input_image = ref(null);
 		const error = ref(null);
 		const unknownError = ref(null);
 		const response = ref(null);
@@ -1309,9 +1408,13 @@ export default {
 
 		load();
 
+		const selectedFile = ref(null);
+		const imageUrl = ref(null);
+
 		// methods/functions
 		const handleSubmit = async () => {
 			response.value = null;
+			const form_data = new FormData();
 			const data = {
 				name: item.value.name,
 				code: item.value.code,
@@ -1335,14 +1438,32 @@ export default {
 				hdmf_no: item.value.hdmf_no,
 				tax_branch_code: item.value.tax_branch_code,
 				alphalist_no: item.value.alphalist_no,
+				currency: item.value.currency,
+				decimal_place: item.value.decimal_place,
+				amount: item.value.amount,
 			};
 
+			for (var key in data) {
+				form_data.append(key, data[key]);
+			}
+
+			if (selectedFile.value) {
+				form_data.append("image_path", selectedFile.value);
+			}
+
 			try {
-				const res = await axios.patch(
-					`setupcompany/${route.params.id}`,
-					data
+				const res = await axios.post(
+					`setupcompany/${route.params.id}?_method=PATCH`,
+					form_data
 				);
 				response.value = res.data;
+				if (selectedFile.value) {
+					item.value.image_path = res.data.image_path;
+					selectedFile.value = null;
+					imageUrl.value = null;
+					input_image.value.value = null;
+				}
+
 				error.value = null;
 				unknownError.value = null;
 				isPending.value = false;
@@ -1464,12 +1585,30 @@ export default {
 			);
 		});
 
+		const onFileSelected = (e) => {
+			selectedFile.value = e.target.files[0];
+			imageUrl.value = URL.createObjectURL(selectedFile.value);
+		};
+
+		const deleteImage = async (id) => {
+			if (confirm("Are you sure you want to delete this image?")) {
+				const res = axios.delete("setupcompany/deleteImage/" + id);
+				item.value.image_path = null;
+			}
+
+			// console.log(id);
+		};
+
 		return {
 			handleSubmit,
 			error,
 			isPending,
 			response,
 			item,
+			imageUrl,
+			onFileSelected,
+			deleteImage,
+			input_image,
 
 			handleCloseModal,
 

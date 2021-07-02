@@ -353,6 +353,122 @@
 										</div>
 									</div>
 								</div>
+								<hr />
+								<div class="row pb-3">
+									<div class="col-4">
+										<h5 class="h5">Company Settings</h5>
+										<label for="">
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
+										</label>
+									</div>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<label>
+												Decimal Place
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
+											</label>
+											<input
+												type="number"
+												class="form-control"
+												:class="[
+													error &&
+														error.errors
+															.decimal_place &&
+														'is-invalid',
+												]"
+												id=""
+												aria-describedby="emailHelp"
+												placeholder="Ex. 1234567"
+												v-model="decimal_place"
+											/>
+											<small
+												v-if="
+													error &&
+														error.errors
+															.decimal_place
+												"
+												id="emailHelp"
+												class="form-text text-danger"
+											>
+												{{
+													error.errors
+														.decimal_place[0]
+												}}
+											</small>
+										</div>
+										<!-- <div class="error">{{ error }}</div> -->
+										<div class="form-group col-4">
+											<label for=""
+												>Currency
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
+											</label>
+											<input
+												type="text"
+												class="form-control"
+												:class="[
+													error &&
+														error.errors.currency &&
+														'is-invalid',
+												]"
+												id=""
+												aria-describedby="emailHelp"
+												placeholder="Ex. John Doe"
+												v-model="currency"
+											/>
+											<small
+												v-if="
+													error &&
+														error.errors.currency
+												"
+												id="emailHelp"
+												class="form-text text-danger"
+											>
+												{{ error.errors.currency[0] }}
+											</small>
+										</div>
+
+										<div class="form-group col-4">
+											<label
+												>Amount
+												<span
+													class="text-danger text-bold"
+													>*</span
+												>
+											</label>
+											<input
+												type="text"
+												class="form-control"
+												:class="[
+													error &&
+														error.errors.amount &&
+														'is-invalid',
+												]"
+												id=""
+												aria-describedby="emailHelp"
+												placeholder="Ex. johndoe@example.com "
+												v-model="amount"
+											/>
+											<small
+												v-if="
+													error && error.errors.amount
+												"
+												id="emailHelp"
+												class="form-text text-danger"
+											>
+												{{ error.errors.amount[0] }}
+											</small>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div
 								class="tab-pane fade"
@@ -1071,6 +1187,9 @@ export default {
 		const hdmf_no = ref("");
 		const tax_branch_code = ref("");
 		const alphalist_no = ref("");
+		const decimal_place = ref("");
+		const currency = ref("");
+		const amount = ref("");
 
 		const selectedFile = ref(null);
 		const imageUrl = ref(null);
@@ -1100,6 +1219,9 @@ export default {
 				hdmf_no: hdmf_no.value,
 				tax_branch_code: tax_branch_code.value,
 				alphalist_no: alphalist_no.value,
+				decimal_place: decimal_place.value,
+				currency: currency.value,
+				amount: amount.value,
 			};
 
 			for (var key in data) {
@@ -1130,6 +1252,7 @@ export default {
 
 				if (err.message.includes("422")) {
 					error.value = err.response.data;
+					console.log(err.response.data);
 					unknownError.value = null;
 				} else {
 					unknownError.value =
@@ -1200,6 +1323,9 @@ export default {
 			hdmf_no,
 			tax_branch_code,
 			alphalist_no,
+			decimal_place,
+			currency,
+			amount,
 			selectedFile,
 			imageUrl,
 
