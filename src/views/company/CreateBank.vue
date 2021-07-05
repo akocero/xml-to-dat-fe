@@ -85,7 +85,32 @@
 							</small>
 						</div>
 
-						<div class="form-group col-md-12">
+						<div class="form-group col-4">
+							<label>
+								Branch Code
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.branch_code &&
+										'is-invalid',
+								]"
+								id="input_bank_branch_code"
+								placeholder="Ex. 1234567"
+								v-model="branch_code"
+							/>
+							<small
+								v-if="error && error.errors.branch_code"
+								class="form-text text-danger"
+							>
+								{{ error.errors.branch_code[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-8">
 							<label for=""
 								>Description
 								<span class="text-danger text-bold">*</span>
@@ -147,6 +172,7 @@ export default {
 
 		const bank_code = ref("");
 		const name = ref("");
+		const branch_code = ref("");
 		const description = ref("");
 
 		const handleCreate = async () => {
@@ -157,6 +183,7 @@ export default {
 				bank_code: bank_code.value,
 				name: name.value,
 				description: description.value,
+				branch_code: branch_code.value,
 			};
 
 			try {
@@ -170,6 +197,7 @@ export default {
 				bank_code.value = "";
 				name.value = "";
 				description.value = "";
+				branch_code.value = "";
 
 				emit("bankAdded", response.value);
 
@@ -199,6 +227,7 @@ export default {
 			isPending,
 			handleCreate,
 			bank_code,
+			branch_code,
 			name,
 			description,
 			closeModal,

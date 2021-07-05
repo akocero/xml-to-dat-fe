@@ -5,7 +5,17 @@
 		<p class="">Please enter OTP (One Time Password)</p>
 		<form action="" class="pt-3">
 			<div class="form-group">
-				<label for="">Enter OTP (One Time Password)</label>
+				<div class="d-flex justify-content-between align-items-center">
+					<label for="">Enter OTP</label
+					><button
+						type="button"
+						class="btn btn-link"
+						@click="resendOTP"
+					>
+						Resend OTP
+					</button>
+				</div>
+
 				<div>
 					<input
 						type="text"
@@ -18,9 +28,9 @@
 				<small id="" class="form-text text-danger"> </small>
 			</div>
 			<button type="submit" class="btn btn-custom-primary">Submit</button>
-			<button type="button" class="btn btn-link" @click="resendOTP">
-				Resend OTP
-			</button>
+			<a type="button" href="" class="btn btn-link">
+				Cancel
+			</a>
 		</form>
 	</div>
 </template>

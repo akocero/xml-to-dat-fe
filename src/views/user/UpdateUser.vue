@@ -210,12 +210,12 @@
 
 <script>
 import { onMounted, computed, ref, watch } from "vue";
-import getItem from "../../composables/getItem";
-import Alert from "../../components/Alert";
+import getItem from "@/composables/getItem";
+import Alert from "@/components/Alert";
 import { useRoute } from "vue-router";
-import Spinner from "../../components/Spinner.vue";
+import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
-import useFetch from "../../composables/useFetch";
+import useFetch from "@/composables/useFetch";
 import axios from "@/axios/axios-instance";
 export default {
 	name: "UpdateUser",

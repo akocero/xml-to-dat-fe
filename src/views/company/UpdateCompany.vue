@@ -178,7 +178,7 @@
 								role="tab"
 								aria-controls="pills-signatories"
 								aria-selected="false"
-								>Signatory</a
+								>Signatories</a
 							>
 						</li>
 					</ul>
@@ -479,7 +479,6 @@
 												}}
 											</small>
 										</div>
-										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-4">
 											<label for=""
 												>Currency
@@ -488,19 +487,23 @@
 													>*</span
 												>
 											</label>
-											<input
-												type="text"
+											<select
+												name=""
+												id="input_currency"
 												class="form-control"
 												:class="[
 													error &&
 														error.errors.currency &&
 														'is-invalid',
 												]"
-												id="input_currency"
-												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
 												v-model="item.currency"
-											/>
+											>
+												<option value=""
+													>Choose ...</option
+												>
+												<option value="php">PHP</option>
+												<option value="usd">USD</option>
+											</select>
 											<small
 												v-if="
 													error &&
@@ -1283,7 +1286,9 @@
 														>POSITION</label
 													>
 													<h4 class="list-value">
-														{{ signatory.position }}
+														{{
+															signatory.p_position
+														}}
 													</h4>
 												</div>
 												<div class="list-actions">
