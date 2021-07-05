@@ -402,7 +402,7 @@
 												}}
 											</small>
 										</div>
-										<!-- <div class="error">{{ error }}</div> -->
+
 										<div class="form-group col-4">
 											<label for=""
 												>Currency
@@ -411,19 +411,23 @@
 													>*</span
 												>
 											</label>
-											<input
-												type="text"
+											<select
+												name=""
+												id="input_currency"
 												class="form-control"
 												:class="[
 													error &&
 														error.errors.currency &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
 												v-model="currency"
-											/>
+											>
+												<option value=""
+													>Choose ...</option
+												>
+												<option value="php">PHP</option>
+												<option value="usd">USD</option>
+											</select>
 											<small
 												v-if="
 													error &&
@@ -433,38 +437,6 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.currency[0] }}
-											</small>
-										</div>
-
-										<div class="form-group col-4">
-											<label
-												>Amount
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.amount &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
-												v-model="amount"
-											/>
-											<small
-												v-if="
-													error && error.errors.amount
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.amount[0] }}
 											</small>
 										</div>
 									</div>
@@ -1137,7 +1109,7 @@
 import { ref, onUnmounted, computed } from "vue";
 
 import feather from "feather-icons";
-import Alert from "../../components/Alert";
+import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import axios from "@/axios/axios-instance";
 export default {

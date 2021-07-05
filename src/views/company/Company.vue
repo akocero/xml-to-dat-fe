@@ -101,10 +101,10 @@
 <script>
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
-import useFetch from "../../composables/useFetch";
-import Spinner from "../../components/Spinner.vue";
-import Badge from "../../components/Badge.vue";
-import Pagination from "../../components/Pagination.vue";
+import useFetch from "@/composables/useFetch";
+import Spinner from "@/components/Spinner.vue";
+import Badge from "@/components/Badge.vue";
+import Pagination from "@/components/Pagination.vue";
 
 export default {
 	name: "Company",

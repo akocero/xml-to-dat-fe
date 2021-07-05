@@ -25,9 +25,9 @@
 
 				<div class="modal-body">
 					<div class="row" v-if="signatory_id && item">
-						<div class="form-group col-5">
+						<div class="form-group col-7">
 							<label>
-								Prepared By:
+								Prepared by:
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
@@ -38,23 +38,46 @@
 										error.errors.prepared_by &&
 										'is-invalid',
 								]"
-								id="input_bank_code"
+								id="input_signatory_prepared_by"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
 								v-model="item.prepared_by"
 							/>
 							<small
 								v-if="error && error.errors.prepared_by"
-								id="emailHelp"
 								class="form-text text-danger"
 							>
 								{{ error.errors.prepared_by[0] }}
 							</small>
 						</div>
 
+						<div class="form-group col-md-5">
+							<label for=""
+								>Position
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								name=""
+								:class="[
+									error &&
+										error.errors.p_position &&
+										'is-invalid',
+								]"
+								id="input_signatory_p_position"
+								class="form-control"
+								v-model="item.p_position"
+							/>
+							<small
+								v-if="error && error.errors.p_position"
+								class="form-text text-danger"
+							>
+								{{ error.errors.p_position[0] }}
+							</small>
+						</div>
+
 						<div class="form-group col-7">
 							<label>
-								Position
+								Checked by:
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
@@ -62,20 +85,197 @@
 								class="form-control"
 								:class="[
 									error &&
-										error.errors.position &&
+										error.errors.checked_by &&
 										'is-invalid',
 								]"
-								id="input_bank_name"
+								id="input_signatory_checked_by"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
-								v-model="item.position"
+								v-model="item.checked_by"
 							/>
 							<small
-								v-if="error && error.errors.position"
+								v-if="error && error.errors.checked_by"
+								class="form-text text-danger"
+							>
+								{{ error.errors.checked_by[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-5">
+							<label for=""
+								>Position
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								name=""
+								:class="[
+									error &&
+										error.errors.c_position &&
+										'is-invalid',
+								]"
+								id="input_signatory_c_position"
+								class="form-control"
+								v-model="item.c_position"
+							/>
+							<small
+								v-if="error && error.errors.c_position"
+								class="form-text text-danger"
+							>
+								{{ error.errors.c_position[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-7">
+							<label>
+								Approved by:
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.approved_by &&
+										'is-invalid',
+								]"
+								id="input_signatory_approved_by"
+								placeholder="Ex. 1234567"
+								v-model="item.approved_by"
+							/>
+							<small
+								v-if="error && error.errors.approved_by"
+								class="form-text text-danger"
+							>
+								{{ error.errors.approved_by[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-5">
+							<label for=""
+								>Position
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								name=""
+								:class="[
+									error &&
+										error.errors.a_position &&
+										'is-invalid',
+								]"
+								id="input_signatory_a_position"
+								class="form-control"
+								v-model="item.a_position"
+							/>
+							<small
+								v-if="error && error.errors.a_position"
+								class="form-text text-danger"
+							>
+								{{ error.errors.a_position[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-7">
+							<label>
+								Noted by:
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.noted_by &&
+										'is-invalid',
+								]"
+								id="input_signatory_noted_by"
+								aria-describedby="emailHelp"
+								placeholder="Ex. 1234567"
+								v-model="item.noted_by"
+							/>
+							<small
+								v-if="error && error.errors.noted_by"
+								class="form-text text-danger"
+							>
+								{{ error.errors.noted_by[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-5">
+							<label for=""
+								>Position
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								name=""
+								:class="[
+									error &&
+										error.errors.n_position &&
+										'is-invalid',
+								]"
+								id="input_signatory_n_position"
+								class="form-control"
+								v-model="item.n_position"
+							/>
+							<small
+								v-if="error && error.errors.n_position"
+								class="form-text text-danger"
+							>
+								{{ error.errors.n_position[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-12">
+							<label for=""
+								>Payroll Journal Report
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<textarea
+								name=""
+								:class="[
+									error &&
+										error.errors.payroll_journal_report &&
+										'is-invalid',
+								]"
+								id="input_signatory_pjr"
+								class="form-control"
+								v-model="item.payroll_journal_report"
+							></textarea>
+							<small
+								v-if="
+									error && error.errors.payroll_journal_report
+								"
 								id="emailHelp"
 								class="form-text text-danger"
 							>
-								{{ error.errors.position[0] }}
+								{{ error.errors.payroll_journal_report[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-12">
+							<label for=""
+								>Overtime Journal Report
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<textarea
+								name=""
+								:class="[
+									error &&
+										error.errors.overtime_journal_report &&
+										'is-invalid',
+								]"
+								id="input_signatory_ojr"
+								class="form-control"
+								v-model="item.overtime_journal_report"
+							></textarea>
+							<small
+								v-if="
+									error &&
+										error.errors.overtime_journal_report
+								"
+								id="emailHelp"
+								class="form-text text-danger"
+							>
+								{{ error.errors.overtime_journal_report[0] }}
 							</small>
 						</div>
 					</div>
@@ -134,7 +334,15 @@ export default {
 			const updatedSignatory = {
 				setup_company_id: item.value.setup_company_id,
 				prepared_by: item.value.prepared_by,
-				position: item.value.position,
+				p_position: item.value.p_position,
+				checked_by: item.value.checked_by,
+				c_position: item.value.c_position,
+				noted_by: item.value.noted_by,
+				n_position: item.value.n_position,
+				approved_by: item.value.approved_by,
+				a_position: item.value.a_position,
+				overtime_journal_report: item.value.overtime_journal_report,
+				payroll_journal_report: item.value.payroll_journal_report,
 			};
 
 			try {
@@ -155,6 +363,7 @@ export default {
 				isPending.value = false;
 
 				if (err.message.includes("422")) {
+					console.log(err.response.data);
 					error.value = err.response.data;
 					unknownError.value = null;
 				} else {

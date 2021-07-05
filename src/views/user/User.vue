@@ -47,7 +47,7 @@
 						<table class="table">
 							<thead>
 								<tr class="text-secondary">
-									<th class="text-center">ID</th>
+									<th class="text-center">Code</th>
 									<th>Name</th>
 									<th>Email</th>
 									<th class="text-center">Role</th>
@@ -56,7 +56,9 @@
 							</thead>
 							<tbody v-if="!isPending && data?.data?.length">
 								<tr v-for="item in data.data" :key="item.id">
-									<td class="text-center">{{ item.id }}</td>
+									<td class="text-center">
+										{{ item.employee_id }}
+									</td>
 									<td>{{ item.full_name }}</td>
 									<td>{{ item.login_id }}</td>
 									<td class="text-center">
@@ -91,7 +93,7 @@
 											class="btn btn-sm btn-transparent"
 										>
 											<i
-												class="far fa-folder-open text-secondary"
+												class="far fa-eye text-secondary"
 											></i>
 										</router-link>
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
@@ -131,11 +133,11 @@
 <script>
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
-import useFetch from "../../composables/useFetch";
-import Spinner from "../../components/Spinner.vue";
-import Badge from "../../components/Badge.vue";
-import Pagination from "../../components/Pagination.vue";
-import Alert from "../../components/Alert.vue";
+import useFetch from "@/composables/useFetch";
+import Spinner from "@/components/Spinner.vue";
+import Badge from "@/components/Badge.vue";
+import Pagination from "@/components/Pagination.vue";
+import Alert from "@/components/Alert.vue";
 
 export default {
 	name: "User",

@@ -213,9 +213,9 @@
 import { ref, onUnmounted, computed } from "vue";
 // import useCreate from "../../composables/useCreate";
 import feather from "feather-icons";
-import Alert from "../../components/Alert";
-import Spinner from "../../components/Spinner";
-import useFetch from "../../composables/useFetch";
+import Alert from "@/components/Alert";
+import Spinner from "@/components/Spinner";
+import useFetch from "@/composables/useFetch";
 import { useRouter } from "vue-router";
 import axios from "@/axios/axios-instance";
 export default {

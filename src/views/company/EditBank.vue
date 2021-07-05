@@ -110,7 +110,32 @@
 							</small>
 						</div>
 
-						<div class="form-group col-md-12">
+						<div class="form-group col-4">
+							<label>
+								Branch Code
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.branch_code &&
+										'is-invalid',
+								]"
+								id="input_bank_branch_code"
+								placeholder="Ex. 1234567"
+								v-model="item.branch_code"
+							/>
+							<small
+								v-if="error && error.errors.branch_code"
+								class="form-text text-danger"
+							>
+								{{ error.errors.branch_code[0] }}
+							</small>
+						</div>
+
+						<div class="form-group col-md-8">
 							<label for=""
 								>Description
 								<span class="text-danger text-bold">*</span>
@@ -176,7 +201,7 @@
 								class="form-control mr-2"
 							/>
 							<button
-								class="btn btn-sm btn-default"
+								class="btn btn-sm btn-success"
 								@click="addBankDetail"
 							>
 								<i v-html="save"></i>
@@ -216,7 +241,16 @@
 						type="button"
 						class="btn btn-custom-success"
 						@click="handleUpdate"
-						v-if="!isPending"
+						v-if="!isPending && !addingDetail"
+					>
+						Save Changes
+					</button>
+					<button
+						type="button"
+						class="btn btn-custom-success"
+						@click="handleUpdate"
+						v-else-if="addingDetail && !isPending"
+						disabled
 					>
 						Save Changes
 					</button>
@@ -283,7 +317,7 @@ export default {
 				bank_code: item.value.bank_code,
 				name: item.value.name,
 				description: item.value.description,
-				branch_code: "2344",
+				branch_code: item.value.branch_code,
 				additional_details: item.value.additional_details,
 			};
 
@@ -361,6 +395,8 @@ export default {
 					delete data[detail];
 				}
 			}
+
+			detailSuccess.value = true;
 		};
 		const closeDetailAlert = () => {
 			detailError.value = false;
