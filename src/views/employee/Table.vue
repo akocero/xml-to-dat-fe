@@ -1,7 +1,10 @@
 <template>
 	<div class="row px-2 d-flex justify-content-between align-items-center">
 		<h5 class="m-0 pb-0">{{ title }} List</h5>
-		<button class="btn btn-sm btn-custom-primary" @click="handleShowModal">
+		<button
+			class="btn btn-sm btn-custom-primary"
+			@click="handleShowModal(0)"
+		>
 			New {{ title }}
 		</button>
 	</div>
@@ -26,7 +29,10 @@
 							<td>{{ item.value }}</td>
 							<td>{{ item.description }}</td>
 							<td>
-								<button class="btn btn-sm btn-light">
+								<button
+									class="btn btn-sm btn-light"
+									@click="handleShowModal(item.id)"
+								>
 									<i class="far fa-edit text-secondary"></i>
 								</button>
 							</td>
@@ -58,10 +64,11 @@ export default {
 	},
 	emits: ["openModal"],
 	setup(props, { emit }) {
-		const handleShowModal = () => {
+		const handleShowModal = (id) => {
 			const data = {
 				type: props.type,
 				title: props.title,
+				id: id,
 			};
 			emit("openModal", data);
 		};

@@ -26,7 +26,7 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<div class="row">
+						<div class="row" v-if="!editingDropdown">
 							<div class="form-group col-12">
 								<label>
 									Value
@@ -78,6 +78,58 @@
 								</small>
 							</div>
 						</div>
+						<div class="row" v-if="editingDropdown && forEditData">
+							<div class="form-group col-12">
+								<label>
+									Value
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<input
+									type="text"
+									class="form-control"
+									:class="[
+										error &&
+											error.errors.value &&
+											'is-invalid',
+									]"
+									id="input_value"
+									aria-describedby="emailHelp"
+									placeholder="Ex. 1234567"
+									v-model="forEditData[0].value"
+								/>
+								<small
+									v-if="error && error.errors.value"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.value[0] }}
+								</small>
+							</div>
+							<div class="form-group col-12">
+								<label for=""
+									>Description
+									<span class="text-danger text-bold">*</span>
+								</label>
+								<textarea
+									name=""
+									:class="[
+										error &&
+											error.errors.description &&
+											'is-invalid',
+									]"
+									id="input_description"
+									class="form-control"
+									v-model="forEditData[0].description"
+								></textarea>
+								<small
+									v-if="error && error.errors.description"
+									id="emailHelp"
+									class="form-text text-danger"
+								>
+									{{ error.errors.description[0] }}
+								</small>
+							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button
@@ -91,8 +143,16 @@
 							type="button"
 							class="btn btn-primary"
 							@click="handleCreate"
+							v-if="!forEditData"
 						>
 							Save
+						</button>
+						<button
+							type="button"
+							class="btn btn-primary"
+							v-if="editingDropdown && forEditData"
+						>
+							Save Changes
 						</button>
 					</div>
 				</div>
@@ -235,12 +295,14 @@
 					role="tabpanel"
 					aria-labelledby="pills-emp-class-tab"
 				>
-					<Table
+					<!-- <Table
 						type="position"
 						@openModal="handleShowModal($event)"
 						title="Employee Class"
 						:data="branches"
-					/>
+					/> -->
+
+					Employee Class
 				</div>
 				<div
 					class="tab-pane fade"
@@ -248,12 +310,14 @@
 					role="tabpanel"
 					aria-labelledby="pills-cost-center-tab"
 				>
-					<Table
+					<!-- <Table
 						type="position"
 						@openModal="handleShowModal($event)"
 						title="Cost Center"
 						:data="positions"
-					/>
+					/> -->
+
+					Cost Center
 				</div>
 				<div
 					class="tab-pane fade"
@@ -379,8 +443,10 @@ export default {
 		const description = ref("");
 
 		const showModal = ref(false);
+		const editingDropdown = ref(false);
 		const dropdownType = ref("");
 		const dropdownTypeTitle = ref("");
+		const forEditData = ref(null);
 
 		onBeforeMount(async () => {
 			await fetch("/setup_employee_dropdown");
@@ -435,7 +501,7 @@ export default {
 		fetch("/setup_employee_dropdown");
 
 		const branches = computed(() => {
-			return data?.value?.data?.filter((item) => item.type === "branch");
+			return data?.value?.data?.filter((item) => item.type == "branch");
 		});
 
 		const positions = computed(() => {
@@ -475,11 +541,23 @@ export default {
 		});
 
 		const handleShowModal = (eventData) => {
-			$("#employeeSetupModal").modal("show");
+			if (eventData.id !== 0) {
+				editingDropdown.value = true;
+				$("#employeeSetupModal").modal("show");
 
-			dropdownType.value = eventData.type;
-			dropdownTypeTitle.value = eventData.title;
-			console.log(type);
+				const filteredDropdown = data.value.data.filter(
+					(item) => item.id === eventData.id
+				);
+				forEditData.value = filteredDropdown;
+				console.log(forEditData.value);
+			} else {
+				forEditData.value = null;
+				editingDropdown.value = false;
+				$("#employeeSetupModal").modal("show");
+				dropdownType.value = eventData.type;
+				dropdownTypeTitle.value = eventData.title;
+				console.log(eventData);
+			}
 		};
 
 		return {
@@ -494,11 +572,13 @@ export default {
 			dimensions,
 			departments,
 
+			editingDropdown,
 			handleShowModal,
 			dropdownTypeTitle,
 			handleCreate,
 			value,
 			description,
+			forEditData,
 		};
 	},
 };
