@@ -12,7 +12,7 @@ const fetch = async (url) => {
     try {
         const res = await axios.get(url);
         data.value = res.data
-        // console.log(res.data)
+        console.log(res.data)
         isPending.value = false
         error.value = null
         return res.data
