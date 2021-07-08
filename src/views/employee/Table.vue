@@ -22,7 +22,7 @@
 						</tr>
 					</thead>
 					<tbody v-if="data.length">
-						<tr v-for="item in data" :key="item.id">
+						<tr v-for="item in filteredData" :key="item.id">
 							<td class="text-center">
 								{{ item.id }}
 							</td>
@@ -56,6 +56,7 @@
 
 <script>
 import Spinner from "@/components/Spinner";
+import { computed } from "vue";
 export default {
 	name: "Table",
 	props: ["data", "title", "type"],
@@ -70,9 +71,14 @@ export default {
 				title: props.title,
 				id: id,
 			};
+
 			emit("openModal", data);
 		};
-		return { handleShowModal };
+
+		const filteredData = computed(() =>
+			props.data.filter((item) => item.type === props.type)
+		);
+		return { handleShowModal, filteredData };
 	},
 };
 </script>

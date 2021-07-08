@@ -1,4 +1,12 @@
 <template>
+	<transition name="alert">
+		<Alert
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="handleCloseAlert"
+		/>
+	</transition>
 	<div class="row">
 		<!-- Modal -->
 		<div
@@ -95,7 +103,7 @@
 									id="input_value"
 									aria-describedby="emailHelp"
 									placeholder="Ex. 1234567"
-									v-model="forEditData[0].value"
+									v-model="newValue"
 								/>
 								<small
 									v-if="error && error.errors.value"
@@ -119,7 +127,7 @@
 									]"
 									id="input_description"
 									class="form-control"
-									v-model="forEditData[0].description"
+									v-model="newDescription"
 								></textarea>
 								<small
 									v-if="error && error.errors.description"
@@ -151,6 +159,7 @@
 							type="button"
 							class="btn btn-primary"
 							v-if="editingDropdown && forEditData"
+							@click="handleUpdate"
 						>
 							Save Changes
 						</button>
@@ -295,13 +304,6 @@
 					role="tabpanel"
 					aria-labelledby="pills-emp-class-tab"
 				>
-					<!-- <Table
-						type="position"
-						@openModal="handleShowModal($event)"
-						title="Employee Class"
-						:data="branches"
-					/> -->
-
 					Employee Class
 				</div>
 				<div
@@ -310,13 +312,6 @@
 					role="tabpanel"
 					aria-labelledby="pills-cost-center-tab"
 				>
-					<!-- <Table
-						type="position"
-						@openModal="handleShowModal($event)"
-						title="Cost Center"
-						:data="positions"
-					/> -->
-
 					Cost Center
 				</div>
 				<div
@@ -329,7 +324,7 @@
 						type="department"
 						@openModal="handleShowModal($event)"
 						title="Department"
-						:data="departments"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -342,7 +337,7 @@
 						type="employee_rank"
 						@openModal="handleShowModal($event)"
 						title="Employee Rank"
-						:data="employee_ranks"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -355,7 +350,7 @@
 						type="sub_department"
 						@openModal="handleShowModal($event)"
 						title="Sub Department"
-						:data="sub_departments"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -368,7 +363,7 @@
 						type="branch"
 						@openModal="handleShowModal($event)"
 						title="Branch"
-						:data="branches"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -381,7 +376,7 @@
 						type="position"
 						@openModal="handleShowModal($event)"
 						title="Position"
-						:data="positions"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -394,7 +389,7 @@
 						type="frequency"
 						@openModal="handleShowModal($event)"
 						title="Frequency"
-						:data="frequency"
+						:data="data"
 					/>
 				</div>
 				<div
@@ -407,7 +402,7 @@
 						type="dimension"
 						@openModal="handleShowModal($event)"
 						title="Dimension"
-						:data="dimensions"
+						:data="data"
 					/>
 				</div>
 			</div>
@@ -421,24 +416,35 @@
 <script>
 import Spinner from "@/components/Spinner";
 import useFetch from "@/composables/useFetch";
+import useData from "@/composables/useData";
 import axios from "@/axios/axios-instance";
 import Table from "./Table";
-import { computed, onBeforeMount, ref } from "vue";
+import Alert from "@/components/Alert";
+import { computed, onBeforeMount, onUpdated, ref } from "vue";
 import $ from "jquery";
 export default {
 	name: "Employee",
 	components: {
 		Spinner,
 		Table,
+		Alert,
 	},
 	setup() {
 		const { data, fetch, error: fetchError } = useFetch();
+		const {
+			response,
+			create,
+			update,
+			error,
+			loading,
+			unknownError,
+		} = useData();
 
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
-
+		// const error = ref(null);
+		// const unknownError = ref(null);
+		// const response = ref(null);
+		// const isPending = ref(false);
+		const alert = ref(null);
 		const value = ref("");
 		const description = ref("");
 
@@ -446,6 +452,9 @@ export default {
 		const editingDropdown = ref(false);
 		const dropdownType = ref("");
 		const dropdownTypeTitle = ref("");
+
+		const newValue = ref("");
+		const newDescription = ref("");
 		const forEditData = ref(null);
 
 		onBeforeMount(async () => {
@@ -453,103 +462,83 @@ export default {
 		});
 
 		const handleCreate = async () => {
-			console.log("creating");
-			isPending.value = true;
-
+			alert.value = null;
 			const newEmpployeeDropdown = {
 				type: dropdownType.value,
 				value: value.value,
 				description: description.value,
 			};
 
-			try {
-				const res = await axios.post(
-					"/setup_employee_dropdown",
-					newEmpployeeDropdown
-				);
-				response.value = res.data;
-				console.log(data.value.data);
-				data.value.data = [...data.value.data, res.data];
-				error.value = null;
-				unknownError.value = null;
-
+			await create("/setup_employee_dropdown", newEmpployeeDropdown);
+			if (!error.value) {
 				$("#employeeSetupModal").modal("hide");
+				data.value = [...data.value, response.value];
 
+				const _alert = {
+					status: "success",
+					message: dropdownType.value + " added",
+				};
+				window.scrollTo(0, 0);
+				alert.value = _alert;
+
+				dropdownType.value = "";
 				value.value = "";
 				description.value = "";
+			}
+		};
 
-				// emit("bankAdded", response.value);
+		const handleUpdate = async () => {
+			alert.value = null;
+			const newEmpployeeDropdown = {
+				type: dropdownType.value,
+				value: newValue.value,
+				description: newDescription.value,
+				active: 1,
+			};
 
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
+			console.log(newEmpployeeDropdown);
 
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-
-					console.log(err.response.data);
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
+			await update(
+				`/setup_employee_dropdown/${forEditData.value.id}`,
+				newEmpployeeDropdown
+			);
+			if (!error.value) {
+				console.log(response.value);
+				const newData = data.value.map((item) => {
+					if (item.id === response.value.id) {
+						return response.value;
+					}
+					return item;
+				});
+				data.value = newData;
+				$("#employeeSetupModal").modal("hide");
+				const _alert = {
+					status: "info",
+					message: dropdownType.value + " updated",
+				};
+				window.scrollTo(0, 0);
+				alert.value = _alert;
+				dropdownType.value = "";
+				newValue.value = "";
+				newDescription.value = "";
 			}
 		};
 
 		fetch("/setup_employee_dropdown");
-
-		const branches = computed(() => {
-			return data?.value?.data?.filter((item) => item.type == "branch");
-		});
-
-		const positions = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "position"
-			);
-		});
-
-		const departments = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "department"
-			);
-		});
-
-		const dimensions = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "dimension"
-			);
-		});
-
-		const frequency = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "frequency"
-			);
-		});
-
-		const employee_ranks = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "employee_rank"
-			);
-		});
-
-		const sub_departments = computed(() => {
-			return data?.value?.data?.filter(
-				(item) => item.type === "sub_department"
-			);
-		});
 
 		const handleShowModal = (eventData) => {
 			if (eventData.id !== 0) {
 				editingDropdown.value = true;
 				$("#employeeSetupModal").modal("show");
 
-				const filteredDropdown = data.value.data.filter(
+				forEditData.value = data.value.find(
 					(item) => item.id === eventData.id
 				);
-				forEditData.value = filteredDropdown;
+
+				newDescription.value = forEditData.value.description;
+				newValue.value = forEditData.value.value;
 				console.log(forEditData.value);
+				dropdownType.value = eventData.type;
 			} else {
 				forEditData.value = null;
 				editingDropdown.value = false;
@@ -560,25 +549,29 @@ export default {
 			}
 		};
 
+		const handleCloseAlert = () => {
+			alert.value = null;
+		};
+
 		return {
 			data,
 			error,
-			isPending,
-			branches,
-			positions,
-			employee_ranks,
-			sub_departments,
-			frequency,
-			dimensions,
-			departments,
+			loading,
 
 			editingDropdown,
 			handleShowModal,
 			dropdownTypeTitle,
 			handleCreate,
+			handleUpdate,
 			value,
 			description,
+
+			newValue,
+			newDescription,
 			forEditData,
+			handleCloseAlert,
+
+			alert,
 		};
 	},
 };
