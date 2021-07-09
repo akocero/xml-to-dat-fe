@@ -359,7 +359,15 @@
 												"
 												class="form-text text-danger"
 											>
-												{{ error.errors.vat_reg[0] }}
+												<span
+													v-for="(err_vat_reg,
+													index) in error.errors
+														.vat_reg"
+													:key="index"
+													class="d-block"
+												>
+													{{ err_vat_reg }}</span
+												>
 											</small>
 										</div>
 
@@ -1478,6 +1486,7 @@ export default {
 
 				if (err.message.includes("422")) {
 					error.value = err.response.data;
+					console.log(err.response.data);
 					unknownError.value = null;
 				} else {
 					unknownError.value =

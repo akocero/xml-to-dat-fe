@@ -21,7 +21,7 @@
 							<th width="10%">Actions</th>
 						</tr>
 					</thead>
-					<tbody v-if="data.length">
+					<tbody v-if="filteredData.length">
 						<tr v-for="item in filteredData" :key="item.id">
 							<td class="text-center">
 								{{ item.id }}
