@@ -1,1 +1,39 @@
 http://127.0.0.1:8000/api/setup_employee_dropdown
+
+###
+// Get companies
+http://127.0.0.1:8000/api/setupcompany
+
+### 
+POST http://127.0.0.1:8000/api/setupcompany/1?_method=PATCH
+Accept: application/json
+Content-Type: application/json
+
+{
+   "code": "96825877",
+   "name": "Keebler Ltd",
+   "address": "5656 Quitzon Union Apt. 910\nPort Lamar, MS 08175-8154",
+   "vat_reg": "YzLhz",
+   "image_path": null,
+   "classification": "Sanford, Bartell and O'Keefe",
+   "currency": "php",
+   "amount": "null",
+   "decimal_place": 2,
+   "tel_no": "+1.910.664.6843",
+   "tel_no_alt": "989.242.9490",
+   "email": "flossie56@example.net",
+   "website": "leannon.com",
+   "facebook": "facebook.com\/mQ1DQ",
+   "twitter": "twitter.com\/LfAg9",
+   "sss_no": "4716873900351625",
+   "sss_initial": "4716676786744635",
+   "sss_doc_no": "5579410060871069",
+   "sss_emp_location_code": "14565-9051",
+   "phic_no": "4024007103597",
+   "phic_initial": "4532964213073832",
+   "phic_signatory": "2362483005664137",
+   "phic_position": "4539552671367",
+   "hdmf_no": "6011791354932525",
+   "tax_branch_code": "4916664023069402",
+   "alphalist_no": "2221317895164785"
+}
