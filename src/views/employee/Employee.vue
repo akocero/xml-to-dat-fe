@@ -8,6 +8,13 @@
 		/>
 	</transition>
 	<div class="row">
+		<ModalCostCenter
+			v-if="showCostCenter"
+			@closeCostCenterModal="showCostCenter = false"
+			@costCenterAdded="costCenterAdded($event)"
+		/>
+	</div>
+	<div class="row">
 		<!-- Modal -->
 		<div
 			class="modal fade"
@@ -29,6 +36,7 @@
 							class="close"
 							data-dismiss="modal"
 							aria-label="Close"
+							@click="resetForm"
 						>
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -312,7 +320,10 @@
 					role="tabpanel"
 					aria-labelledby="pills-cost-center-tab"
 				>
-					Cost Center
+					<TableCostCenter
+						@showCostCenterModal="showCostCenterModal"
+						:costCenterData="costCenterData"
+					/>
 				</div>
 				<div
 					class="tab-pane fade"
@@ -417,10 +428,11 @@
 import Spinner from "@/components/Spinner";
 import useFetch from "@/composables/useFetch";
 import useData from "@/composables/useData";
-import axios from "@/axios/axios-instance";
 import Table from "./Table";
+import TableCostCenter from "./TableCostCenter";
+import ModalCostCenter from "./ModalCostCenter";
 import Alert from "@/components/Alert";
-import { computed, onBeforeMount, onUpdated, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import $ from "jquery";
 export default {
 	name: "Employee",
@@ -428,17 +440,13 @@ export default {
 		Spinner,
 		Table,
 		Alert,
+		TableCostCenter,
+		ModalCostCenter,
 	},
 	setup() {
-		const { data, fetch, error: fetchError } = useFetch();
-		const {
-			response,
-			create,
-			update,
-			error,
-			loading,
-			unknownError,
-		} = useData();
+		const { data, fetch } = useFetch();
+		const { data: costCenterData, fetch: costCnterFetch } = useFetch();
+		const { response, create, update, error, unknownError } = useData();
 
 		// const error = ref(null);
 		// const unknownError = ref(null);
@@ -459,6 +467,7 @@ export default {
 
 		onBeforeMount(async () => {
 			await fetch("/setup_employee_dropdown");
+			await costCnterFetch("/setup_employee_cost_center");
 		});
 
 		const handleCreate = async () => {
@@ -524,13 +533,10 @@ export default {
 			}
 		};
 
-		fetch("/setup_employee_dropdown");
-
 		const handleShowModal = (eventData) => {
+			showModal.value = true;
 			if (eventData.id !== 0) {
 				editingDropdown.value = true;
-				$("#employeeSetupModal").modal("show");
-
 				forEditData.value = data.value.find(
 					(item) => item.id === eventData.id
 				);
@@ -542,21 +548,56 @@ export default {
 			} else {
 				forEditData.value = null;
 				editingDropdown.value = false;
-				$("#employeeSetupModal").modal("show");
+
 				dropdownType.value = eventData.type;
 				dropdownTypeTitle.value = eventData.title;
 				console.log(eventData);
 			}
+			$("#employeeSetupModal").modal("show");
 		};
 
 		const handleCloseAlert = () => {
 			alert.value = null;
 		};
 
+		const resetForm = () => {
+			dropdownType.value = "";
+			value.value = "";
+			description.value = "";
+			newValue.value = "";
+			newDescription.value = "";
+
+			error.value = null;
+			showModal.value = false;
+		};
+
+		// COST CENTER FUNCTIONS
+		const showCostCenter = ref(false);
+		const costCenterAdded = (eventData) => {
+			console.log("cost Center added", eventData.value);
+			$("#cost-center-modal").modal("hide");
+			costCenterData.value.data = [
+				eventData,
+				...costCenterData.value.data,
+			];
+			showCostCenter.value = false;
+			const _alert = {
+				status: "success",
+				message: "cost center added",
+			};
+
+			alert.value = _alert;
+		};
+		const showCostCenterModal = () => {
+			showCostCenter.value = true;
+			setTimeout(() => {
+				$("#cost-center-modal").modal("show");
+			}, 50);
+		};
+
 		return {
 			data,
 			error,
-			loading,
 
 			editingDropdown,
 			handleShowModal,
@@ -565,13 +606,20 @@ export default {
 			handleUpdate,
 			value,
 			description,
+			showModal,
 
 			newValue,
 			newDescription,
 			forEditData,
 			handleCloseAlert,
+			resetForm,
 
 			alert,
+
+			showCostCenter,
+			showCostCenterModal,
+			costCenterData,
+			costCenterAdded,
 		};
 	},
 };
