@@ -37,3 +37,21 @@ Content-Type: application/json
    "tax_branch_code": "4916664023069402",
    "alphalist_no": "2221317895164785"
 }
+
+###
+
+// Get Employee Setup Cost Center
+http://127.0.0.1:8000/api/setup_employee_cost_center
+
+
+###
+
+POST http://127.0.0.1:8000/api/setup_employee_cost_center
+Accept: application/json
+Content-Type: application/json
+
+{
+   "value": "96825877",
+   "description": "Keebler Ltd",
+   "basic_daily_rate_amount": 1234
+}
