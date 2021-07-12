@@ -37,7 +37,7 @@
 								:class="[
 									error && error.errors.value && 'is-invalid',
 								]"
-								id="input_value"
+								id="input_cc_value"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
 								v-model="value"
@@ -63,7 +63,7 @@
 										error.errors.description &&
 										'is-invalid',
 								]"
-								id="input_value"
+								id="input_cc_description"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
 								v-model="description"
@@ -89,7 +89,7 @@
 										error.errors.basic_daily_rate_amount &&
 										'is-invalid',
 								]"
-								id="input_value"
+								id="input_cc_basic_daily_rate_amount"
 								aria-describedby="emailHelp"
 								placeholder="Ex. 1234567"
 								v-model="basicDailyRateAmount"
