@@ -541,6 +541,7 @@ export default {
 		// *** MAIN (DROPDOWN) METHODS AND VARIABLES ***
 		const handleShowModal = (eventData) => {
 			showModal.value = true;
+			error.value = null;
 			// 0 means nothing to edit then go for adding data
 			if (eventData.id !== 0) {
 				editingDropdown.value = true;
