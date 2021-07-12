@@ -335,7 +335,7 @@
 						type="department"
 						@openModal="handleShowModal($event)"
 						title="Department"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -348,7 +348,7 @@
 						type="employee_rank"
 						@openModal="handleShowModal($event)"
 						title="Employee Rank"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -361,7 +361,7 @@
 						type="sub_department"
 						@openModal="handleShowModal($event)"
 						title="Sub Department"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -374,7 +374,7 @@
 						type="branch"
 						@openModal="handleShowModal($event)"
 						title="Branch"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -387,7 +387,7 @@
 						type="position"
 						@openModal="handleShowModal($event)"
 						title="Position"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -400,7 +400,7 @@
 						type="frequency"
 						@openModal="handleShowModal($event)"
 						title="Frequency"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 				<div
@@ -413,7 +413,7 @@
 						type="dimension"
 						@openModal="handleShowModal($event)"
 						title="Dimension"
-						:data="data"
+						:data="data.data"
 					/>
 				</div>
 			</div>
@@ -481,7 +481,7 @@ export default {
 			await create("/setup_employee_dropdown", newEmpployeeDropdown);
 			if (!error.value) {
 				$("#employeeSetupModal").modal("hide");
-				data.data.value = [...data.data.value, response.value]; // append reponse from api to table
+				data.value.data = [...data.value.data, response.value]; // append reponse from api to table
 
 				displayAlert("success", dropdownType.value + " added");
 				window.scrollTo(0, 0);
@@ -514,7 +514,7 @@ export default {
 		};
 
 		const updateTableData = (response) => {
-			data.data.value = data.data.value.map((item) => {
+			data.value.data = data.value.data.map((item) => {
 				if (item.id === response.value.id) {
 					return response.value;
 				}
