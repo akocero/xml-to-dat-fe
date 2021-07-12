@@ -11,8 +11,19 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalLabel">
-						Modal title
+					<h5
+						class="modal-title"
+						id="exampleModalLabel"
+						v-if="!forEditCostCenterItem"
+					>
+						New Cost Center
+					</h5>
+					<h5
+						class="modal-title"
+						id="exampleModalLabel"
+						v-if="forEditCostCenterItem"
+					>
+						Update Cost Center
 					</h5>
 					<button
 						type="button"
@@ -25,7 +36,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="row" v-if="!editing">
+					<div class="row" v-if="!forEditCostCenterItem">
 						<div class="form-group col-12">
 							<label>
 								Value
@@ -106,6 +117,87 @@
 							</small>
 						</div>
 					</div>
+					<div class="row" v-else>
+						<div class="form-group col-12">
+							<label>
+								Value
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error && error.errors.value && 'is-invalid',
+								]"
+								id="input_cc_value"
+								aria-describedby="emailHelp"
+								placeholder="Ex. 1234567"
+								v-model="updateValue"
+							/>
+							<small
+								v-if="error && error.errors.value"
+								id="emailHelp"
+								class="form-text text-danger"
+							>
+								{{ error.errors.value[0] }}
+							</small>
+						</div>
+						<div class="form-group col-12">
+							<label>
+								Description
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.description &&
+										'is-invalid',
+								]"
+								id="input_cc_description"
+								aria-describedby="emailHelp"
+								placeholder="Ex. 1234567"
+								v-model="updateDescription"
+							/>
+							<small
+								v-if="error && error.errors.description"
+								id="emailHelp"
+								class="form-text text-danger"
+							>
+								{{ error.errors.description[0] }}
+							</small>
+						</div>
+						<div class="form-group col-12">
+							<label>
+								Basic Daily Rate Amount
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								type="text"
+								class="form-control"
+								:class="[
+									error &&
+										error.errors.basic_daily_rate_amount &&
+										'is-invalid',
+								]"
+								id="input_cc_basic_daily_rate_amount"
+								aria-describedby="emailHelp"
+								placeholder="Ex. 1234567"
+								v-model="updateBasicDailyRateAmount"
+							/>
+							<small
+								v-if="
+									error &&
+										error.errors.basic_daily_rate_amount
+								"
+								id="emailHelp"
+								class="form-text text-danger"
+							>
+								{{ error.errors.basic_daily_rate_amount[0] }}
+							</small>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button
@@ -119,6 +211,7 @@
 						type="button"
 						class="btn btn-primary"
 						@click="handleCreate"
+						v-if="!forEditCostCenterItem && !loading"
 					>
 						Save
 					</button>
@@ -126,8 +219,17 @@
 						type="button"
 						class="btn btn-primary"
 						@click="handleUpdate"
+						v-if="forEditCostCenterItem && !loading"
 					>
 						Save changes
+					</button>
+					<button
+						type="button"
+						class="btn btn-primary"
+						v-if="loading"
+						disabled
+					>
+						Saving ...
 					</button>
 				</div>
 			</div>
@@ -137,10 +239,11 @@
 
 <script>
 import useData from "@/composables/useData";
-import { ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 export default {
 	name: "ModalCostCenter",
-	emits: ["closeCostCenterModal", "costCenterAdded"],
+	emits: ["closeCostCenterModal", "costCenterAdded", "costCenterUpdated"],
+	props: ["forEditCostCenterItem"],
 	setup(props, { emit }) {
 		const { error, response, create, update, loading } = useData();
 		const costCenterID = ref(0);
@@ -153,6 +256,16 @@ export default {
 		const updateValue = ref("");
 		const updateDescription = ref("");
 		const updateBasicDailyRateAmount = ref("");
+
+		onBeforeMount(() => {
+			if (props.forEditCostCenterItem) {
+				updateValue.value = props.forEditCostCenterItem.value;
+				updateDescription.value =
+					props.forEditCostCenterItem.description;
+				updateBasicDailyRateAmount.value =
+					props.forEditCostCenterItem.basic_daily_rate_amount;
+			}
+		});
 
 		const handleCreate = async () => {
 			const data = {
@@ -171,11 +284,22 @@ export default {
 		};
 
 		const handleUpdate = async () => {
-			const res = await update(
-				"setup_employee_cost_center/" + costCenterID
-			);
+			if (props.forEditCostCenterItem) {
+				const data = {
+					value: updateValue.value,
+					description: updateDescription.value,
+					basic_daily_rate_amount: updateBasicDailyRateAmount.value,
+					active: 1,
+				};
+				await update(
+					"setup_employee_cost_center/" +
+						props.forEditCostCenterItem.id,
+					data
+				);
 
-			if (!error.value) {
+				if (!error.value) {
+					emit("costCenterUpdated", response.value);
+				}
 			}
 		};
 
@@ -197,6 +321,7 @@ export default {
 			handleCreate,
 			handleUpdate,
 			editing,
+			loading,
 
 			handleCloseCostCenterModal,
 		};
