@@ -5,6 +5,9 @@
 	font-size: 0.8rem;
 	padding: 1px 8px;
 	border: 1px solid $grey-color;
+	display: inline-block;
+	margin-right: 0.4rem;
+	margin-bottom: 0.4rem;
 
 	&-warning {
 		background-color: #fdf5dd;
@@ -16,5 +19,11 @@
 		background-color: #cff6dd;
 		border: 1px solid #9eeebb;
 		color: #4daf4d;
+	}
+
+	&-info {
+		background-color: #d1ecf1;
+		border: 1px solid #bee5eb;
+		color: #29558f;
 	}
 }

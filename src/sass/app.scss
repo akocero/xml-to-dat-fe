@@ -46,6 +46,10 @@ label {
 			display: inline-block;
 		}
 	}
+
+	&.max-35 {
+		max-height: 35vh;
+	}
 }
 
 .auth-container {

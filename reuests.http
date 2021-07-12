@@ -50,8 +50,25 @@ POST http://127.0.0.1:8000/api/setup_employee_cost_center
 Accept: application/json
 Content-Type: application/json
 
+# {
+#    "value": "96825877",
+#    "description": "Keebler Ltd",
+#    "basic_daily_rate_amount": 1234
+# }
+
+
+###
+http://127.0.0.1:8000/api/setup_employee_class
+
+###
+POST http://127.0.0.1:8000/api/setup_employee_class
+Accept: application/json
+Content-Type: application/json
+
 {
-   "value": "96825877",
-   "description": "Keebler Ltd",
-   "basic_daily_rate_amount": 1234
+   "value": "233333",
+   "description": "asdsaddsa",
+   "tax_as": 1234,
+   "classes": ["is_resigned","paid_holiday","paid_holiday_restday","paid_special_holiday"]
 }
+
