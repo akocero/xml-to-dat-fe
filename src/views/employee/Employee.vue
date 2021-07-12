@@ -533,7 +533,7 @@ export default {
 			showModal.value = true;
 			if (eventData.id !== 0) {
 				editingDropdown.value = true;
-				forEditData.value = data.value.find(
+				forEditData.value = data.value.data.find(
 					(item) => item.id === eventData.id
 				);
 
