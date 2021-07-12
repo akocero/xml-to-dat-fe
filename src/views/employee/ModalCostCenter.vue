@@ -7,8 +7,9 @@
 		role="dialog"
 		aria-labelledby="exampleModalLabel"
 		aria-hidden="true"
+		data-backdrop="static"
 	>
-		<div class="modal-dialog" role="document">
+		<div class="modal-dialog modal-sm" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5
@@ -93,7 +94,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
-								type="text"
+								type="number"
 								class="form-control"
 								:class="[
 									error &&
@@ -174,7 +175,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
-								type="text"
+								type="number"
 								class="form-control"
 								:class="[
 									error &&
@@ -204,8 +205,9 @@
 						type="button"
 						class="btn btn-secondary"
 						data-dismiss="modal"
+						@click="handleCloseCostCenterModal"
 					>
-						Close
+						Cancel
 					</button>
 					<button
 						type="button"
@@ -246,7 +248,6 @@ export default {
 	props: ["forEditCostCenterItem"],
 	setup(props, { emit }) {
 		const { error, response, create, update, loading } = useData();
-		const costCenterID = ref(0);
 		const editing = ref(false);
 
 		const value = ref("");

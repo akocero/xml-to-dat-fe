@@ -17,6 +17,15 @@
 		/>
 	</div>
 	<div class="row">
+		<ModalEmployeeClass
+			v-if="showEmployeeClass"
+			@closeEmployeeClassModal="showEmployeeClass = false"
+			@employeeClassAdded="employeeClassAdded($event)"
+			@employeeClassUpdated="employeeClassUpdated($event)"
+			:forEditEmployeeClassItem="forEditEmployeeClassItem"
+		/>
+	</div>
+	<div class="row">
 		<!-- Modal -->
 		<div
 			class="modal fade"
@@ -30,8 +39,19 @@
 			<div class="modal-dialog modal-sm" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">
+						<h5
+							class="modal-title"
+							id="exampleModalLabel"
+							v-if="!editingDropdown"
+						>
 							New {{ dropdownTypeTitle }}
+						</h5>
+						<h5
+							class="modal-title"
+							id="exampleModalLabel"
+							v-if="editingDropdown && forEditData"
+						>
+							Update {{ forEditData.type }}
 						</h5>
 						<button
 							type="button"
@@ -154,8 +174,9 @@
 							type="button"
 							class="btn btn-secondary"
 							data-dismiss="modal"
+							@click="resetForm"
 						>
-							Close
+							Cancel
 						</button>
 						<button
 							type="button"
@@ -314,7 +335,11 @@
 					role="tabpanel"
 					aria-labelledby="pills-emp-class-tab"
 				>
-					Employee Class
+					<TableEmployeeClass
+						v-if="!loading"
+						@showEmployeeClassModal="showEmployeeClassModal($event)"
+						:employeeClassData="employeeClassData"
+					/>
 				</div>
 				<div
 					class="tab-pane fade"
@@ -432,7 +457,9 @@ import useFetch from "@/composables/useFetch";
 import useData from "@/composables/useData";
 import Table from "./Table";
 import TableCostCenter from "./TableCostCenter";
+import TableEmployeeClass from "./TableEmployeeClass";
 import ModalCostCenter from "./ModalCostCenter";
+import ModalEmployeeClass from "./ModalEmployeeClass";
 import Alert from "@/components/Alert";
 import { onBeforeMount, ref } from "vue";
 import $ from "jquery";
@@ -444,15 +471,22 @@ export default {
 		Alert,
 		TableCostCenter,
 		ModalCostCenter,
+		TableEmployeeClass,
+		ModalEmployeeClass,
 	},
 	setup() {
 		const { data, fetch } = useFetch();
 		const { data: costCenterData, fetch: costCnterFetch } = useFetch();
+		const {
+			data: employeeClassData,
+			fetch: employeeClassFetch,
+		} = useFetch();
 		const { response, create, update, error, unknownError } = useData();
 
 		const alert = ref(null);
 		const value = ref("");
 		const description = ref("");
+		const loading = ref(false);
 
 		const showModal = ref(false);
 		const editingDropdown = ref(false);
@@ -463,19 +497,20 @@ export default {
 		const newDescription = ref("");
 		const forEditData = ref(null);
 
+		// Fetch Data to Tables
 		onBeforeMount(async () => {
+			loading.value = true;
 			await fetch("/setup_employee_dropdown");
 			await costCnterFetch("/setup_employee_cost_center");
+			await employeeClassFetch("/setup_employee_class");
+			loading.value = false;
 		});
 
-		// Dropdown data methods
-		const updateTableData = (response) => {
-			data.value.data = data.value.data.map((item) => {
-				if (item.id === response.value.id) {
-					return response.value;
-				}
-				return item;
-			});
+		// *** REUSABLE METHODS ***
+		const updateTableData = (data, response) => {
+			return data.map((item) =>
+				item.id === response.id ? response : item
+			);
 		};
 
 		const displayAlert = (status, message) => {
@@ -487,29 +522,8 @@ export default {
 			window.scrollTo(0, 0);
 		};
 
-		const matchAndUpdateModalInputs = (eventData) => {
-			forEditData.value = data.value.data.find(
-				(item) => item.id === eventData.id
-			);
-
-			newDescription.value = forEditData.value.description;
-			newValue.value = forEditData.value.value;
-			dropdownType.value = eventData.type;
-		};
-
-		const handleShowModal = (eventData) => {
-			showModal.value = true;
-			if (eventData.id !== 0) {
-				editingDropdown.value = true;
-				matchAndUpdateModalInputs(eventData);
-			} else {
-				forEditData.value = null;
-				editingDropdown.value = false;
-				dropdownType.value = eventData.type;
-				dropdownTypeTitle.value = eventData.title;
-				console.log(eventData);
-			}
-			$("#employeeSetupModal").modal("show");
+		const matchForEditData = (data, eventData) => {
+			return data.find((item) => item.id === eventData.id);
 		};
 
 		const handleCloseAlert = () => {
@@ -524,6 +538,28 @@ export default {
 			newDescription.value = "";
 		};
 
+		// *** MAIN (DROPDOWN) METHODS AND VARIABLES ***
+		const handleShowModal = (eventData) => {
+			showModal.value = true;
+			// 0 means nothing to edit then go for adding data
+			if (eventData.id !== 0) {
+				editingDropdown.value = true;
+				forEditData.value = matchForEditData(
+					data.value.data,
+					eventData
+				);
+				newDescription.value = forEditData.value.description;
+				newValue.value = forEditData.value.value;
+				dropdownType.value = eventData.type;
+			} else {
+				forEditData.value = null;
+				editingDropdown.value = false;
+				dropdownType.value = eventData.type;
+				dropdownTypeTitle.value = eventData.title;
+			}
+			$("#employeeSetupModal").modal("show");
+		};
+
 		const handleCreate = async () => {
 			alert.value = null;
 			error.value = null;
@@ -536,7 +572,7 @@ export default {
 			await create("/setup_employee_dropdown", newEmpployeeDropdown);
 			if (!error.value) {
 				$("#employeeSetupModal").modal("hide");
-				data.value.data = [...data.value.data, response.value]; // append reponse from api to table
+				data.value.data = [response.value, ...data.value.data]; // append reponse from api to table related to it
 
 				displayAlert("success", dropdownType.value + " added");
 				resetForm();
@@ -558,19 +594,23 @@ export default {
 				newEmpployeeDropdown
 			);
 			if (!error.value) {
-				updateTableData(response);
+				data.value.data = updateTableData(
+					data.value.data,
+					response.value
+				);
 				$("#employeeSetupModal").modal("hide");
 				displayAlert("info", dropdownType.value + " updated");
 				resetForm();
 			}
 		};
 
-		// cost center methods
+		// *** COST CENTER METHODS AND VARIABLES ***
 		const showCostCenter = ref(false);
 		const forEditCostCenterItem = ref(null);
 
 		const costCenterAdded = (eventData) => {
 			$("#cost-center-modal").modal("hide");
+			// append reponse from api to table related to it
 			costCenterData.value.data = [
 				eventData,
 				...costCenterData.value.data,
@@ -580,14 +620,9 @@ export default {
 		};
 
 		const costCenterUpdated = (eventData) => {
-			console.log(eventData, "cc updated");
-			costCenterData.value.data = costCenterData.value.data.map(
-				(item) => {
-					if (item.id === eventData.id) {
-						return eventData;
-					}
-					return item;
-				}
+			costCenterData.value.data = updateTableData(
+				costCenterData.value.data,
+				eventData
 			);
 			showCostCenter.value = false;
 			$("#cost-center-modal").modal("hide");
@@ -599,17 +634,61 @@ export default {
 			showCostCenter.value = true;
 			alert.value = null;
 			forEditCostCenterItem.value = null;
-
+			// 0 means nothing to edit then go for adding data
 			if (id !== 0) {
-				const forEdit = costCenterData.value.data.find(
-					(item) => item.id === id
+				forEditCostCenterItem.value = matchForEditData(
+					costCenterData.value.data,
+					{ id }
 				);
-
-				forEditCostCenterItem.value = forEdit;
 			}
-
+			// I did timeout because it takes time to finished the showCostCenter ref Transition
+			// If you have question to it feel free to fuck yourself!
 			setTimeout(() => {
 				$("#cost-center-modal").modal("show");
+			}, 50);
+		};
+
+		// *** EMPPLOYEE CLASS METHODS AND VARIABLES ***
+		const showEmployeeClass = ref(false);
+		const forEditEmployeeClassItem = ref(null);
+
+		const employeeClassAdded = (eventData) => {
+			$("#employee-class-modal").modal("hide");
+			// append reponse from api to table related to it
+			employeeClassData.value.data = [
+				eventData,
+				...employeeClassData.value.data,
+			];
+			showEmployeeClass.value = false;
+			displayAlert("success", "employee class added");
+		};
+
+		const employeeClassUpdated = (eventData) => {
+			employeeClassData.value.data = updateTableData(
+				employeeClassData.value.data,
+				eventData
+			);
+			showEmployeeClass.value = false;
+			$("#employee-class-modal").modal("hide");
+			displayAlert("info", "employee class updated");
+		};
+
+		const showEmployeeClassModal = (id) => {
+			console.log(id);
+			showEmployeeClass.value = true;
+			alert.value = null;
+			forEditEmployeeClassItem.value = null;
+			// 0 means nothing to edit then go for adding data
+			if (id !== 0) {
+				forEditEmployeeClassItem.value = matchForEditData(
+					employeeClassData.value.data,
+					{ id }
+				);
+			}
+			// I did timeout because it takes time to finished the showEmployeeClass ref Transition
+			// If you have question to it feel free to fuck yourself!
+			setTimeout(() => {
+				$("#employee-class-modal").modal("show");
 			}, 50);
 		};
 
@@ -633,6 +712,7 @@ export default {
 			resetForm,
 
 			alert,
+			loading,
 
 			showCostCenter,
 			showCostCenterModal,
@@ -640,6 +720,13 @@ export default {
 			costCenterAdded,
 			costCenterUpdated,
 			forEditCostCenterItem,
+
+			showEmployeeClass,
+			showEmployeeClassModal,
+			employeeClassData,
+			employeeClassAdded,
+			employeeClassUpdated,
+			forEditEmployeeClassItem,
 		};
 	},
 };
