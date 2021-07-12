@@ -12,6 +12,8 @@
 			v-if="showCostCenter"
 			@closeCostCenterModal="showCostCenter = false"
 			@costCenterAdded="costCenterAdded($event)"
+			@costCenterUpdated="costCenterUpdated($event)"
+			:forEditCostCenterItem="forEditCostCenterItem"
 		/>
 	</div>
 	<div class="row">
@@ -321,7 +323,7 @@
 					aria-labelledby="pills-cost-center-tab"
 				>
 					<TableCostCenter
-						@showCostCenterModal="showCostCenterModal"
+						@showCostCenterModal="showCostCenterModal($event)"
 						:costCenterData="costCenterData"
 					/>
 				</div>
@@ -448,10 +450,6 @@ export default {
 		const { data: costCenterData, fetch: costCnterFetch } = useFetch();
 		const { response, create, update, error, unknownError } = useData();
 
-		// const error = ref(null);
-		// const unknownError = ref(null);
-		// const response = ref(null);
-		// const isPending = ref(false);
 		const alert = ref(null);
 		const value = ref("");
 		const description = ref("");
@@ -470,49 +468,7 @@ export default {
 			await costCnterFetch("/setup_employee_cost_center");
 		});
 
-		const handleCreate = async () => {
-			alert.value = null;
-			const newEmpployeeDropdown = {
-				type: dropdownType.value,
-				value: value.value,
-				description: description.value,
-			};
-
-			await create("/setup_employee_dropdown", newEmpployeeDropdown);
-			if (!error.value) {
-				$("#employeeSetupModal").modal("hide");
-				data.value.data = [...data.value.data, response.value]; // append reponse from api to table
-
-				displayAlert("success", dropdownType.value + " added");
-				window.scrollTo(0, 0);
-				resetForm();
-			}
-		};
-
-		const handleUpdate = async () => {
-			alert.value = null;
-			const newEmpployeeDropdown = {
-				type: dropdownType.value,
-				value: newValue.value,
-				description: newDescription.value,
-				active: 1,
-			};
-
-			console.log(newEmpployeeDropdown);
-
-			await update(
-				`/setup_employee_dropdown/${forEditData.value.id}`,
-				newEmpployeeDropdown
-			);
-			if (!error.value) {
-				updateTableData(response);
-				$("#employeeSetupModal").modal("hide");
-				displayAlert("info", dropdownType.value + " updated");
-				resetForm();
-				window.scrollTo(0, 0);
-			}
-		};
-
+		// Dropdown data methods
 		const updateTableData = (response) => {
 			data.value.data = data.value.data.map((item) => {
 				if (item.id === response.value.id) {
@@ -527,24 +483,28 @@ export default {
 				status,
 				message,
 			};
+
+			window.scrollTo(0, 0);
+		};
+
+		const matchAndUpdateModalInputs = (eventData) => {
+			forEditData.value = data.value.data.find(
+				(item) => item.id === eventData.id
+			);
+
+			newDescription.value = forEditData.value.description;
+			newValue.value = forEditData.value.value;
+			dropdownType.value = eventData.type;
 		};
 
 		const handleShowModal = (eventData) => {
 			showModal.value = true;
 			if (eventData.id !== 0) {
 				editingDropdown.value = true;
-				forEditData.value = data.value.data.find(
-					(item) => item.id === eventData.id
-				);
-
-				newDescription.value = forEditData.value.description;
-				newValue.value = forEditData.value.value;
-				console.log(forEditData.value);
-				dropdownType.value = eventData.type;
+				matchAndUpdateModalInputs(eventData);
 			} else {
 				forEditData.value = null;
 				editingDropdown.value = false;
-
 				dropdownType.value = eventData.type;
 				dropdownTypeTitle.value = eventData.title;
 				console.log(eventData);
@@ -562,31 +522,92 @@ export default {
 			description.value = "";
 			newValue.value = "";
 			newDescription.value = "";
-
-			// error.value = null;
-			// showModal.value = false;
 		};
 
-		// COST CENTER FUNCTIONS
+		const handleCreate = async () => {
+			alert.value = null;
+			error.value = null;
+			const newEmpployeeDropdown = {
+				type: dropdownType.value,
+				value: value.value,
+				description: description.value,
+			};
+
+			await create("/setup_employee_dropdown", newEmpployeeDropdown);
+			if (!error.value) {
+				$("#employeeSetupModal").modal("hide");
+				data.value.data = [...data.value.data, response.value]; // append reponse from api to table
+
+				displayAlert("success", dropdownType.value + " added");
+				resetForm();
+			}
+		};
+
+		const handleUpdate = async () => {
+			alert.value = null;
+			error.value = null;
+			const newEmpployeeDropdown = {
+				type: dropdownType.value,
+				value: newValue.value,
+				description: newDescription.value,
+				active: 1,
+			};
+
+			await update(
+				`/setup_employee_dropdown/${forEditData.value.id}`,
+				newEmpployeeDropdown
+			);
+			if (!error.value) {
+				updateTableData(response);
+				$("#employeeSetupModal").modal("hide");
+				displayAlert("info", dropdownType.value + " updated");
+				resetForm();
+			}
+		};
+
+		// cost center methods
 		const showCostCenter = ref(false);
+		const forEditCostCenterItem = ref(null);
+
 		const costCenterAdded = (eventData) => {
-			console.log("cost Center added", eventData.value);
 			$("#cost-center-modal").modal("hide");
 			costCenterData.value.data = [
 				eventData,
 				...costCenterData.value.data,
 			];
 			showCostCenter.value = false;
-			const _alert = {
-				status: "success",
-				message: "cost center added",
-			};
-
-			alert.value = _alert;
+			displayAlert("success", "cost center added");
 		};
-		const showCostCenterModal = () => {
-			alert.value = null;
+
+		const costCenterUpdated = (eventData) => {
+			console.log(eventData, "cc updated");
+			costCenterData.value.data = costCenterData.value.data.map(
+				(item) => {
+					if (item.id === eventData.id) {
+						return eventData;
+					}
+					return item;
+				}
+			);
+			showCostCenter.value = false;
+			$("#cost-center-modal").modal("hide");
+			displayAlert("info", "cost center updated");
+		};
+
+		const showCostCenterModal = (id) => {
+			console.log(id);
 			showCostCenter.value = true;
+			alert.value = null;
+			forEditCostCenterItem.value = null;
+
+			if (id !== 0) {
+				const forEdit = costCenterData.value.data.find(
+					(item) => item.id === id
+				);
+
+				forEditCostCenterItem.value = forEdit;
+			}
+
 			setTimeout(() => {
 				$("#cost-center-modal").modal("show");
 			}, 50);
@@ -617,6 +638,8 @@ export default {
 			showCostCenterModal,
 			costCenterData,
 			costCenterAdded,
+			costCenterUpdated,
+			forEditCostCenterItem,
 		};
 	},
 };

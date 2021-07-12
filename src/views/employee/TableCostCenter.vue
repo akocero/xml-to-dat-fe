@@ -1,7 +1,10 @@
 <template>
 	<div class="row px-2 d-flex justify-content-between align-items-center">
 		<h5 class="m-0 pb-0">Cost Center List</h5>
-		<button class="btn btn-sm btn-custom-primary" @click="handleShowModal">
+		<button
+			class="btn btn-sm btn-custom-primary"
+			@click="handleShowModal(0)"
+		>
 			New Cost Center
 		</button>
 	</div>
@@ -61,9 +64,7 @@ export default {
 	emits: ["showCostCenterModal"],
 	setup(props, { emit }) {
 		const handleShowModal = (id) => {
-			const data = {};
-
-			emit("showCostCenterModal", data);
+			emit("showCostCenterModal", id);
 		};
 
 		return { handleShowModal };
