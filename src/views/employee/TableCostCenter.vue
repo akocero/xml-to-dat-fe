@@ -52,8 +52,6 @@
 
 <script>
 import Spinner from "@/components/Spinner";
-import { onBeforeMount, watch } from "vue";
-import useFetch from "../../composables/useFetch";
 export default {
 	name: "TableCostCenter",
 	components: {

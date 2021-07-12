@@ -481,18 +481,11 @@ export default {
 			await create("/setup_employee_dropdown", newEmpployeeDropdown);
 			if (!error.value) {
 				$("#employeeSetupModal").modal("hide");
-				data.value = [...data.value, response.value];
+				data.data.value = [...data.data.value, response.value]; // append reponse from api to table
 
-				const _alert = {
-					status: "success",
-					message: dropdownType.value + " added",
-				};
+				displayAlert("success", dropdownType.value + " added");
 				window.scrollTo(0, 0);
-				alert.value = _alert;
-
-				dropdownType.value = "";
-				value.value = "";
-				description.value = "";
+				resetForm();
 			}
 		};
 
@@ -512,25 +505,28 @@ export default {
 				newEmpployeeDropdown
 			);
 			if (!error.value) {
-				console.log(response.value);
-				const newData = data.value.map((item) => {
-					if (item.id === response.value.id) {
-						return response.value;
-					}
-					return item;
-				});
-				data.value = newData;
+				updateTableData(response);
 				$("#employeeSetupModal").modal("hide");
-				const _alert = {
-					status: "info",
-					message: dropdownType.value + " updated",
-				};
+				displayAlert("info", dropdownType.value + " updated");
+				resetForm();
 				window.scrollTo(0, 0);
-				alert.value = _alert;
-				dropdownType.value = "";
-				newValue.value = "";
-				newDescription.value = "";
 			}
+		};
+
+		const updateTableData = (response) => {
+			data.data.value = data.data.value.map((item) => {
+				if (item.id === response.value.id) {
+					return response.value;
+				}
+				return item;
+			});
+		};
+
+		const displayAlert = (status, message) => {
+			alert.value = {
+				status,
+				message,
+			};
 		};
 
 		const handleShowModal = (eventData) => {
@@ -567,8 +563,8 @@ export default {
 			newValue.value = "";
 			newDescription.value = "";
 
-			error.value = null;
-			showModal.value = false;
+			// error.value = null;
+			// showModal.value = false;
 		};
 
 		// COST CENTER FUNCTIONS
@@ -589,6 +585,7 @@ export default {
 			alert.value = _alert;
 		};
 		const showCostCenterModal = () => {
+			alert.value = null;
 			showCostCenter.value = true;
 			setTimeout(() => {
 				$("#cost-center-modal").modal("show");

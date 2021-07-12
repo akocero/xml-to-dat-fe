@@ -76,7 +76,7 @@ export default {
 		};
 
 		const filteredData = computed(() =>
-			props.data.filter((item) => item.type === props.type)
+			props.data.data.filter((item) => item.type === props.type)
 		);
 		return { handleShowModal, filteredData };
 	},
