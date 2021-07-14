@@ -30,38 +30,53 @@ const routes = [
       {
         path: 'user',
         name: 'user',
-        component: () => import('@/views/user/User.vue'),
+        component: () => import('@/views/setup_user/User.vue'),
         props: true
       },
       {
         path: 'user/create',
         name: 'create-user',
-        component: () => import('@/views/user/CreateUser.vue')
+        component: () => import('@/views/setup_user/CreateUser.vue')
       },
       {
         path: 'user/update/:id',
         name: 'update-user',
-        component: () => import('@/views/user/UpdateUser.vue')
+        component: () => import('@/views/setup_user/UpdateUser.vue')
       },
       {
-        path: 'company',
+        path: 'setup/company',
         name: 'company',
-        component: () => import('@/views/company/Company.vue')
+        component: () => import('@/views/setup_company/Company.vue')
       },
       {
-        path: 'company/create',
+        path: 'setup/company/create',
         name: 'create-company',
-        component: () => import('@/views/company/CreateCompany.vue')
+        component: () => import('@/views/setup_company/CreateCompany.vue')
       },
       {
-        path: 'company/update/:id',
+        path: 'setup/company/update/:id',
         name: 'update-company',
-        component: () => import('@/views/company/UpdateCompany.vue')
+        component: () => import('@/views/setup_company/UpdateCompany.vue')
       },
       {
-        path: 'employee',
-        name: 'employee',
-        component: () => import('@/views/employee/Employee.vue')
+        path: 'setup/employee',
+        name: 'setup-employee',
+        component: () => import('@/views/setup_employee/SetupEmployee.vue')
+      },
+      {
+        path: 'employee-management',
+        name: 'employee-management',
+        component: () => import('@/views/employee_management/EmployeeList.vue')
+      },
+      {
+        path: 'employee-management/create',
+        name: 'create-employee',
+        component: () => import('@/views/employee_management/CreateEmployee.vue')
+      },
+      {
+        path: 'employee-management/edit/:id',
+        name: 'edit-employee',
+        component: () => import('@/views/employee_management/EditEmployee.vue')
       },
     ]
   },

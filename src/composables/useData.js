@@ -14,13 +14,12 @@ const useData = () => {
       try {
          const res = await axios.post(url, data);
          response.value = res.data;
-         console.log(data.value.data);
          error.value = null;
          unknownError.value = null;
          loading.value = false;
 		} catch (err) {
          loading.value = false;
-
+         console.log(err.response.data.message)
          if (err.message.includes("422")) {
             error.value = err.response.data;
 
