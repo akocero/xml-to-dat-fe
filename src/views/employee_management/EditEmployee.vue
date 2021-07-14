@@ -18,6 +18,9 @@
 						{{ item.first_name }}
 						{{ item.maiden_name }} {{ item.extension_name }}. Info.
 					</h5>
+					<h5 v-else class="h4 mb-0 text-primary">
+						N/A
+					</h5>
 					<router-link
 						class="btn btn-light"
 						:to="{ name: 'employee-management' }"
@@ -204,41 +207,46 @@
 									</div>
 
 									<div class="row col-8">
-										<div class="form-group col-4">
-											<label>
-												Employee ID
-												<span
-													class="text-danger text-bold"
-													>*</span
+										<div class="row col-12">
+											<div class="form-group col-4">
+												<label>
+													Employee ID
+													<span
+														class="text-danger text-bold"
+														>*</span
+													>
+												</label>
+												<input
+													type="text"
+													class="form-control"
+													:class="[
+														error &&
+															error.errors
+																.employee_id &&
+															'is-invalid',
+													]"
+													id=""
+													aria-describedby="emailHelp"
+													placeholder="Ex. 1234567"
+													v-model="item.employee_id"
+												/>
+												<small
+													v-if="
+														error &&
+															error.errors
+																.employee_id
+													"
+													id="emailHelp"
+													class="form-text text-danger"
 												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
+													{{
 														error.errors
-															.employee_id &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
-												v-model="item.employee_id"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.employee_id
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.employee_id[0]
-												}}
-											</small>
+															.employee_id[0]
+													}}
+												</small>
+											</div>
 										</div>
+
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-4">
 											<label for=""
@@ -274,7 +282,7 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
+										<div class="form-group col-3">
 											<label
 												>Last Name
 												<span
@@ -308,14 +316,8 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
-											<label
-												>Middle Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+										<div class="form-group col-3">
+											<label>Middle Name </label>
 											<input
 												type="text"
 												class="form-control"
@@ -343,13 +345,9 @@
 												}}
 											</small>
 										</div>
-										<div class="form-group col-4">
+										<div class="form-group col-2">
 											<label>
-												Extension Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
+												Suffix
 											</label>
 											<input
 												type="text"
@@ -381,7 +379,7 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
+										<div class="form-group col-2">
 											<label for=""
 												>Gender
 												<span
@@ -420,7 +418,7 @@
 												{{ error.errors.gender[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
+										<div class="form-group col-3">
 											<label
 												>Birthdate
 												<span
@@ -453,8 +451,13 @@
 												{{ error.errors.birthdate[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label>birthplace</label>
+										<div class="form-group col-4">
+											<label
+												>Birthplace<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -480,8 +483,14 @@
 												{{ error.errors.birthplace[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label>Citizenship</label>
+
+										<div class="form-group col-3">
+											<label
+												>Citizenship<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -509,16 +518,17 @@
 												}}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label
+										<div class="form-group col-4">
+											<label for=""
 												>Civil Status
 												<span
 													class="text-danger text-bold"
 													>*</span
 												>
 											</label>
-											<input
-												type="text"
+											<select
+												name=""
+												id="input_currency"
 												class="form-control"
 												:class="[
 													error &&
@@ -526,11 +536,21 @@
 															.civil_status &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex.  "
 												v-model="item.civil_status"
-											/>
+											>
+												<option value=""
+													>Choose ...</option
+												>
+												<option value="signle"
+													>Single</option
+												>
+												<option value="married"
+													>Married</option
+												>
+												<option value="widow"
+													>Widow</option
+												>
+											</select>
 											<small
 												v-if="
 													error &&
@@ -597,7 +617,13 @@
 											</small>
 										</div>
 										<div class="form-group col-6">
-											<label for="">Tel No.</label>
+											<label for=""
+												>Tel No.
+												<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -623,7 +649,12 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label>Mobile No.</label>
+											<label
+												>Mobile No.<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -780,7 +811,7 @@
 										<hr />
 									</div>
 									<div class="col-4">
-										<h5 class="h5">SSS Info</h5>
+										<h5 class="h5">Biometrics</h5>
 										<label for="">
 											You can change your avatar here or
 											remove the current avatar to revert
@@ -880,6 +911,33 @@
 											</small>
 										</div>
 									</div>
+									<div class="col-12 my-2">
+										<hr />
+									</div>
+
+									<div class="row pb-2 col-12">
+										<div
+											class="col-12 d-flex justify-content-between align-items-center pb-1"
+										>
+											<h5 class="h5 mb-0">
+												Dependent List
+											</h5>
+											<button
+												type="button"
+												class="btn btn-sm btn-custom-primary"
+												@click="addDependent"
+											>
+												Add Dependent
+											</button>
+										</div>
+
+										<EmployeeDependentList
+											:dependents="item.dependents"
+											@deleteDependent="
+												deleteDependent($event)
+											"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -900,6 +958,9 @@
 							</button>
 						</div>
 					</form>
+					<div v-else>
+						<Spinner />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -907,12 +968,14 @@
 </template>
 
 <script>
-import { ref, onUnmounted, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeList from "./EmployeeRelativeList.vue";
+import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
+import Spinner from "@/components/Spinner";
 import { useRoute, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import getItem from "../../composables/getItem";
@@ -921,8 +984,10 @@ export default {
 	name: "CreateCompany",
 	components: {
 		Alert,
+		Spinner,
 		EmployeeAddressList,
 		EmployeeRelativeList,
+		EmployeeDependentList,
 	},
 	computed: {
 		chevronRight: function() {
@@ -950,6 +1015,7 @@ export default {
 
 			item.value.addresses = JSON.parse(item.value.addresses);
 			item.value.relatives = JSON.parse(item.value.relatives);
+			item.value.dependents = JSON.parse(item.value.dependents);
 			// console.log(item.value.addresses)
 			console.log(item.value);
 		});
@@ -978,7 +1044,7 @@ export default {
 
 			let err = false;
 			item.value.addresses.forEach((address) => {
-				if (!address.city || !address.country || !address.brgy) {
+				if (!address.city || !address.country) {
 					err = true;
 				}
 			});
@@ -989,6 +1055,31 @@ export default {
 						"Please fill out city and country in address list before adding one"
 				  )
 				: item.value.addresses.push(tempAddress);
+		};
+
+		const addDependent = () => {
+			alert.value = null;
+			const tempDependent = {
+				id: uuidv4(),
+				full_name: "",
+				birthdate: "",
+				include: "included",
+				active: "active",
+			};
+
+			let err = false;
+			item.value.dependents.forEach((dependent) => {
+				if (!dependent.full_name) {
+					err = true;
+				}
+			});
+
+			err
+				? displayAlert(
+						"info",
+						"Please fill out full name in dependent list before adding one"
+				  )
+				: item.value.dependents.push(tempDependent);
 		};
 
 		const addRelative = () => {
@@ -1015,6 +1106,20 @@ export default {
 						"Please fill out relationship and name in relative list before adding one"
 				  )
 				: item.value.relatives.push(tempRelative);
+		};
+
+		const deleteDependent = (id) => {
+			console.log("this id will be deleted: ", id);
+			if (
+				confirm("Are you sure you want to delete the dependent?") &&
+				item.value.dependents.length !== 1
+			) {
+				item.value.dependents = item.value.dependents.filter(
+					(dependent) => dependent.id !== id
+				);
+			} else {
+				displayAlert("info", "Employee need atleast 1 dependent");
+			}
 		};
 
 		const deleteAddress = (id) => {
@@ -1066,6 +1171,7 @@ export default {
 				gender: item.value.gender,
 				addresses: JSON.stringify(item.value.addresses),
 				relatives: JSON.stringify(item.value.relatives),
+				dependents: JSON.stringify(item.value.dependents),
 				active: 1,
 			};
 
@@ -1100,7 +1206,7 @@ export default {
 			);
 
 			if (!error.value) {
-				displayAlert("success", "Employee Added");
+				displayAlert("info", "Employee Updated");
 			} else {
 				displayAlert("error", "Invalid Inputs");
 			}
@@ -1190,6 +1296,9 @@ export default {
 
 			addRelative,
 			deleteRelative,
+
+			addDependent,
+			deleteDependent,
 		};
 	},
 };

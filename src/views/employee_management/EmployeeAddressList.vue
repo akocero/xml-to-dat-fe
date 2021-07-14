@@ -3,19 +3,16 @@
 		<div class="w-12">
 			<label>
 				Building No.
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-12">
 			<label>
 				Street No.
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-12">
 			<label>
-				Barangay.
-				<span class="text-danger text-bold">*</span>
+				Barangay
 			</label>
 		</div>
 		<div class="w-12">
@@ -27,7 +24,6 @@
 		<div class="w-8">
 			<label>
 				Region
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-12">
@@ -39,13 +35,11 @@
 		<div class="w-8">
 			<label>
 				Zip Code
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-8">
 			<label>
 				Geo Code
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 	</div>

@@ -129,30 +129,6 @@
 							</p>
 						</router-link>
 					</li>
-					<li class="nav-item">
-						<a href="#" class="nav-link">
-							<!-- <i class="nav-icon fas fa-box"></i> -->
-							<i
-								v-html="database"
-								class="nav-icon nav-icon fas pr-2"
-							></i>
-							<p>
-								Database
-								<i class="right fas fa-angle-left"></i>
-							</p>
-						</a>
-						<ul class="nav nav-treeview">
-							<li class="nav-item">
-								<router-link
-									:to="{ name: 'dashboard' }"
-									class="nav-link"
-								>
-									<i class="far fa-circle nav-icon"></i>
-									<p>Dashboard</p>
-								</router-link>
-							</li>
-						</ul>
-					</li>
 				</ul>
 			</nav>
 			<!-- /.sidebar-menu -->
