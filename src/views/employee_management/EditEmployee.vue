@@ -140,7 +140,7 @@
 										<img
 											v-if="
 												item.profile_image_path &&
-													!imageUrl
+													!profile_image_path
 											"
 											:src="
 												'http://127.0.0.1:8000/storage/' +
@@ -150,8 +150,8 @@
 											style="width: 90%"
 										/>
 										<img
-											v-else-if="imageUrl"
-											:src="imageUrl"
+											v-else-if="profile_image_path"
+											:src="profile_image_path"
 											alt=""
 											style="width: 90%"
 										/>
@@ -168,7 +168,7 @@
 										<input
 											type="file"
 											class="d-block mt-2"
-											@change="onFileSelected"
+											@change="onProfileFileSelected"
 										/>
 										<small
 											>The maximum file size allowed is
@@ -176,12 +176,17 @@
 										><br /><br />
 										<small
 											v-if="
-												error && error.errors.image_path
+												error &&
+													error.errors
+														.profile_image_path
 											"
 											id="emailHelp"
 											class="form-text text-danger"
 										>
-											{{ error.errors.image_path[0] }}
+											{{
+												error.errors
+													.profile_image_path[0]
+											}}
 										</small>
 									</div>
 								</div>
@@ -708,6 +713,72 @@
 								aria-labelledby="pills-contri-tab"
 							>
 								<div class="row">
+									<div class="col-md-4">
+										<h5 class="h5">Signature Image</h5>
+										<label for="">
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
+										</label>
+									</div>
+
+									<div class="col-md-2">
+										<img
+											v-if="
+												item.signatory_image_path &&
+													!signatory_image_path
+											"
+											:src="
+												'http://127.0.0.1:8000/storage/' +
+													item.signatory_image_path
+											"
+											alt=""
+											style="width: 90%"
+										/>
+										<img
+											v-else-if="signatory_image_path"
+											:src="signatory_image_path"
+											alt=""
+											style="width: 90%"
+										/>
+										<img
+											v-else
+											src="../../assets/no-image.png"
+											alt=""
+											style="width: 90%"
+										/>
+									</div>
+
+									<div class="form-group col-md-6">
+										<label for="">Upload Image</label>
+										<input
+											type="file"
+											class="d-block mt-2"
+											@change="onSignatureFileSelected"
+										/>
+										<small
+											>The maximum file size allowed is
+											200KB.</small
+										><br /><br />
+										<small
+											v-if="
+												error &&
+													error.errors
+														.signatory_image_path
+											"
+											id="emailHelp"
+											class="form-text text-danger"
+										>
+											{{
+												error.errors
+													.signatory_image_path[0]
+											}}
+										</small>
+									</div>
+
+									<div class="col-12 my-2">
+										<hr />
+									</div>
 									<div class="col-4">
 										<h5 class="h5">SSS Info</h5>
 										<label for="">
@@ -884,8 +955,11 @@ export default {
 		});
 		const alert = ref(null);
 
-		const selectedFile = ref(null);
-		const imageUrl = ref(null);
+		const selectedProfileFile = ref(null);
+		const profile_image_path = ref(null);
+
+		const selectedSignatureFile = ref(null);
+		const signatory_image_path = ref(null);
 
 		const addAddress = () => {
 			alert.value = null;
@@ -1002,8 +1076,18 @@ export default {
 				form_data.append(key, data[key]);
 			}
 
-			if (selectedFile.value) {
-				form_data.append("profile_image_path", selectedFile.value);
+			if (selectedProfileFile.value) {
+				form_data.append(
+					"profile_image_path",
+					selectedProfileFile.value
+				);
+			}
+
+			if (selectedSignatureFile.value) {
+				form_data.append(
+					"signatory_image_path",
+					selectedSignatureFile.value
+				);
 			}
 
 			for (var pair of form_data.entries()) {
@@ -1065,14 +1149,28 @@ export default {
 			);
 		});
 
-		const onFileSelected = (e) => {
-			selectedFile.value = e.target.files[0];
-			imageUrl.value = URL.createObjectURL(selectedFile.value);
+		const onProfileFileSelected = (e) => {
+			selectedProfileFile.value = e.target.files[0];
+			profile_image_path.value = URL.createObjectURL(
+				selectedProfileFile.value
+			);
+		};
+
+		const onSignatureFileSelected = (e) => {
+			selectedSignatureFile.value = e.target.files[0];
+			signatory_image_path.value = URL.createObjectURL(
+				selectedSignatureFile.value
+			);
 		};
 
 		return {
-			selectedFile,
-			imageUrl,
+			selectedProfileFile,
+			profile_image_path,
+			onProfileFileSelected,
+
+			selectedSignatureFile,
+			signatory_image_path,
+			onSignatureFileSelected,
 
 			item,
 
@@ -1082,7 +1180,6 @@ export default {
 			response,
 			alert,
 			handleCloseAlert,
-			onFileSelected,
 
 			commTabHasError,
 			mainTabHasError,

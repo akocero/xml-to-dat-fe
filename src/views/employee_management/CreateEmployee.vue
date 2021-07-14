@@ -148,7 +148,7 @@
 										<input
 											type="file"
 											class="d-block mt-2"
-											@change="onFileSelected"
+											@change="onProfileFileSelected"
 										/>
 										<small
 											>The maximum file size allowed is
@@ -156,12 +156,17 @@
 										><br /><br />
 										<small
 											v-if="
-												error && error.errors.image_path
+												error &&
+													error.errors
+														.profile_image_path
 											"
 											id="emailHelp"
 											class="form-text text-danger"
 										>
-											{{ error.errors.image_path[0] }}
+											{{
+												error.errors
+													.profile_image_path[0]
+											}}
 										</small>
 									</div>
 								</div>
@@ -688,8 +693,62 @@
 								aria-labelledby="pills-contri-tab"
 							>
 								<div class="row">
+									<div class="col-md-4">
+										<h5 class="h5">Signature Image</h5>
+										<label for="">
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
+										</label>
+									</div>
+
+									<div class="col-md-2">
+										<img
+											v-if="signatory_image_path"
+											:src="signatory_image_path"
+											alt=""
+											style="width: 90%"
+										/>
+										<img
+											v-else
+											src="../../assets/no-image.png"
+											alt=""
+											style="width: 90%"
+										/>
+									</div>
+
+									<div class="form-group col-md-6">
+										<label for="">Upload Image</label>
+										<input
+											type="file"
+											class="d-block mt-2"
+											@change="onSignatureFileSelected"
+										/>
+										<small
+											>The maximum file size allowed is
+											200KB.</small
+										><br /><br />
+										<small
+											v-if="
+												error &&
+													error.errors
+														.signatory_image_path
+											"
+											id="emailHelp"
+											class="form-text text-danger"
+										>
+											{{
+												error.errors
+													.signatory_image_path[0]
+											}}
+										</small>
+									</div>
+									<div class="col-12 my-2">
+										<hr />
+									</div>
+
 									<div class="col-4">
-										<h5 class="h5">SSS Info</h5>
+										<h5 class="h5">Biometrics</h5>
 										<label for="">
 											You can change your avatar here or
 											remove the current avatar to revert
@@ -866,8 +925,11 @@ export default {
 		const extension_name = ref("");
 		const gender = ref("");
 
-		const selectedFile = ref(null);
+		const selectedFileProfile = ref(null);
 		const profile_image_path = ref(null);
+
+		const selectedFileSignature = ref(null);
+		const signatory_image_path = ref(null);
 
 		const addresses = ref([
 			{
@@ -1011,13 +1073,23 @@ export default {
 				form_data.append(key, data[key]);
 			}
 
-			if (selectedFile.value) {
-				form_data.append("profile_image_path", selectedFile.value);
+			if (selectedFileProfile.value) {
+				form_data.append(
+					"profile_image_path",
+					selectedFileProfile.value
+				);
 			}
 
-			for (var pair of form_data.entries()) {
-				console.log(pair[0] + ", " + pair[1]);
+			if (selectedFileSignature.value) {
+				form_data.append(
+					"signatory_image_path",
+					selectedFileSignature.value
+				);
 			}
+
+			// for (var pair of form_data.entries()) {
+			// 	console.log(pair[0] + ", " + pair[1]);
+			// }
 
 			await create("basicemployeeinformation", form_data);
 
@@ -1071,9 +1143,18 @@ export default {
 			);
 		});
 
-		const onFileSelected = (e) => {
-			selectedFile.value = e.target.files[0];
-			profile_image_path.value = URL.createObjectURL(selectedFile.value);
+		const onProfileFileSelected = (e) => {
+			selectedFileProfile.value = e.target.files[0];
+			profile_image_path.value = URL.createObjectURL(
+				selectedFileProfile.value
+			);
+		};
+
+		const onSignatureFileSelected = (e) => {
+			selectedFileSignature.value = e.target.files[0];
+			signatory_image_path.value = URL.createObjectURL(
+				selectedFileSignature.value
+			);
 		};
 
 		return {
@@ -1093,8 +1174,14 @@ export default {
 			civil_status,
 			extension_name,
 			gender,
-			selectedFile,
+
+			selectedFileProfile,
 			profile_image_path,
+			onProfileFileSelected,
+
+			selectedFileSignature,
+			signatory_image_path,
+			onSignatureFileSelected,
 
 			handleSubmit,
 			error,
@@ -1102,7 +1189,6 @@ export default {
 			response,
 			alert,
 			handleCloseAlert,
-			onFileSelected,
 
 			commTabHasError,
 			mainTabHasError,
