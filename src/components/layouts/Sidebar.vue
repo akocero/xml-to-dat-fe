@@ -103,7 +103,7 @@
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
 								<router-link
-									:to="{ name: 'employee' }"
+									:to="{ name: 'setup-employee' }"
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
@@ -116,7 +116,10 @@
 
 					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
 					<li class="nav-item">
-						<a href="" class="nav-link">
+						<router-link
+							:to="{ name: 'employee-management' }"
+							class="nav-link"
+						>
 							<i
 								v-html="users"
 								class="nav-icon nav-icon fas pr-2"
@@ -124,7 +127,7 @@
 							<p>
 								Employee Management
 							</p>
-						</a>
+						</router-link>
 					</li>
 					<li class="nav-item">
 						<a href="#" class="nav-link">
