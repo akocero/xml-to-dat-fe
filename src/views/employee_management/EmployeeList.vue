@@ -39,10 +39,12 @@
 						<table class="table">
 							<thead>
 								<tr class="text-secondary">
-									<th class="text-center">Code</th>
+									<th class="text-center">Employee ID</th>
 									<th>Full Name</th>
-									<th>Mobile</th>
 									<th>Email</th>
+									<th>Department</th>
+									<th>Position</th>
+
 									<th width="12%">Actions</th>
 								</tr>
 							</thead>
@@ -58,8 +60,9 @@
 											item.extension_name
 										}}
 									</td>
-									<td>{{ item.mobile_no }}</td>
 									<td>{{ item.email }}</td>
+									<td></td>
+									<td></td>
 									<td>
 										<router-link
 											:to="{

@@ -32,7 +32,7 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError && 'pr-4'"
+								:class="employeeTabHasError && 'pr-4'"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
@@ -41,7 +41,7 @@
 								aria-selected="true"
 								>Employee Info
 								<i
-									v-if="mainTabHasError"
+									v-if="employeeTabHasError"
 									v-html="alertTriangle"
 									class="text-danger icon-error"
 								></i>
@@ -50,7 +50,7 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError && 'pr-4'"
+								:class="contactTabHasError && 'pr-4'"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -60,7 +60,7 @@
 							>
 								Contact Info
 								<i
-									v-if="commTabHasError"
+									v-if="contactTabHasError"
 									v-html="alertTriangle"
 									class="text-danger icon-error"
 								></i>
@@ -69,7 +69,7 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
+								:class="otherInfoTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -79,7 +79,7 @@
 							>
 								Other Info
 								<i
-									v-if="connTabHasError"
+									v-if="otherInfoTabHasError"
 									v-html="alertTriangle"
 									class="text-danger icon-error"
 								></i>
@@ -122,9 +122,9 @@
 									<div class="col-md-4">
 										<h5 class="h5">Profile Image</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
 										</label>
 									</div>
 
@@ -148,7 +148,7 @@
 										<input
 											type="file"
 											class="d-block mt-2"
-											@change="onFileSelected"
+											@change="onProfileFileSelected"
 										/>
 										<small
 											>The maximum file size allowed is
@@ -156,12 +156,17 @@
 										><br /><br />
 										<small
 											v-if="
-												error && error.errors.image_path
+												error &&
+													error.errors
+														.profile_image_path
 											"
 											id="emailHelp"
 											class="form-text text-danger"
 										>
-											{{ error.errors.image_path[0] }}
+											{{
+												error.errors
+													.profile_image_path[0]
+											}}
 										</small>
 									</div>
 								</div>
@@ -172,48 +177,53 @@
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
 										</label>
 									</div>
 
 									<div class="row col-8">
-										<div class="form-group col-4">
-											<label>
-												Employee ID
-												<span
-													class="text-danger text-bold"
-													>*</span
+										<div class="row col-12">
+											<div class="form-group col-4">
+												<label>
+													Employee ID
+													<span
+														class="text-danger text-bold"
+														>*</span
+													>
+												</label>
+												<input
+													type="text"
+													class="form-control"
+													:class="[
+														error &&
+															error.errors
+																.employee_id &&
+															'is-invalid',
+													]"
+													id=""
+													aria-describedby="emailHelp"
+													placeholder="Ex. 1234567"
+													v-model="employee_id"
+												/>
+												<small
+													v-if="
+														error &&
+															error.errors
+																.employee_id
+													"
+													id="emailHelp"
+													class="form-text text-danger"
 												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
+													{{
 														error.errors
-															.employee_id &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
-												v-model="employee_id"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.employee_id
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.employee_id[0]
-												}}
-											</small>
+															.employee_id[0]
+													}}
+												</small>
+											</div>
 										</div>
+
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-4">
 											<label for=""
@@ -249,7 +259,7 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
+										<div class="form-group col-3">
 											<label
 												>Last Name
 												<span
@@ -283,14 +293,8 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
-											<label
-												>Middle Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+										<div class="form-group col-3">
+											<label>Middle Name </label>
 											<input
 												type="text"
 												class="form-control"
@@ -318,13 +322,9 @@
 												}}
 											</small>
 										</div>
-										<div class="form-group col-4">
+										<div class="form-group col-2">
 											<label>
-												Extension Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
+												Suffix
 											</label>
 											<input
 												type="text"
@@ -356,7 +356,7 @@
 											</small>
 										</div>
 
-										<div class="form-group col-4">
+										<div class="form-group col-2">
 											<label for=""
 												>Gender
 												<span
@@ -376,8 +376,8 @@
 												v-model="gender"
 											>
 												<option value=""
-													>Choose ...</option
-												>
+													>Choose
+												</option>
 												<option value="male"
 													>Male</option
 												>
@@ -395,7 +395,7 @@
 												{{ error.errors.gender[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
+										<div class="form-group col-3">
 											<label
 												>Birthdate
 												<span
@@ -428,8 +428,13 @@
 												{{ error.errors.birthdate[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label>birthplace</label>
+										<div class="form-group col-4">
+											<label
+												>Birthplace<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -455,7 +460,7 @@
 												{{ error.errors.birthplace[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
+										<div class="form-group col-3">
 											<label>Citizenship</label>
 											<input
 												type="text"
@@ -484,16 +489,17 @@
 												}}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label
+										<div class="form-group col-4">
+											<label for=""
 												>Civil Status
 												<span
 													class="text-danger text-bold"
 													>*</span
 												>
 											</label>
-											<input
-												type="text"
+											<select
+												name=""
+												id="input_currency"
 												class="form-control"
 												:class="[
 													error &&
@@ -501,11 +507,21 @@
 															.civil_status &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex.  "
 												v-model="civil_status"
-											/>
+											>
+												<option value=""
+													>Choose
+												</option>
+												<option value="signle"
+													>Single</option
+												>
+												<option value="married"
+													>Married</option
+												>
+												<option value="widow"
+													>Widow</option
+												>
+											</select>
 											<small
 												v-if="
 													error &&
@@ -533,9 +549,9 @@
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
 										</label>
 									</div>
 
@@ -572,7 +588,12 @@
 											</small>
 										</div>
 										<div class="form-group col-6">
-											<label for="">Tel No.</label>
+											<label for=""
+												>Tel No.<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -598,7 +619,12 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label>Mobile No.</label>
+											<label
+												>Mobile No.<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -670,9 +696,24 @@
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
+										</label>
+									</div>
+
+									<div class="row col-8">
+										<!-- <div class="error">{{ error }}</div> -->
+									</div>
+								</div>
+								<hr class="my-3" />
+								<div class="row">
+									<div class="col-4">
+										<h5 class="h5">Previous Employer</h5>
+										<label for="">
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
 										</label>
 									</div>
 
@@ -688,24 +729,72 @@
 								aria-labelledby="pills-contri-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">SSS Info</h5>
+									<div class="col-md-4">
+										<h5 class="h5">Signature Image</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
+										</label>
+									</div>
+
+									<div class="col-md-2">
+										<img
+											v-if="signatory_image_path"
+											:src="signatory_image_path"
+											alt=""
+											style="width: 90%"
+										/>
+										<img
+											v-else
+											src="../../assets/no-image.png"
+											alt=""
+											style="width: 90%"
+										/>
+									</div>
+
+									<div class="form-group col-md-6">
+										<label for="">Upload Image</label>
+										<input
+											type="file"
+											class="d-block mt-2"
+											@change="onSignatureFileSelected"
+										/>
+										<small
+											>The maximum file size allowed is
+											200KB.</small
+										><br /><br />
+										<small
+											v-if="
+												error &&
+													error.errors
+														.signatory_image_path
+											"
+											id="emailHelp"
+											class="form-text text-danger"
+										>
+											{{
+												error.errors
+													.signatory_image_path[0]
+											}}
+										</small>
+									</div>
+									<div class="col-12 my-2">
+										<hr />
+									</div>
+
+									<div class="col-4">
+										<h5 class="h5">Biometrics</h5>
+										<label for="">
+											This Paragraph will explain what was
+											the fields does or what was the use
+											of it
 										</label>
 									</div>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Height
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+											<label>Height </label>
 											<input
 												type="text"
 												class="form-control"
@@ -756,13 +845,7 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Blood Type
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+											<label>Blood Type </label>
 											<input
 												type="text"
 												class="form-control"
@@ -789,6 +872,33 @@
 											</small>
 										</div>
 									</div>
+									<div class="col-12 my-2">
+										<hr />
+									</div>
+
+									<div class="row pb-2 col-12">
+										<div
+											class="col-12 d-flex justify-content-between align-items-center pb-1"
+										>
+											<h5 class="h5 mb-0">
+												Dependent List
+											</h5>
+											<button
+												type="button"
+												class="btn btn-sm btn-custom-primary"
+												@click="addDependent"
+											>
+												Add Dependent
+											</button>
+										</div>
+
+										<EmployeeDependentList
+											:dependents="dependents"
+											@deleteDependent="
+												deleteDependent($event)
+											"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -805,7 +915,7 @@
 								v-if="loading"
 								disabled
 							>
-								Saving...
+								Saving
 							</button>
 						</div>
 					</form>
@@ -821,6 +931,7 @@ import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeList from "./EmployeeRelativeList.vue";
+import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import useData from "@/composables/useData";
@@ -831,6 +942,7 @@ export default {
 		Alert,
 		EmployeeAddressList,
 		EmployeeRelativeList,
+		EmployeeDependentList,
 	},
 	computed: {
 		chevronRight: function() {
@@ -866,8 +978,11 @@ export default {
 		const extension_name = ref("");
 		const gender = ref("");
 
-		const selectedFile = ref(null);
+		const selectedFileProfile = ref(null);
 		const profile_image_path = ref(null);
+
+		const selectedFileSignature = ref(null);
+		const signatory_image_path = ref(null);
 
 		const addresses = ref([
 			{
@@ -883,6 +998,16 @@ export default {
 			},
 		]);
 
+		const dependents = ref([
+			{
+				id: uuidv4(),
+				full_name: "",
+				birthdate: "",
+				include: "included",
+				active: "active",
+			},
+		]);
+
 		const relatives = ref([
 			{
 				id: uuidv4(),
@@ -893,8 +1018,6 @@ export default {
 				occupation: "",
 			},
 		]);
-
-		const address = ref(null);
 
 		const addAddress = () => {
 			alert.value = null;
@@ -952,6 +1075,31 @@ export default {
 				: relatives.value.push(tempRelative);
 		};
 
+		const addDependent = () => {
+			alert.value = null;
+			const tempDependent = {
+				id: uuidv4(),
+				full_name: "",
+				birthdate: "",
+				include: "included",
+				active: "active",
+			};
+
+			let err = false;
+			dependents.value.forEach((dependent) => {
+				if (!dependent.full_name) {
+					err = true;
+				}
+			});
+
+			err
+				? displayAlert(
+						"info",
+						"Please fill out full name in dependent list before adding one"
+				  )
+				: dependents.value.push(tempDependent);
+		};
+
 		const deleteAddress = (id) => {
 			console.log("this id will be deleted: ", id);
 			if (
@@ -963,6 +1111,20 @@ export default {
 				);
 			} else {
 				displayAlert("info", "Employee need atleast 1 address");
+			}
+		};
+
+		const deleteDependent = (id) => {
+			console.log("this id will be deleted: ", id);
+			if (
+				confirm("Are you sure you want to delete the dependent?") &&
+				dependents.value.length !== 1
+			) {
+				dependents.value = dependents.value.filter(
+					(dependent) => dependent.id !== id
+				);
+			} else {
+				displayAlert("info", "Employee need atleast 1 dependent");
 			}
 		};
 
@@ -1001,6 +1163,7 @@ export default {
 				gender: gender.value,
 				addresses: JSON.stringify(addresses.value),
 				relatives: JSON.stringify(relatives.value),
+				dependents: JSON.stringify(dependents.value),
 				active: 1,
 			};
 
@@ -1011,13 +1174,23 @@ export default {
 				form_data.append(key, data[key]);
 			}
 
-			if (selectedFile.value) {
-				form_data.append("profile_image_path", selectedFile.value);
+			if (selectedFileProfile.value) {
+				form_data.append(
+					"profile_image_path",
+					selectedFileProfile.value
+				);
 			}
 
-			for (var pair of form_data.entries()) {
-				console.log(pair[0] + ", " + pair[1]);
+			if (selectedFileSignature.value) {
+				form_data.append(
+					"signatory_image_path",
+					selectedFileSignature.value
+				);
 			}
+
+			// for (var pair of form_data.entries()) {
+			// 	console.log(pair[0] + ", " + pair[1]);
+			// }
 
 			await create("basicemployeeinformation", form_data);
 
@@ -1045,35 +1218,43 @@ export default {
 			alert.value = null;
 		};
 
-		const commTabHasError = computed(() => {
+		const contactTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
-				(error.value && error.value.errors.birthdate)
+				(error.value && error.value.errors.tel_no) ||
+				(error.value && error.value.errors.mobile_no)
 			);
 		});
 
-		const mainTabHasError = computed(() => {
+		const employeeTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.employee_id) ||
 				(error.value && error.value.errors.first_name) ||
 				(error.value && error.value.errors.last_name) ||
-				(error.value && error.value.errors.address)
+				(error.value && error.value.errors.citizenship) ||
+				(error.value && error.value.errors.civil_status) ||
+				(error.value && error.value.errors.gender) ||
+				(error.value && error.value.errors.birthdate) ||
+				(error.value && error.value.errors.birthplace)
 			);
 		});
 
-		const connTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.height) ||
-				(error.value && error.value.errors.tin_no) ||
-				(error.value && error.value.errors.hdmf_no) ||
-				(error.value && error.value.errors.tax_branch_code) ||
-				(error.value && error.value.errors.alphalist_no)
-			);
+		const otherInfoTabHasError = computed(() => {
+			return error.value && error.value.errors.height;
 		});
 
-		const onFileSelected = (e) => {
-			selectedFile.value = e.target.files[0];
-			profile_image_path.value = URL.createObjectURL(selectedFile.value);
+		const onProfileFileSelected = (e) => {
+			selectedFileProfile.value = e.target.files[0];
+			profile_image_path.value = URL.createObjectURL(
+				selectedFileProfile.value
+			);
+		};
+
+		const onSignatureFileSelected = (e) => {
+			selectedFileSignature.value = e.target.files[0];
+			signatory_image_path.value = URL.createObjectURL(
+				selectedFileSignature.value
+			);
 		};
 
 		return {
@@ -1093,8 +1274,14 @@ export default {
 			civil_status,
 			extension_name,
 			gender,
-			selectedFile,
+
+			selectedFileProfile,
 			profile_image_path,
+			onProfileFileSelected,
+
+			selectedFileSignature,
+			signatory_image_path,
+			onSignatureFileSelected,
 
 			handleSubmit,
 			error,
@@ -1102,11 +1289,14 @@ export default {
 			response,
 			alert,
 			handleCloseAlert,
-			onFileSelected,
 
-			commTabHasError,
-			mainTabHasError,
-			connTabHasError,
+			contactTabHasError,
+			employeeTabHasError,
+			otherInfoTabHasError,
+
+			dependents,
+			addDependent,
+			deleteDependent,
 
 			addAddress,
 			addresses,

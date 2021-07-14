@@ -3,6 +3,7 @@
 		<div class="w-15">
 			<label>
 				Relationship
+				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-15">
@@ -14,19 +15,16 @@
 		<div class="w-35">
 			<label>
 				Address
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-15">
 			<label>
 				Occupation
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 		<div class="w-15">
 			<label>
 				Contact No.
-				<span class="text-danger text-bold">*</span>
 			</label>
 		</div>
 	</div>
