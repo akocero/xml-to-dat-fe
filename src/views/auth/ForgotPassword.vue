@@ -2,7 +2,9 @@
 	<div class="forgot-password-container w-75" v-if="!validatedEmail">
 		<h3 class="h3">Forgot Password</h3>
 		<hr />
-		<p class="">Enter email and we will send you OTP</p>
+		<p class="">
+			Provide an email address to receive your One-Time Password (OTP)
+		</p>
 		<form action="" class="pt-3" @submit.prevent="handleSubmit">
 			<div class="form-group">
 				<label for="">Email address</label>

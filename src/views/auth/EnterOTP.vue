@@ -2,27 +2,27 @@
 	<div class="forgot-password-container w-75">
 		<h3 class="h3">Enter OTP</h3>
 		<hr />
-		<p class="">Please enter OTP (One Time Password)</p>
+		<p class="">Please enter your OTP for verification.</p>
 		<form action="" class="pt-3">
 			<div class="form-group">
 				<div class="d-flex justify-content-between align-items-center">
-					<label for="">Enter OTP</label
-					><button
+					<label for="">Enter OTP</label>
+				</div>
+
+				<div class="row">
+					<input
+						type="text"
+						class="form-control col-8"
+						id=""
+						placeholder="Enter OTP"
+					/>
+					<button
 						type="button"
-						class="btn btn-link"
+						class="btn btn-link col-4"
 						@click="resendOTP"
 					>
 						Resend OTP
 					</button>
-				</div>
-
-				<div>
-					<input
-						type="text"
-						class="form-control"
-						id=""
-						placeholder="Enter OTP"
-					/>
 				</div>
 
 				<small id="" class="form-text text-danger"> </small>
