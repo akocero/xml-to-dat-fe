@@ -87,7 +87,7 @@
 									<td>
 										<router-link
 											:to="{
-												name: 'view-user',
+												name: 'update-user',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"

@@ -16,7 +16,8 @@
 					<h5 class="h4 mb-0 text-primary" v-if="item">
 						{{ item.last_name }},
 						{{ item.first_name }}
-						{{ item.maiden_name }} {{ item.extension_name }}. Info.
+						{{ item.maiden_name }} {{ item.extension_name }}.
+						Information
 					</h5>
 					<h5 v-else class="h4 mb-0 text-primary">
 						N/A

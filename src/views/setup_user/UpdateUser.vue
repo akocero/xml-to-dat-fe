@@ -22,7 +22,7 @@
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
 					<h4 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.full_name }} Info.
+						{{ item.full_name }} Information.
 					</h4>
 					<router-link class="btn btn-light" :to="{ name: 'user' }"
 						>User List <i v-html="chevronRight"></i>
