@@ -23,7 +23,7 @@
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
 					<h5 class="h4 mb-0">New User</h5>
-					<router-link class="btn btn-light" :to="{ name: 'user' }"
+					<router-link class="btn btn-primary" :to="{ name: 'user' }"
 						>User List<i v-html="chevronRight"></i>
 					</router-link>
 				</div>

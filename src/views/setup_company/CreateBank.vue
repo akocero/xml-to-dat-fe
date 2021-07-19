@@ -33,7 +33,7 @@
 						{{ unknownError }}
 					</div>
 					<div class="row">
-						<div class="form-group col-5">
+						<div class="form-group col-4">
 							<label>
 								Code
 								<span class="text-danger text-bold">*</span>
@@ -60,7 +60,7 @@
 							</small>
 						</div>
 
-						<div class="form-group col-7">
+						<div class="form-group col-8">
 							<label>
 								Name
 								<span class="text-danger text-bold">*</span>

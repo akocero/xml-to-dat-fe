@@ -23,7 +23,9 @@
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
 					<h5 class="h4 mb-0 text-primary">New Company</h5>
-					<router-link class="btn btn-light" :to="{ name: 'company' }"
+					<router-link
+						class="btn btn-primary"
+						:to="{ name: 'company' }"
 						>Cancel <i v-html="chevronRight"></i>
 					</router-link>
 				</div>
@@ -138,7 +140,7 @@
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
 										<h5 class="h5">Company Image</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Add your company's logo to
 											personalize your company profile.
 											This logo can also be used in
@@ -189,7 +191,7 @@
 								<div class="row pb-3">
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Input basic information of your
 											company to provide more data about
 											your organization.
@@ -368,7 +370,7 @@
 								<div class="row pb-3">
 									<div class="col-4">
 										<h5 class="h5">Company Settings</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Choose settings to be applied across
 											all modules in your Company's
 											payroll system.
@@ -462,7 +464,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Provide your company's updated
 											contact information.
 										</label>
@@ -565,7 +567,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Include social media handles of the
 											organization so your employees can
 											reach you.
@@ -665,7 +667,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">SSS Info</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Provide your company's Social
 											Security System (SSS) details. This
 											information will be used for your
@@ -812,8 +814,8 @@
 								<hr class="pb-3" />
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Philhealth Info</h5>
-										<label for="">
+										<h5 class="h5">PhilHealth Info</h5>
+										<label for="" class="text-justify pr-4">
 											Provide your company's PhilHealth
 											details. This information will be
 											used for your monthly contribution
@@ -825,7 +827,7 @@
 									<div class="row col-8">
 										<div class="form-group col-6">
 											<label
-												>Philhealth Number
+												>PhilHealth Number
 												<span
 													class="text-danger text-bold"
 													>*</span
@@ -856,7 +858,7 @@
 											</small>
 										</div>
 										<div class="form-group col-6">
-											<label>Philhealth Initial</label>
+											<label>PhilHealth Initial</label>
 											<input
 												type="text"
 												class="form-control"
@@ -888,7 +890,7 @@
 
 										<div class="form-group col-6">
 											<label
-												>Philhealth Signatory
+												>PhilHealth Signatory
 												<span
 													class="text-danger text-bold"
 													>*</span
@@ -926,7 +928,7 @@
 
 										<div class="form-group col-6">
 											<label
-												>Philhealth Position
+												>PhilHealth Position
 												<span
 													class="text-danger text-bold"
 													>*</span
@@ -967,7 +969,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Pag-IBIG Info</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Provide your company's Pag-IBIG Fund
 											details. This information will be
 											used for your monthly contribution
@@ -1019,7 +1021,7 @@
 										<h5 class="h5">
 											Other Conributon Details
 										</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Input additional contribution
 											details as an employer. Any
 											information added here will be used

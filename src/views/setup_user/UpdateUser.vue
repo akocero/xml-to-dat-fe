@@ -24,7 +24,7 @@
 					<h4 class="h4 mb-0 text-primary" v-if="item">
 						{{ item.full_name }} Information.
 					</h4>
-					<router-link class="btn btn-light" :to="{ name: 'user' }"
+					<router-link class="btn btn-primary" :to="{ name: 'user' }"
 						>User List <i v-html="chevronRight"></i>
 					</router-link>
 				</div>

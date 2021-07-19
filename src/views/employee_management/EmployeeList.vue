@@ -44,6 +44,7 @@
 									<th>Email</th>
 									<th>Department</th>
 									<th>Position</th>
+									<th>Branch</th>
 
 									<th width="12%">Actions</th>
 								</tr>
@@ -56,11 +57,11 @@
 									<td>
 										{{ item.last_name }},
 										{{ item.first_name }}
-										{{ item.maiden_name }} .{{
-											item.extension_name
-										}}
+										{{ item.maiden_name }}
+										{{ item.extension_name }}
 									</td>
 									<td>{{ item.email }}</td>
+									<td></td>
 									<td></td>
 									<td></td>
 									<td>

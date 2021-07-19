@@ -15,7 +15,7 @@
 				>
 					<h5 class="h4 mb-0 text-primary">New Employee</h5>
 					<router-link
-						class="btn btn-light"
+						class="btn btn-primary"
 						:to="{ name: 'employee-management' }"
 						>Cancel <i v-html="chevronRight"></i>
 					</router-link>
@@ -121,7 +121,7 @@
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
 										<h5 class="h5">Profile Image</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											This profile image is optional. The
 											employee's image may be used for
 											his/her ID, and other documents.
@@ -177,7 +177,7 @@
 								<div class="row pb-3">
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Add employee's basic personal
 											information.
 										</label>
@@ -550,7 +550,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Add employee's contact information.
 										</label>
 									</div>
@@ -695,7 +695,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											This Paragraph will explain what was
 											the fields does or what was the use
 											of it
@@ -710,7 +710,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">Previous Employer</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											This Paragraph will explain what was
 											the fields does or what was the use
 											of it
@@ -731,7 +731,7 @@
 								<div class="row">
 									<div class="col-md-4">
 										<h5 class="h5">Signature Image</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Upload Employee Signature to be used
 											for Employee ID and other documents.
 										</label>
@@ -784,7 +784,7 @@
 
 									<div class="col-4">
 										<h5 class="h5">Biometrics</h5>
-										<label for="">
+										<label for="" class="text-justify pr-4">
 											Update employee's additional vital
 											health information.
 										</label>

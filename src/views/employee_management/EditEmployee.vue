@@ -23,7 +23,7 @@
 						N/A
 					</h5>
 					<router-link
-						class="btn btn-light"
+						class="btn btn-primary"
 						:to="{ name: 'employee-management' }"
 						>Cancel <i v-html="chevronRight"></i>
 					</router-link>
