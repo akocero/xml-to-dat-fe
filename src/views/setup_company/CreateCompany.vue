@@ -139,9 +139,10 @@
 									<div class="col-md-4">
 										<h5 class="h5">Company Image</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Add your company's logo to
+											personalize your company profile.
+											This logo can also be used in
+											payslips and generation of reports.
 										</label>
 									</div>
 
@@ -189,9 +190,9 @@
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Input basic information of your
+											company to provide more data about
+											your organization.
 										</label>
 									</div>
 

@@ -785,9 +785,8 @@
 									<div class="col-4">
 										<h5 class="h5">Biometrics</h5>
 										<label for="">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											Update employee's additional vital
+											health information.
 										</label>
 									</div>
 

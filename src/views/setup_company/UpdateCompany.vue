@@ -88,7 +88,7 @@
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
 					<h5 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.name }} Info.
+						{{ item.name }} Information.
 					</h5>
 					<router-link class="btn btn-light" :to="{ name: 'company' }"
 						>Cancel <i v-html="chevronRight"></i>
