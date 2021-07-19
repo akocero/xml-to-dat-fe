@@ -340,6 +340,9 @@
 						@showEmployeeClassModal="showEmployeeClassModal($event)"
 						:employeeClassData="employeeClassData"
 					/>
+					<div v-else>
+						<Spinner />
+					</div>
 				</div>
 				<div
 					class="tab-pane fade"

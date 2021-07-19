@@ -141,12 +141,12 @@
 
 					<div class="col-md-6">
 						<label class="text-bold">Companies </label>
-						<input
+						<!-- <input
 							type="text"
 							v-model="search"
 							class="mini-search-company"
 							placeholder="Company name..."
-						/>
+						/> -->
 						<div
 							class="multi-select text-secondary"
 							v-if="
@@ -160,13 +160,13 @@
 								:key="company.id"
 								class="multi-select-card shadow-sm border"
 							>
-								<input
+								<!-- <input
 									type="checkbox"
 									name=""
 									:value="company.id"
 									v-model="companiesArray"
-								/>
-								<h6 class="h6 text-bold pb-0 mb-0">
+								/> -->
+								<h6 class="h6 text-bold pb-0 mb-0 ml-0">
 									{{ company.code }} - {{ company.name }}
 								</h6>
 							</div>
@@ -188,22 +188,6 @@
 				</div>
 				<div class="row" v-else>
 					<Spinner />
-				</div>
-				<hr />
-				<div class="row col-12">
-					<button
-						class="btn btn-custom-success"
-						v-if="!isPending && !disabledSaveChanges"
-					>
-						Save Changes
-					</button>
-					<button
-						class="btn btn-custom-success"
-						v-if="isPending"
-						disabled
-					>
-						Loading ...
-					</button>
 				</div>
 			</form>
 		</div>
@@ -283,6 +267,16 @@ export default {
 
 		onMounted(() => {
 			pushToCompaniesArray();
+			setTimeout(() => {
+				const tags = ["input", "select", "textarea", "button"];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 1000);
 		});
 
 		const handleSubmit = async () => {

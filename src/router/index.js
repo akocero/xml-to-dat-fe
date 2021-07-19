@@ -44,6 +44,11 @@ const routes = [
         component: () => import('@/views/setup_user/UpdateUser.vue')
       },
       {
+        path: 'user/view/:id',
+        name: 'view-user',
+        component: () => import('@/views/setup_user/ViewUser.vue')
+      },
+      {
         path: 'setup/company',
         name: 'company',
         component: () => import('@/views/setup_company/Company.vue')
@@ -57,6 +62,11 @@ const routes = [
         path: 'setup/company/update/:id',
         name: 'update-company',
         component: () => import('@/views/setup_company/UpdateCompany.vue')
+      },
+      {
+        path: 'setup/company/view/:id',
+        name: 'view-company',
+        component: () => import('@/views/setup_company/ViewCompany.vue')
       },
       {
         path: 'setup/employee',

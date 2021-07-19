@@ -37,7 +37,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. John Doe"
 				v-model="dependent.full_name"
 			/>
 		</div>

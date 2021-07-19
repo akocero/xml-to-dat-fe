@@ -407,6 +407,9 @@
 												<option value="female"
 													>Female</option
 												>
+												<option value="female"
+													>Others</option
+												>
 											</select>
 											<small
 												v-if="
