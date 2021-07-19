@@ -58,7 +58,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Bldg. 1 Unit No. 2"
 				v-model="address.bldg"
 			/>
 		</div>
@@ -68,7 +68,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. No. 3 Luzon Street, Pilipinas Subdivision"
 				v-model="address.street"
 			/>
 		</div>
@@ -78,7 +78,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Barangay East - wala na akong maisip"
 				v-model="address.brgy"
 			/>
 		</div>
@@ -88,7 +88,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Manila"
 				v-model="address.city"
 			/>
 		</div>
@@ -98,7 +98,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. NCR"
 				v-model="address.region"
 			/>
 		</div>
@@ -108,7 +108,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Philippines"
 				v-model="address.country"
 			/>
 		</div>
@@ -118,7 +118,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. 1111"
 				v-model="address.zipcode"
 			/>
 		</div>
@@ -128,7 +128,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. 2222"
 				v-model="address.geocode"
 			/>
 		</div>

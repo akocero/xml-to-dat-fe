@@ -1,86 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="response"
-			:status="'info'"
-			:message="'Company Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankAdded"
-			:status="'success'"
-			:message="'Bank Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankUpdated"
-			:status="'info'"
-			:message="'Bank Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryAdded"
-			:status="'success'"
-			:message="'Signatory Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryUpdated"
-			:status="'info'"
-			:message="'Signatory Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<CreateBank
-		v-if="item && creatingBank"
-		:companyID="item.id"
-		@bankAdded="bankAdded($event)"
-		@hideCreateBank="creatingBank = false"
-	/>
-
-	<EditBank
-		v-if="item && updatingBank"
-		:bank_id="update_bank_id"
-		@bankUpdated="bankUpdated($event)"
-		@hideEditBank="updatingBank = false"
-	/>
-
-	<EditSignatory
-		v-if="item && updatingSignatory"
-		:signatory_id="update_signatory_id"
-		@signatoryUpdated="signatoryUpdated($event)"
-		@hideEditSignatory="updatingSignatory = false"
-	/>
-
-	<CreateSignatory
-		v-if="item && creatingSignatory"
-		:companyID="item.id"
-		@signatoryAdded="signatoryAdded($event)"
-		@hideCreateSignatory="creatingSignatory = false"
-	/>
-
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<div class="row mb-3">
@@ -106,7 +24,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError ? 'pr-4' : ''"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
@@ -114,17 +31,11 @@
 								aria-controls="pills-main"
 								aria-selected="true"
 								>Main
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError ? 'pr-4' : ''"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -133,17 +44,11 @@
 								aria-selected="false"
 							>
 								Communication
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -152,11 +57,6 @@
 								aria-selected="false"
 							>
 								Contribution
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -208,17 +108,11 @@
 
 									<div class="col-md-2">
 										<img
-											v-if="item.image_path && !imageUrl"
+											v-if="item.image_path"
 											:src="
 												'http://127.0.0.1:8000/storage/' +
 													item.image_path
 											"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else-if="imageUrl"
-											:src="imageUrl"
 											alt=""
 											style="width: 90%"
 										/>
@@ -241,23 +135,7 @@
 										<small
 											>The maximum file size allowed is
 											200KB.</small
-										><br /><br />
-										<small
-											v-if="
-												error && error.errors.image_path
-											"
-											class="form-text text-danger"
 										>
-											{{ error.errors.image_path[0] }}
-										</small>
-										<button
-											v-if="item.image_path"
-											class="btn btn-sm btn-danger"
-											@click="deleteImage(item.id)"
-											type="button"
-										>
-											Delete Image
-										</button>
 									</div>
 								</div>
 
@@ -285,23 +163,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.code &&
-														'is-invalid',
-												]"
 												id="input_code"
 												placeholder="Ex. 1234567"
 												v-model="item.code"
 											/>
-											<small
-												v-if="
-													error && error.errors.code
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.code[0] }}
-											</small>
 										</div>
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-8">
@@ -315,23 +180,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.name &&
-														'is-invalid',
-												]"
 												id="input_name"
 												placeholder="Ex. John Doe"
 												v-model="item.name"
 											/>
-											<small
-												v-if="
-													error && error.errors.name
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.name[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-4">
@@ -345,32 +197,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.vat_reg &&
-														'is-invalid',
-												]"
 												id="input_vat_reg"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.vat_reg"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.vat_reg
-												"
-												class="form-text text-danger"
-											>
-												<span
-													v-for="(err_vat_reg,
-													index) in error.errors
-														.vat_reg"
-													:key="index"
-													class="d-block"
-												>
-													{{ err_vat_reg }}</span
-												>
-											</small>
 										</div>
 
 										<div class="form-group col-8">
@@ -384,29 +214,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.classification &&
-														'is-invalid',
-												]"
 												id="input_classification"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.classification"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.classification
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.classification[0]
-												}}
-											</small>
 										</div>
 
 										<div class="col-md-12">
@@ -419,24 +230,10 @@
 											</label>
 											<textarea
 												name=""
-												:class="[
-													error &&
-														error.errors.address &&
-														'is-invalid',
-												]"
 												id="input_address"
 												class="form-control"
 												v-model="item.address"
 											></textarea>
-											<small
-												v-if="
-													error &&
-														error.errors.address
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.address[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -463,31 +260,11 @@
 											<input
 												type="number"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.decimal_place &&
-														'is-invalid',
-												]"
 												id="input_decimal_place"
 												aria-describedby="emailHelp"
 												placeholder="Ex. 1234567"
 												v-model="item.decimal_place"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.decimal_place
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.decimal_place[0]
-												}}
-											</small>
 										</div>
 										<div class="form-group col-4">
 											<label for=""
@@ -501,11 +278,6 @@
 												name=""
 												id="input_currency"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.currency &&
-														'is-invalid',
-												]"
 												v-model="item.currency"
 											>
 												<option value=""
@@ -514,16 +286,6 @@
 												<option value="php">PHP</option>
 												<option value="usd">USD</option>
 											</select>
-											<small
-												v-if="
-													error &&
-														error.errors.currency
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.currency[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -557,48 +319,20 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.tel_no &&
-														'is-invalid',
-												]"
 												id="input_tel_no"
 												placeholder="Ex. 02-8123-4567 "
 												v-model="item.tel_no"
 											/>
-											<small
-												v-if="
-													error && error.errors.tel_no
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no[0] }}
-											</small>
 										</div>
 										<div class="form-group col-6">
 											<label>Tel No Alt.</label>
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.tel_no_alt &&
-														'is-invalid',
-												]"
 												id="input_tel_no_alt"
 												placeholder="Ex. 02-8123-4567 "
 												v-model="item.tel_no_alt"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.tel_no_alt
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no_alt[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -612,23 +346,10 @@
 											<input
 												type="email"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.email &&
-														'is-invalid',
-												]"
 												id="input_email"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.email"
 											/>
-											<small
-												v-if="
-													error && error.errors.email
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.email[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -649,24 +370,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.website &&
-														'is-invalid',
-												]"
 												id="input_website"
 												placeholder="Ex. https://www.facebook.com/"
 												v-model="item.website"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.website
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.website[0] }}
-											</small>
 										</div>
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-6">
@@ -674,24 +381,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.facebook &&
-														'is-invalid',
-												]"
 												id="input_facebook"
 												placeholder="Ex. https://www.facebook.com/hisoka.morow.904/"
 												v-model="item.facebook"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.facebook
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.facebook[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -699,24 +392,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.twitter &&
-														'is-invalid',
-												]"
 												id="input_twitter"
 												placeholder="Ex. https://www.twitter.com/hisoka.morow.904/ "
 												v-model="item.twitter"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.twitter
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.twitter[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -750,50 +429,20 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.sss_no &&
-														'is-invalid',
-												]"
 												id="input_sss_no"
 												placeholder="Ex. 3484073113 "
 												v-model="item.sss_no"
 											/>
-											<small
-												v-if="
-													error && error.errors.sss_no
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.sss_no[0] }}
-											</small>
 										</div>
 										<div class="form-group col-6">
 											<label>SSS Initial</label>
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_initial &&
-														'is-invalid',
-												]"
 												id="input_sss_initial"
 												placeholder="Ex.  "
 												v-model="item.sss_initial"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.sss_initial[0]
-												}}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -807,25 +456,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_doc_no &&
-														'is-invalid',
-												]"
 												id="input_doc_no"
 												placeholder="Ex.  "
 												v-model="item.sss_doc_no"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_doc_no
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.sss_doc_no[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -839,31 +473,12 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_emp_location_code &&
-														'is-invalid',
-												]"
 												id="input_location_code"
 												placeholder="Ex.  "
 												v-model="
 													item.sss_emp_location_code
 												"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.sss_emp_location_code
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.sss_emp_location_code[0]
-												}}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -890,52 +505,20 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.phic_no &&
-														'is-invalid',
-												]"
 												id="input_phic_no"
 												placeholder="Ex. 022500018635 "
 												v-model="item.phic_no"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.phic_no
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.phic_no[0] }}
-											</small>
 										</div>
 										<div class="form-group col-6">
 											<label>Philhealth Initial</label>
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_initial &&
-														'is-invalid',
-												]"
 												id="input_phic_initial"
 												placeholder="Ex. "
 												v-model="item.phic_initial"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.phic_initial[0]
-												}}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -949,29 +532,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_signatory &&
-														'is-invalid',
-												]"
 												id="input_phic_signatory"
 												placeholder="Ex."
 												v-model="item.phic_signatory"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_signatory
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.phic_signatory[0]
-												}}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -985,29 +549,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_position &&
-														'is-invalid',
-												]"
 												id="input_phic_position"
 												placeholder="Ex. "
 												v-model="item.phic_position"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_position
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.phic_position[0]
-												}}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -1034,24 +579,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors.hdmf_no &&
-														'is-invalid',
-												]"
 												id="input_hdmf_no"
 												placeholder="Ex.123456789101 "
 												v-model="item.hdmf_no"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.hdmf_no
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.hdmf_no[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -1082,29 +613,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.tax_branch_code &&
-														'is-invalid',
-												]"
 												id="input_tax_branch_code"
 												placeholder="Ex. "
 												v-model="item.tax_branch_code"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.tax_branch_code
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.tax_branch_code[0]
-												}}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -1112,28 +624,10 @@
 											<input
 												type="text"
 												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.alphalist_no &&
-														'is-invalid',
-												]"
 												id="input_alphalist_no"
 												placeholder="Ex. "
 												v-model="item.alphalist_no"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.alphalist_no
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.alphalist_no[0]
-												}}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -1151,18 +645,6 @@
 										<h4 class="tab-pane-title">
 											Bank List
 										</h4>
-
-										<button
-											type="button"
-											class="btn btn-custom-primary btn-sm"
-											data-toggle="modal"
-											data-target="#create-bank-modal"
-											data-backdrop="static"
-											data-keyboard="false"
-											@click="showBankModal('create')"
-										>
-											Add Bank
-										</button>
 									</div>
 
 									<div class="col-md-12">
@@ -1207,26 +689,6 @@
 														{{ bank.description }}
 													</h4>
 												</div>
-												<div class="list-actions">
-													<button
-														type="button"
-														class="btn btn-sm btn-light"
-														data-toggle="modal"
-														data-target="#update-bank-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showBankModal(
-																'update',
-																bank.id
-															)
-														"
-													>
-														<i
-															class="far fa-edit"
-														></i>
-													</button>
-												</div>
 											</div>
 										</div>
 										<div v-else>
@@ -1249,19 +711,6 @@
 										<h4 class="tab-pane-title">
 											Signatory List
 										</h4>
-										<button
-											type="button"
-											class="btn btn-custom-primary btn-sm"
-											data-toggle="modal"
-											data-target="#create-signatory-modal"
-											data-backdrop="static"
-											data-keyboard="false"
-											@click="
-												showSignatoryModal('create')
-											"
-										>
-											Add Signatory
-										</button>
 									</div>
 
 									<div class="col-md-12">
@@ -1301,7 +750,7 @@
 														}}
 													</h4>
 												</div>
-												<div class="list-actions">
+												<!-- <div class="list-actions">
 													<button
 														type="button"
 														class="btn btn-sm btn-light"
@@ -1320,7 +769,7 @@
 															class="far fa-edit"
 														></i>
 													</button>
-												</div>
+												</div> -->
 											</div>
 										</div>
 										<div v-else>
@@ -1329,22 +778,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<hr />
-						<div class="row col-12">
-							<input
-								type="submit"
-								class="btn btn-custom-success"
-								v-if="!isPending"
-								value="Save Changes"
-							/>
-							<button
-								class="btn btn-custom-success"
-								v-if="isPending"
-								disabled
-							>
-								Saving...
-							</button>
 						</div>
 					</form>
 					<div v-else>
@@ -1358,31 +791,17 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted, computed, ref } from "vue";
+import { onMounted } from "vue";
 import { useRoute } from "vue-router";
-
 import getItem from "@/composables/getItem";
-
-import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
 
-import CreateBank from "./CreateBank";
-import EditBank from "./EditBank";
-import CreateSignatory from "./CreateSignatory";
-import EditSignatory from "./EditSignatory";
-
 import feather from "feather-icons";
-import axios from "@/axios/axios-instance";
 
 export default {
 	name: "UpdateCompany",
 	components: {
-		Alert,
 		Spinner,
-		CreateBank,
-		CreateSignatory,
-		EditBank,
-		EditSignatory,
 	},
 	computed: {
 		chevronRight: function() {
@@ -1402,254 +821,24 @@ export default {
 			route.params.id,
 			"setupcompany"
 		);
-		const input_image = ref(null);
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
-
-		const isBankAdded = ref(false);
-		const isBankUpdated = ref(false);
-		const isSignatoryAdded = ref(false);
-		const isSignatoryUpdated = ref(false);
-
-		const creatingBank = ref(false);
-		const updatingBank = ref(false);
-		const creatingSignatory = ref(false);
-		const updatingSignatory = ref(false);
-
-		const update_bank_id = ref(null);
-		const update_signatory_id = ref(null);
 
 		load();
 
-		const selectedFile = ref(null);
-		const imageUrl = ref(null);
-
-		// methods/functions
-		const handleSubmit = async () => {
-			response.value = null;
-			const form_data = new FormData();
-			const data = {
-				name: item.value.name,
-				code: item.value.code,
-				facebook: item.value.facebook,
-				twitter: item.value.twitter,
-				vat_reg: item.value.vat_reg,
-				tel_no: item.value.tel_no,
-				tel_no_alt: item.value.tel_no_alt,
-				email: item.value.email,
-				website: item.value.website,
-				address: item.value.address,
-				classification: item.value.classification,
-				sss_no: item.value.sss_no,
-				sss_initial: item.value.sss_initial,
-				sss_doc_no: item.value.sss_doc_no,
-				sss_emp_location_code: item.value.sss_emp_location_code,
-				phic_no: item.value.phic_no,
-				phic_initial: item.value.phic_initial,
-				phic_signatory: item.value.phic_signatory,
-				phic_position: item.value.phic_position,
-				hdmf_no: item.value.hdmf_no,
-				tax_branch_code: item.value.tax_branch_code,
-				alphalist_no: item.value.alphalist_no,
-				currency: item.value.currency,
-				decimal_place: item.value.decimal_place,
-				amount: item.value.amount,
-			};
-
-			for (var key in data) {
-				form_data.append(key, data[key]);
-			}
-
-			if (selectedFile.value) {
-				form_data.append("image_path", selectedFile.value);
-			}
-
-			try {
-				const res = await axios.post(
-					`setupcompany/${route.params.id}?_method=PATCH`,
-					form_data
-				);
-				response.value = res.data;
-				if (selectedFile.value) {
-					item.value.image_path = res.data.image_path;
-					selectedFile.value = null;
-					imageUrl.value = null;
-					input_image.value.value = null;
-				}
-
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
-				window.scrollTo(0, 0);
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					console.log(err.response.data);
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
-			}
-		};
-
-		const showBankModal = (type, value = null) => {
-			if (type === "create") {
-				creatingBank.value = true;
-			} else {
-				updatingBank.value = true;
-				update_bank_id.value = value;
-				console.log(update_bank_id.value);
-			}
-		};
-
-		const showSignatoryModal = (type, value = null) => {
-			if (type === "create") {
-				creatingSignatory.value = true;
-			} else {
-				updatingSignatory.value = true;
-				update_signatory_id.value = value;
-				// console.log(update_bank_id.value);
-			}
-		};
-
-		const handleCloseModal = () => {
-			error.value = null;
-			response.value = "";
-			isBankAdded.value = false;
-			isBankUpdated.value = false;
-			isSignatoryAdded.value = false;
-			isSignatoryUpdated.value = false;
-		};
-
-		const bankAdded = (newBank) => {
-			creatingBank.value = false;
-			isBankAdded.value = true;
-			item.value.setup_company_banks = [
-				newBank,
-				...item.value.setup_company_banks,
-			];
-			console.log(newBank);
-			window.scrollTo(0, 0);
-		};
-
-		const bankUpdated = (updatedBank) => {
-			updatingBank.value = false;
-			isBankUpdated.value = true;
-			const newbanks = item.value.setup_company_banks.filter(
-				(bank) => bank.id !== updatedBank.id
-			);
-			item.value.setup_company_banks = [updatedBank, ...newbanks];
-			window.scrollTo(0, 0);
-		};
-
-		const signatoryAdded = (newSignatory) => {
-			creatingSignatory.value = false;
-			isSignatoryAdded.value = true;
-			item.value.setup_company_signatories = [
-				newSignatory,
-				...item.value.setup_company_signatories,
-			];
-			console.log(newSignatory);
-			window.scrollTo(0, 0);
-		};
-
-		const signatoryUpdated = (updatedSignatory) => {
-			updatingSignatory.value = false;
-			isSignatoryUpdated.value = true;
-			const newSignatories = item.value.setup_company_signatories.filter(
-				(signatory) => signatory.id !== updatedSignatory.id
-			);
-			item.value.setup_company_signatories = [
-				updatedSignatory,
-				...newSignatories,
-			];
-			window.scrollTo(0, 0);
-		};
-
-		// computed error handling
-		const commTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.email) ||
-				(error.value && error.value.errors.tel_no)
-			);
+		onMounted(() => {
+			setTimeout(() => {
+				const tags = ["input", "select", "textarea", "button"];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 1000);
 		});
-
-		const mainTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.code) ||
-				(error.value && error.value.errors.name) ||
-				(error.value && error.value.errors.vat_reg) ||
-				(error.value && error.value.errors.address)
-			);
-		});
-
-		const connTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.sss_no) ||
-				(error.value && error.value.errors.phic_no) ||
-				(error.value && error.value.errors.hdmf_no) ||
-				(error.value && error.value.errors.tax_branch_code) ||
-				(error.value && error.value.errors.alphalist_no)
-			);
-		});
-
-		const onFileSelected = (e) => {
-			selectedFile.value = e.target.files[0];
-			imageUrl.value = URL.createObjectURL(selectedFile.value);
-		};
-
-		const deleteImage = async (id) => {
-			if (confirm("Are you sure you want to delete this image?")) {
-				const res = axios.delete("setupcompany/deleteImage/" + id);
-				item.value.image_path = null;
-			}
-
-			// console.log(id);
-		};
 
 		return {
-			handleSubmit,
-			error,
-			isPending,
-			response,
 			item,
-			imageUrl,
-			onFileSelected,
-			deleteImage,
-			input_image,
-
-			handleCloseModal,
-
-			isBankAdded,
-			isBankUpdated,
-			bankAdded,
-			bankUpdated,
-			creatingBank,
-			updatingBank,
-			showBankModal,
-
-			isSignatoryAdded,
-			isSignatoryUpdated,
-			signatoryAdded,
-			signatoryUpdated,
-			creatingSignatory,
-			updatingSignatory,
-			showSignatoryModal,
-
-			update_bank_id,
-			update_signatory_id,
-
-			connTabHasError,
-			mainTabHasError,
-			commTabHasError,
 		};
 	},
 };

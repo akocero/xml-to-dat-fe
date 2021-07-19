@@ -122,9 +122,10 @@
 									<div class="col-md-4">
 										<h5 class="h5">Profile Image</h5>
 										<label for="">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											This profile image is optional. The
+											employee's image may be used for
+											his/her ID, and other documents.
+											Please upload a recent photo.
 										</label>
 									</div>
 
@@ -177,9 +178,8 @@
 									<div class="col-4">
 										<h5 class="h5">Main Information</h5>
 										<label for="">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											Add employee's basic personal
+											information.
 										</label>
 									</div>
 
@@ -244,7 +244,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
+												placeholder="Ex. Juan"
 												v-model="first_name"
 											/>
 											<small
@@ -278,7 +278,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Dela Cruz"
 												v-model="last_name"
 											/>
 											<small
@@ -306,7 +306,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Santos"
 												v-model="maiden_name"
 											/>
 											<small
@@ -337,7 +337,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. Jr."
 												v-model="extension_name"
 											/>
 											<small
@@ -384,6 +384,9 @@
 												<option value="female"
 													>Female</option
 												>
+												<option value="female"
+													>Others</option
+												>
 											</select>
 											<small
 												v-if="
@@ -414,7 +417,6 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 02-8123-4567 "
 												v-model="birthdate"
 											/>
 											<small
@@ -446,7 +448,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 02-8123-4567 "
+												placeholder="Ex. Manila"
 												v-model="birthplace"
 											/>
 											<small
@@ -473,7 +475,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.tel_no.com/"
+												placeholder="Ex. Filipino"
 												v-model="citizenship"
 											/>
 											<small
@@ -549,9 +551,7 @@
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
 										<label for="">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											Add employee's contact information.
 										</label>
 									</div>
 
@@ -732,9 +732,8 @@
 									<div class="col-md-4">
 										<h5 class="h5">Signature Image</h5>
 										<label for="">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											Upload Employee Signature to be used
+											for Employee ID and other documents.
 										</label>
 									</div>
 
@@ -805,7 +804,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 3484073113 "
+												placeholder="Ex. 183 cm"
 												v-model="height"
 											/>
 											<small
@@ -830,7 +829,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex. 70 kilos"
 												v-model="weight"
 											/>
 											<small
@@ -857,7 +856,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex. O+"
 												v-model="blood_type"
 											/>
 											<small

@@ -92,7 +92,12 @@
 								></i>
 							</a>
 						</li>
-						<li class="nav-item">
+						<li
+							class="nav-item"
+							data-toggle="tooltip"
+							data-placement="left"
+							title="Please save your information for Main, Communication, and Contribution tabs to enable Bank Tab"
+						>
 							<a
 								class="nav-link disabled"
 								id="pills-banks-tab"
@@ -104,7 +109,12 @@
 								>Banks</a
 							>
 						</li>
-						<li class="nav-item">
+						<li
+							class="nav-item"
+							data-toggle="tooltip"
+							data-placement="left"
+							title="Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab"
+						>
 							<a
 								class="nav-link disabled"
 								id="pills-signatory-tab"
@@ -1112,6 +1122,7 @@ import feather from "feather-icons";
 import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import axios from "@/axios/axios-instance";
+import $ from "jquery";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -1165,6 +1176,10 @@ export default {
 
 		const selectedFile = ref(null);
 		const imageUrl = ref(null);
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
 
 		const handleSubmit = async () => {
 			const form_data = new FormData();
