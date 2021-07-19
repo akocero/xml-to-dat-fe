@@ -58,7 +58,7 @@
 						</button>
 					</div>
 					<div class="row" v-if="bank_id && item">
-						<div class="form-group col-5">
+						<div class="form-group col-4">
 							<label>
 								Code
 								<span class="text-danger text-bold">*</span>
@@ -85,7 +85,7 @@
 							</small>
 						</div>
 
-						<div class="form-group col-7">
+						<div class="form-group col-8">
 							<label>
 								Name
 								<span class="text-danger text-bold">*</span>
@@ -160,7 +160,7 @@
 							</small>
 						</div>
 						<div
-							class="col-12 d-flex justify-content-between align-items-center pb-2"
+							class="col-12 d-flex justify-content-between align-items-center pt-4 pb-2"
 						>
 							<h5 class="h6 mb-0">Additional Details</h5>
 							<button
