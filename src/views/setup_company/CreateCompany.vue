@@ -369,9 +369,9 @@
 									<div class="col-4">
 										<h5 class="h5">Company Settings</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Choose settings to be applied across
+											all modules in your Company's
+											payroll system.
 										</label>
 									</div>
 
@@ -463,9 +463,8 @@
 									<div class="col-4">
 										<h5 class="h5">Contact Info</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Provide your company's updated
+											contact information.
 										</label>
 									</div>
 
@@ -567,9 +566,9 @@
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Include social media handles of the
+											organization so your employees can
+											reach you.
 										</label>
 									</div>
 
@@ -667,9 +666,11 @@
 									<div class="col-4">
 										<h5 class="h5">SSS Info</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Provide your company's Social
+											Security System (SSS) details. This
+											information will be used for your
+											monthly contribution as an employer,
+											as well as for generating reports.
 										</label>
 									</div>
 
@@ -813,9 +814,11 @@
 									<div class="col-4">
 										<h5 class="h5">Philhealth Info</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Provide your company's PhilHealth
+											details. This information will be
+											used for your monthly contribution
+											as an employer, as well as for
+											generating reports.
 										</label>
 									</div>
 
@@ -963,11 +966,13 @@
 								<hr class="pb-3" />
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Pag-ibig Info</h5>
+										<h5 class="h5">Pag-IBIG Info</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Provide your company's Pag-IBIG Fund
+											details. This information will be
+											used for your monthly contribution
+											as an employer, as well as for
+											generating reports.
 										</label>
 									</div>
 
@@ -1015,9 +1020,12 @@
 											Other Conributon Details
 										</h5>
 										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
+											Input additional contribution
+											details as an employer. Any
+											information added here will be used
+											for your monthly dues as an
+											employer, as well as for generating
+											reports.
 										</label>
 									</div>
 
