@@ -1,18 +1,10 @@
 <template>
 	<transition name="alert">
 		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-	<transition name="alert">
-		<Alert
-			v-if="response"
-			:status="'info'"
-			:message="'User Updated'"
-			@closeModal="handleCloseModal"
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="alert = false"
 		/>
 	</transition>
 	<div class="card boiler shadow-md">
@@ -193,13 +185,13 @@
 				<div class="row col-12">
 					<button
 						class="btn btn-custom-success"
-						v-if="!isPending && !disabledSaveChanges"
+						v-if="!loading && !disabledSaveChanges"
 					>
 						Save Changes
 					</button>
 					<button
 						class="btn btn-custom-success"
-						v-if="isPending"
+						v-if="loading"
 						disabled
 					>
 						Loading ...
@@ -211,14 +203,15 @@
 </template>
 
 <script>
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, computed, ref } from "vue";
 import getItem from "@/composables/getItem";
+import useData from "@/composables/useData";
+import useAlert from "@/composables/useAlert";
 import Alert from "@/components/Alert";
 import { useRoute } from "vue-router";
 import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
 import useFetch from "@/composables/useFetch";
-import axios from "@/axios/axios-instance";
 export default {
 	name: "UpdateUser",
 	components: {
@@ -241,10 +234,13 @@ export default {
 			isPending: isPendingCompany,
 		} = useFetch();
 
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
+		const { alert, displayAlert } = useAlert();
+		const { response, error, update, loading, unknownError } = useData();
+
+		// const error = ref(null);
+		// const unknownError = ref(null);
+		// const response = ref(null);
+		// const loading = ref(false);
 
 		fetch("setupcompany?page=1");
 
@@ -296,51 +292,37 @@ export default {
 				companies: companiesArray.value,
 			};
 
-			try {
-				const res = await axios.patch(
-					`payrolluser/${route.params.id}`,
-					data
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
-				window.scrollTo(0, 0);
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
+			await update(`payrolluser/${route.params.id}`, data);
+			if (!error.value) {
+				// router.push({ name: "user", params: { userAdded: true } });
+				displayAlert("info", "User Updated");
+			} else {
+				displayAlert("error", "Invalid Inputs");
+				// console.log("error: ", error.value);
 			}
-		};
-
-		const handleCloseModal = () => {
-			response.value = null;
-			error.value.message = null;
 		};
 
 		return {
 			handleSubmit,
+
 			error,
-			isPending,
+			loading,
 			response,
+
 			item,
-			handleCloseModal,
+
 			companies,
+
 			search,
 			matchCompanies,
+
 			isPendingCompany,
 			companiesArray,
+
 			disabledSaveChanges,
 			disableSaveChanges,
+
+			alert,
 		};
 	},
 };

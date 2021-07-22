@@ -173,25 +173,12 @@
 											type="file"
 											class="d-block mt-2"
 											@change="onProfileFileSelected"
+											disabled
 										/>
 										<small
 											>The maximum file size allowed is
 											200KB.</small
 										><br /><br />
-										<small
-											v-if="
-												error &&
-													error.errors
-														.profile_image_path
-											"
-											id="emailHelp"
-											class="form-text text-danger"
-										>
-											{{
-												error.errors
-													.profile_image_path[0]
-											}}
-										</small>
 									</div>
 								</div>
 
@@ -226,25 +213,11 @@
 																.employee_id &&
 															'is-invalid',
 													]"
-													id=""
-													aria-describedby="emailHelp"
+													id="input_employee_id"
 													placeholder="Ex. 1234567"
 													v-model="item.employee_id"
+													disabled
 												/>
-												<small
-													v-if="
-														error &&
-															error.errors
-																.employee_id
-													"
-													id="emailHelp"
-													class="form-text text-danger"
-												>
-													{{
-														error.errors
-															.employee_id[0]
-													}}
-												</small>
 											</div>
 										</div>
 
@@ -266,21 +239,11 @@
 															.first_name &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_first_name"
 												placeholder="Ex. John Doe"
 												v-model="item.first_name"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.first_name
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.first_name[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-3">
@@ -300,21 +263,11 @@
 															.last_name &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_last_name"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.last_name"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.last_name
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.last_name[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-3">
@@ -328,23 +281,11 @@
 															.maiden_name &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_maiden_name"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.maiden_name"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.maiden_name
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.maiden_name[0]
-												}}
-											</small>
 										</div>
 										<div class="form-group col-2">
 											<label>
@@ -359,25 +300,11 @@
 															.extension_name &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_extension_name"
 												placeholder="Ex. 1234567"
 												v-model="item.extension_name"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.extension_name
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.extension_name[0]
-												}}
-											</small>
 										</div>
 
 										<div class="form-group col-2">
@@ -389,8 +316,7 @@
 												>
 											</label>
 											<select
-												name=""
-												id="input_currency"
+												id="input_gender"
 												class="form-control"
 												:class="[
 													error &&
@@ -398,6 +324,7 @@
 														'is-invalid',
 												]"
 												v-model="item.gender"
+												disabled
 											>
 												<option value=""
 													>Choose ...</option
@@ -412,15 +339,6 @@
 													>Others</option
 												>
 											</select>
-											<small
-												v-if="
-													error && error.errors.gender
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.gender[0] }}
-											</small>
 										</div>
 										<div class="form-group col-3">
 											<label
@@ -439,21 +357,11 @@
 															.birthdate &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_birthdate"
 												placeholder="Ex. 02-8123-4567 "
 												v-model="item.birthdate"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.birthdate
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.birthdate[0] }}
-											</small>
 										</div>
 										<div class="form-group col-4">
 											<label
@@ -471,8 +379,8 @@
 															.birthplace &&
 														'is-invalid',
 												]"
-												id=""
-												aria-describedby="emailHelp"
+												id="input_birthplace"
+												disabled
 												placeholder="Ex. 02-8123-4567 "
 												v-model="item.birthplace"
 											/>
@@ -505,22 +413,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex. https://www.tel_no.com/"
 												v-model="item.citizenship"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.citizenship
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.citizenship[0]
-												}}
-											</small>
 										</div>
 										<div class="form-group col-4">
 											<label for=""
@@ -531,8 +427,7 @@
 												>
 											</label>
 											<select
-												name=""
-												id="input_currency"
+												id=""
 												class="form-control"
 												:class="[
 													error &&
@@ -541,6 +436,7 @@
 														'is-invalid',
 												]"
 												v-model="item.civil_status"
+												disabled
 											>
 												<option value=""
 													>Choose ...</option
@@ -555,19 +451,6 @@
 													>Widow</option
 												>
 											</select>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.civil_status
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.civil_status[0]
-												}}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -606,19 +489,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex. johndoe@example.com "
 												v-model="item.email"
+												disabled
 											/>
-											<small
-												v-if="
-													error && error.errors.email
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.email[0] }}
-											</small>
 										</div>
 										<div class="form-group col-6">
 											<label for=""
@@ -637,19 +511,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex. https://www.tel_no.com/hisoka.morow.904/"
 												v-model="item.tel_no"
+												disabled
 											/>
-											<small
-												v-if="
-													error && error.errors.tel_no
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -669,20 +534,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex. https://www.mobile_no.com/hisoka.morow.904/ "
 												v-model="item.mobile_no"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.mobile_no
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.mobile_no[0] }}
-											</small>
 										</div>
 									</div>
 								</div>
@@ -692,13 +547,6 @@
 										class="col-12 d-flex justify-content-between align-items-center pb-1"
 									>
 										<h5 class="h5 mb-0">Address List</h5>
-										<button
-											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addAddress"
-										>
-											Add Address
-										</button>
 									</div>
 									<EmployeeAddressList
 										:addresses="item.addresses"
@@ -711,13 +559,6 @@
 										class="col-12 d-flex justify-content-between align-items-center pb-1"
 									>
 										<h5 class="h5 mb-0">Relative List</h5>
-										<button
-											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addRelative"
-										>
-											Add Relative
-										</button>
 									</div>
 
 									<EmployeeRelativeList
@@ -790,25 +631,12 @@
 											type="file"
 											class="d-block mt-2"
 											@change="onSignatureFileSelected"
+											disabled
 										/>
 										<small
 											>The maximum file size allowed is
 											200KB.</small
-										><br /><br />
-										<small
-											v-if="
-												error &&
-													error.errors
-														.signatory_image_path
-											"
-											id="emailHelp"
-											class="form-text text-danger"
 										>
-											{{
-												error.errors
-													.signatory_image_path[0]
-											}}
-										</small>
 									</div>
 
 									<div class="col-12 my-2">
@@ -841,19 +669,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex. 3484073113 "
 												v-model="item.height"
+												disabled
 											/>
-											<small
-												v-if="
-													error && error.errors.height
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.height[0] }}
-											</small>
 										</div>
 										<div class="form-group col-6">
 											<label>Weight</label>
@@ -866,19 +685,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex.  "
 												v-model="item.weight"
+												disabled
 											/>
-											<small
-												v-if="
-													error && error.errors.weight
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.weight[0] }}
-											</small>
 										</div>
 
 										<div class="form-group col-6">
@@ -899,20 +709,10 @@
 														'is-invalid',
 												]"
 												id=""
-												aria-describedby="emailHelp"
 												placeholder="Ex.  "
 												v-model="item.blood_type"
+												disabled
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors.blood_type
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.blood_type[0] }}
-											</small>
 										</div>
 									</div>
 									<div class="col-12 my-2">
@@ -926,13 +726,6 @@
 											<h5 class="h5 mb-0">
 												Dependent List
 											</h5>
-											<button
-												type="button"
-												class="btn btn-sm btn-custom-primary"
-												@click="addDependent"
-											>
-												Add Dependent
-											</button>
 										</div>
 
 										<EmployeeDependentList
@@ -944,22 +737,6 @@
 									</div>
 								</div>
 							</div>
-						</div>
-						<hr />
-						<div class="row col-12">
-							<input
-								type="submit"
-								class="btn btn-custom-success"
-								v-if="!loading"
-								value="Save Changes"
-							/>
-							<button
-								class="btn btn-custom-success"
-								v-if="loading"
-								disabled
-							>
-								Saving...
-							</button>
 						</div>
 					</form>
 					<div v-else>
@@ -1024,6 +801,17 @@ export default {
 			item.value.dependents = JSON.parse(item.value.dependents);
 			// console.log(item.value.addresses)
 			console.log(item.value);
+
+			// setTimeout(() => {
+			// 	const tags = ["input", "select", "textarea", "button"];
+			// 	tags.forEach((tagName) => {
+			// 		var inputs = document.getElementsByTagName(tagName);
+			// 		console.log(inputs[0]);
+			// 		for (var i = 0; i < inputs.length; i++) {
+			// 			inputs[i].disabled = true;
+			// 		}
+			// 	});
+			// }, 500);
 		});
 
 		const selectedProfileFile = ref(null);

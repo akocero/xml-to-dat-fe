@@ -1,20 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-	<transition name="alert">
-		<Alert
-			v-if="response"
-			:status="'info'"
-			:message="'User Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<div class="row mb-3">
@@ -22,7 +6,7 @@
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
 					<h4 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.full_name }} Info.
+						{{ item.full_name }} Information
 					</h4>
 					<router-link class="btn btn-light" :to="{ name: 'user' }"
 						>User List <i v-html="chevronRight"></i>
@@ -46,18 +30,10 @@
 											error.errors.employee_id &&
 											'is-invalid',
 									]"
-									id="exampleInputEmail1"
-									aria-describedby="emailHelp"
+									id="input_employee_id"
 									placeholder="Enter email"
 									v-model="item.employee_id"
 								/>
-								<small
-									v-if="error && error.errors.employee_id"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.employee_id[0] }}
-								</small>
 							</div>
 							<!-- <div class="error">{{ error }}</div> -->
 							<div class="form-group col-7">
@@ -72,18 +48,10 @@
 											error.errors.full_name &&
 											'is-invalid',
 									]"
-									id="exampleInputEmail1"
-									aria-describedby="emailHelp"
+									id="input_full_name"
 									placeholder="Enter email"
 									v-model="item.full_name"
 								/>
-								<small
-									v-if="error && error.errors.full_name"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.full_name[0] }}
-								</small>
 							</div>
 
 							<div class="form-group col-12">
@@ -96,25 +64,17 @@
 											error.errors.login_id &&
 											'is-invalid',
 									]"
-									id="exampleInputEmail1"
-									aria-describedby="emailHelp"
+									id="input_login_id"
 									placeholder="Enter email "
 									v-model="item.login_id"
 								/>
-								<small
-									v-if="error && error.errors.login_id"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.login_id[0] }}
-								</small>
 							</div>
 
 							<div class="form-group col-12">
 								<label for="">Role</label>
 								<select
 									name=""
-									id=""
+									id="select_role"
 									class="form-control"
 									:class="[
 										error &&
@@ -128,25 +88,12 @@
 									<option value="admin">Admin</option>
 									<option value="manager">Manager</option>
 								</select>
-								<small
-									v-if="error && error.errors.login_type"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.login_type[0] }}
-								</small>
 							</div>
 						</div>
 					</div>
 
 					<div class="col-md-6">
 						<label class="text-bold">Companies </label>
-						<!-- <input
-							type="text"
-							v-model="search"
-							class="mini-search-company"
-							placeholder="Company name..."
-						/> -->
 						<div
 							class="multi-select text-secondary"
 							v-if="
@@ -160,13 +107,13 @@
 								:key="company.id"
 								class="multi-select-card shadow-sm border"
 							>
-								<!-- <input
+								<input
 									type="checkbox"
 									name=""
 									:value="company.id"
 									v-model="companiesArray"
-								/> -->
-								<h6 class="h6 text-bold pb-0 mb-0 ml-0">
+								/>
+								<h6 class="h6 text-bold pb-0 mb-0">
 									{{ company.code }} - {{ company.name }}
 								</h6>
 							</div>
@@ -195,9 +142,8 @@
 </template>
 
 <script>
-import { onMounted, computed, ref, watch } from "vue";
+import { onBeforeMount, computed, ref } from "vue";
 import getItem from "@/composables/getItem";
-import Alert from "@/components/Alert";
 import { useRoute } from "vue-router";
 import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
@@ -206,7 +152,6 @@ import axios from "@/axios/axios-instance";
 export default {
 	name: "UpdateUser",
 	components: {
-		Alert,
 		Spinner,
 	},
 	computed: {
@@ -233,7 +178,6 @@ export default {
 		fetch("setupcompany?page=1");
 
 		const search = ref("");
-		const disabledSaveChanges = ref(false);
 
 		const matchCompanies = computed(() => {
 			return companies.value.data.filter((item) =>
@@ -258,14 +202,7 @@ export default {
 			}
 		};
 
-		const disableSaveChanges = computed(() => {
-			if (companiesArray.value.length < 1) {
-				disabledSaveChanges.value = true;
-			}
-			console.log(companiesArray.value.length);
-		});
-
-		onMounted(() => {
+		onBeforeMount(() => {
 			pushToCompaniesArray();
 			setTimeout(() => {
 				const tags = ["input", "select", "textarea", "button"];
@@ -279,62 +216,16 @@ export default {
 			}, 1000);
 		});
 
-		const handleSubmit = async () => {
-			const data = {
-				full_name: item.value.full_name,
-				login_id: item.value.login_id,
-				login_type: item.value.login_type,
-				employee_id: item.value.employee_id,
-				active: 1,
-				password: "password",
-				companies: companiesArray.value,
-			};
-
-			try {
-				const res = await axios.patch(
-					`payrolluser/${route.params.id}`,
-					data
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
-				window.scrollTo(0, 0);
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
-			}
-		};
-
-		const handleCloseModal = () => {
-			response.value = null;
-			error.value.message = null;
-		};
-
 		return {
-			handleSubmit,
 			error,
 			isPending,
 			response,
 			item,
-			handleCloseModal,
 			companies,
 			search,
 			matchCompanies,
 			isPendingCompany,
 			companiesArray,
-			disabledSaveChanges,
-			disableSaveChanges,
 		};
 	},
 };

@@ -157,7 +157,7 @@
 
 <script>
 import axios from "@/axios/axios-instance";
-import { onUpdated, ref } from "vue";
+import { ref } from "vue";
 import $ from "jquery";
 
 export default {
