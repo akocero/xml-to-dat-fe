@@ -43,7 +43,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Father"
 				v-model="relative.relationship"
 			/>
 		</div>
@@ -53,7 +53,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Jose Rizal"
 				v-model="relative.name"
 			/>
 		</div>
@@ -63,7 +63,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Manila"
 				v-model="relative.address"
 			/>
 		</div>
@@ -73,7 +73,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. Office Staff"
 				v-model="relative.occupation"
 			/>
 		</div>
@@ -83,7 +83,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. 1234567"
+				placeholder="Ex. 09999252145"
 				v-model="relative.contact_no"
 			/>
 		</div>

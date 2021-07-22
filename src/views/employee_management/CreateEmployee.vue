@@ -4,7 +4,7 @@
 			v-if="alert"
 			:status="alert.status"
 			:message="alert.message"
-			@closeModal="handleCloseAlert"
+			@closeModal="alert = false"
 		/>
 	</transition>
 	<div class="card boiler shadow-md">
@@ -696,9 +696,9 @@
 									<div class="col-4">
 										<h5 class="h5">Social Media</h5>
 										<label for="" class="text-justify pr-4">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
+											Include social media accounts of the
+											employee to keep them engaged with
+											company activities and updates.
 										</label>
 									</div>
 
@@ -706,21 +706,21 @@
 										<!-- <div class="error">{{ error }}</div> -->
 									</div>
 								</div>
-								<hr class="my-3" />
-								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Previous Employer</h5>
-										<label for="" class="text-justify pr-4">
-											This Paragraph will explain what was
-											the fields does or what was the use
-											of it
-										</label>
-									</div>
+								<!-- <hr class="my-3" />
+									<div class="row">
+										<div class="col-4">
+											<h5 class="h5">Previous Employer</h5>
+											<label for="" class="text-justify pr-4">
+												This Paragraph will explain what was
+												the fields does or what was the use
+												of it
+											</label>
+										</div>
 
-									<div class="row col-8">
-										<!-- <div class="error">{{ error }}</div> -->
-									</div>
-								</div>
+										<div class="row col-8">
+											
+										</div>
+									</div> -->
 							</div>
 							<div
 								class="tab-pane fade"
@@ -924,7 +924,7 @@
 </template>
 
 <script>
-import { ref, onUnmounted, computed } from "vue";
+import { ref, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
@@ -933,6 +933,7 @@ import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import useData from "@/composables/useData";
+import useAlert from "@/composables/useAlert";
 
 export default {
 	name: "CreateCompany",
@@ -957,7 +958,7 @@ export default {
 	setup() {
 		const router = useRouter();
 		const { error, response, loading, create, unknownError } = useData();
-		const alert = ref(null);
+		const { alert, displayAlert } = useAlert();
 
 		const first_name = ref("");
 		const employee_id = ref("");
@@ -1199,23 +1200,6 @@ export default {
 			}
 		};
 
-		const displayAlert = (status, message) => {
-			const alertDelay = 5000;
-
-			alert.value = {
-				status,
-				message,
-			};
-			window.scrollTo(0, 0);
-			setTimeout(() => {
-				alert.value = null;
-			}, alertDelay);
-		};
-
-		const handleCloseAlert = () => {
-			alert.value = null;
-		};
-
 		const contactTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
@@ -1286,7 +1270,6 @@ export default {
 			loading,
 			response,
 			alert,
-			handleCloseAlert,
 
 			contactTabHasError,
 			employeeTabHasError,

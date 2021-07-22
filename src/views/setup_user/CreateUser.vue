@@ -1,18 +1,10 @@
 <template>
 	<transition name="alert">
 		<Alert
-			v-if="response"
-			:status="'success'"
-			:message="'User Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-	<transition name="alert">
-		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="alert = false"
 		/>
 	</transition>
 
@@ -36,57 +28,31 @@
 					<div class="col-md-6">
 						<div class="row pr-3">
 							<div class="form-group col-5">
-								<label
-									>Employee ID
-									<span class="text-danger text-bold">*</span>
-								</label>
-								<input
-									type="text"
-									class="form-control"
-									:class="[
-										error &&
-											error.errors.employee_id &&
-											'is-invalid',
-									]"
-									id=""
-									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+								<BaseTextField
+									id="input_employee_id"
+									label="Employee ID"
 									v-model="employee_id"
+									:error="error"
+									:errorField="
+										error?.errors?.employee_id || null
+									"
+									placeholder="Ex. 213456"
+									:required="true"
 								/>
-								<small
-									v-if="error && error.errors.employee_id"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.employee_id[0] }}
-								</small>
 							</div>
-							<!-- <div class="error">{{ error }}</div> -->
+
 							<div class="form-group col-7">
-								<label for=""
-									>Full Name
-									<span class="text-danger text-bold">*</span>
-								</label>
-								<input
-									type="text"
-									class="form-control"
-									:class="[
-										error &&
-											error.errors.full_name &&
-											'is-invalid',
-									]"
-									id=""
-									aria-describedby="emailHelp"
-									placeholder="Ex. John Doe"
+								<BaseTextField
+									id="input_full_name"
+									label="Full Name"
 									v-model="full_name"
+									:error="error"
+									:errorField="
+										error?.errors?.full_name || null
+									"
+									placeholder="Ex. John Doe"
+									:required="true"
 								/>
-								<small
-									v-if="error && error.errors.full_name"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.full_name[0] }}
-								</small>
 							</div>
 
 							<div class="form-group col-12">
@@ -164,7 +130,7 @@
 
 						<div
 							class="multi-select text-secondary"
-							v-if="!isPendingCompany && companies.data?.length"
+							v-if="!loadingCompany && companies.data?.length"
 						>
 							<div
 								v-for="company in matchCompanies"
@@ -192,12 +158,12 @@
 					<input
 						type="submit"
 						class="btn btn-custom-success"
-						v-if="!isPending"
+						v-if="!loading"
 						value="Save"
 					/>
 					<button
 						class="btn btn-custom-success"
-						v-if="isPending"
+						v-if="loading"
 						disabled
 					>
 						Loading ...
@@ -209,20 +175,27 @@
 </template>
 
 <script>
-// import axios from 'axios';
-import { ref, onUnmounted, computed } from "vue";
-// import useCreate from "../../composables/useCreate";
+import { ref, computed } from "vue";
+import useData from "@/composables/useData";
+import useAlert from "@/composables/useAlert";
 import feather from "feather-icons";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import useFetch from "@/composables/useFetch";
 import { useRouter } from "vue-router";
-import axios from "@/axios/axios-instance";
+import BaseTextField from "@/components/BaseTextField";
+
 export default {
 	name: "CreateUser",
 	components: {
 		Alert,
 		Spinner,
+		BaseTextField,
+	},
+	data() {
+		return {
+			testt: "",
+		};
 	},
 	computed: {
 		chevronRight: function() {
@@ -236,14 +209,10 @@ export default {
 			data: companies,
 			error: errorCompany,
 			fetch,
-			isPending: isPendingCompany,
+			isPending: loadingCompany,
 		} = useFetch();
-		// const { response, error, create, isPending } = useCreate();
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
-
+		const { response, error, create, loading, unknownError } = useData();
+		const { alert, displayAlert } = useAlert();
 		const router = useRouter();
 
 		fetch("setupcompany?page=1");
@@ -273,49 +242,39 @@ export default {
 				companies: companiesArray.value,
 			};
 
-			try {
-				const res = await axios.post("payrolluser", data);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
+			console.log(data);
+
+			await create("payrolluser", data);
+
+			if (!error.value) {
+				console.log("user created");
 				router.push({ name: "user", params: { userAdded: true } });
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
+				// displayAlert("success", "User Added");
+			} else {
+				displayAlert("error", "Invalid Inputs");
+				console.log("error: ", error.value);
 			}
-		};
-
-		const handleCloseModal = () => {
-			error.value.message = null;
-			response.value = "";
 		};
 
 		return {
 			handleSubmit,
+
 			full_name,
 			login_id,
 			login_type,
 			employee_id,
+
 			error,
-			isPending,
+			loading,
 			response,
-			handleCloseModal,
+
 			companies,
 			companiesArray,
 			matchCompanies,
+			loadingCompany,
+
 			search,
-			isPendingCompany,
+			alert,
 		};
 	},
 };

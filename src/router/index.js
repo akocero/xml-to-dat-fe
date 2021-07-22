@@ -88,6 +88,11 @@ const routes = [
         name: 'edit-employee',
         component: () => import('@/views/employee_management/EditEmployee.vue')
       },
+      {
+        path: 'employee-management/view/:id',
+        name: 'view-employee',
+        component: () => import('@/views/employee_management/ViewEmployee.vue')
+      },
     ]
   },
 ]

@@ -1019,7 +1019,7 @@
 								<div class="row">
 									<div class="col-4">
 										<h5 class="h5">
-											Other Conributon Details
+											Other Contribution Details
 										</h5>
 										<label for="" class="text-justify pr-4">
 											Input additional contribution

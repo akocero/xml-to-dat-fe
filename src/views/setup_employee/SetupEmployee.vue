@@ -4,7 +4,7 @@
 			v-if="alert"
 			:status="alert.status"
 			:message="alert.message"
-			@closeModal="handleCloseAlert"
+			@closeModal="alert = false"
 		/>
 	</transition>
 	<div class="row">
@@ -458,6 +458,7 @@
 import Spinner from "@/components/Spinner";
 import useFetch from "@/composables/useFetch";
 import useData from "@/composables/useData";
+import useAlert from "@/composables/useAlert";
 import Table from "./Table";
 import TableCostCenter from "./TableCostCenter";
 import TableEmployeeClass from "./TableEmployeeClass";
@@ -485,8 +486,8 @@ export default {
 			fetch: employeeClassFetch,
 		} = useFetch();
 		const { response, create, update, error, unknownError } = useData();
+		const { alert, displayAlert } = useAlert();
 
-		const alert = ref(null);
 		const value = ref("");
 		const description = ref("");
 		const loading = ref(false);
@@ -515,22 +516,8 @@ export default {
 				item.id === response.id ? response : item
 			);
 		};
-
-		const displayAlert = (status, message) => {
-			alert.value = {
-				status,
-				message,
-			};
-
-			window.scrollTo(0, 0);
-		};
-
 		const matchForEditData = (data, eventData) => {
 			return data.find((item) => item.id === eventData.id);
-		};
-
-		const handleCloseAlert = () => {
-			alert.value = null;
 		};
 
 		const resetForm = () => {
@@ -712,7 +699,6 @@ export default {
 			newValue,
 			newDescription,
 			forEditData,
-			handleCloseAlert,
 			resetForm,
 
 			alert,
