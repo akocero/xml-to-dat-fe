@@ -18,7 +18,7 @@
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
+						@click="$emit('hideCreateSignatory')"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -303,7 +303,7 @@
 					<button
 						type="button"
 						class="btn btn-custom-success"
-						v-if="!isPending"
+						v-if="!loading"
 						@click="handleCreate"
 					>
 						Save
@@ -318,10 +318,10 @@
 </template>
 
 <script>
-import axios from "@/axios/axios-instance";
-import { onUpdated, ref } from "vue";
+import { ref } from "vue";
 import $ from "jquery";
 import BaseTextField from "@/components/BaseTextField";
+import useData from "@/composables/useData";
 
 export default {
 	name: "CreateSignatory",
@@ -330,10 +330,7 @@ export default {
 		BaseTextField,
 	},
 	setup(props, { emit }) {
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
+		const { response, error, create, loading, unknownError } = useData();
 
 		const code = ref("");
 		const prepared_by = ref("");
@@ -350,7 +347,7 @@ export default {
 		const handleCreate = async () => {
 			const newSignatory = {
 				code: code.value,
-				active: 0,
+				active: 1,
 				setup_company_id: props.companyID,
 				prepared_by: prepared_by.value,
 				p_position: p_position.value,
@@ -364,46 +361,19 @@ export default {
 				payroll_journal_report: payroll_journal_report.value,
 			};
 
-			try {
-				const res = await axios.post(
-					"setupcompanysignatory",
-					newSignatory
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
+			await create("setupcompanysignatory", newSignatory);
 
+			if (!error.value) {
 				$("#create-signatory-modal").modal("hide");
-
 				emit("signatoryAdded", response.value);
-
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					console.log(err.response.data);
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
 			}
-		};
-
-		const closeModal = () => {
-			emit("hideCreateSignatory");
 		};
 
 		return {
 			error,
-			isPending,
+			loading,
 			handleCreate,
 
-			closeModal,
 			unknownError,
 
 			code,

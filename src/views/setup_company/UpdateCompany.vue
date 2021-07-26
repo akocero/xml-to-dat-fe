@@ -1,5 +1,5 @@
 <template>
-	<transition name="alert">
+	<!-- <transition name="alert">
 		<Alert
 			v-if="response"
 			:status="'info'"
@@ -51,8 +51,15 @@
 			:message="error.message"
 			@closeModal="handleCloseModal"
 		/>
+	</transition> -->
+	<transition name="alert">
+		<Alert
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="alert = false"
+		/>
 	</transition>
-
 	<CreateBank
 		v-if="item && creatingBank"
 		:companyID="item.id"
@@ -166,24 +173,45 @@
 								class="nav-link"
 								id="pills-banks-tab"
 								data-toggle="pill"
+								:class="
+									item?.setup_company_banks.length === 0 &&
+										'pr-4'
+								"
 								href="#pills-banks"
 								role="tab"
 								aria-controls="pills-banks"
 								aria-selected="false"
-								>Banks</a
-							>
+								>Banks<i
+									v-if="
+										item?.setup_company_banks.length === 0
+									"
+									v-html="alertTriangle"
+									class="text-danger icon-error"
+								></i
+							></a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
 								id="pills-signatories-tab"
 								data-toggle="pill"
+								:class="
+									item?.setup_company_signatories.length ===
+										0 && 'pr-4'
+								"
 								href="#pills-signatories"
 								role="tab"
 								aria-controls="pills-signatories"
 								aria-selected="false"
-								>Signatories</a
-							>
+								>Signatories<i
+									v-if="
+										item?.setup_company_signatories
+											.length === 0
+									"
+									v-html="alertTriangle"
+									class="text-danger icon-error"
+								></i
+							></a>
 						</li>
 					</ul>
 					<form
@@ -1324,7 +1352,7 @@
 														<span
 															class="custom-badge custom-badge-success"
 															v-if="
-																signatory.active ===
+																signatory.active ==
 																	1
 															"
 															>Active</span
@@ -1394,10 +1422,11 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted, computed, ref } from "vue";
+import { onUnmounted, computed, ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 
 import getItem from "@/composables/getItem";
+import useAlert from "@/composables/useAlert";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
@@ -1440,6 +1469,9 @@ export default {
 			route.params.id,
 			"setupcompany"
 		);
+
+		const { displayAlert, alert } = useAlert();
+
 		const input_image = ref(null);
 		const error = ref(null);
 		const unknownError = ref(null);
@@ -1459,7 +1491,19 @@ export default {
 		const update_bank_id = ref(null);
 		const update_signatory_id = ref(null);
 
-		load();
+		onBeforeMount(async () => {
+			await load();
+
+			if (
+				item.value.setup_company_banks.length === 0 ||
+				item.value.setup_company_signatories.length === 0
+			) {
+				displayAlert(
+					"warning",
+					"Please add company banks or signatories"
+				);
+			}
+		});
 
 		const selectedFile = ref(null);
 		const imageUrl = ref(null);
@@ -1654,6 +1698,8 @@ export default {
 		};
 
 		return {
+			alert,
+
 			handleSubmit,
 			error,
 			isPending,
