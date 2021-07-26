@@ -27,6 +27,23 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="form-group col-7">
+							<BaseTextField
+								id="input_signatory_code"
+								label="Signatory Code"
+								v-model="code"
+								:error="error"
+								:errorField="error?.errors?.code || null"
+								placeholder="Ex. Signatory 1"
+								:required="true"
+							/>
+						</div>
+						<div class="form-group col-5">
+							<label for="">Status</label>
+							<select class="form-control" disabled>
+								<option value="active">Active</option>
+							</select>
+						</div>
+						<div class="form-group col-7">
 							<label>
 								Prepared by:
 								<span class="text-danger text-bold">*</span>
@@ -304,17 +321,21 @@
 import axios from "@/axios/axios-instance";
 import { onUpdated, ref } from "vue";
 import $ from "jquery";
+import BaseTextField from "@/components/BaseTextField";
 
 export default {
 	name: "CreateSignatory",
 	props: ["companyID"],
-	components: {},
+	components: {
+		BaseTextField,
+	},
 	setup(props, { emit }) {
 		const error = ref(null);
 		const unknownError = ref(null);
 		const response = ref(null);
 		const isPending = ref(false);
 
+		const code = ref("");
 		const prepared_by = ref("");
 		const p_position = ref("");
 		const checked_by = ref("");
@@ -328,6 +349,8 @@ export default {
 
 		const handleCreate = async () => {
 			const newSignatory = {
+				code: code.value,
+				active: 0,
 				setup_company_id: props.companyID,
 				prepared_by: prepared_by.value,
 				p_position: p_position.value,
@@ -360,6 +383,7 @@ export default {
 
 				if (err.message.includes("422")) {
 					error.value = err.response.data;
+					console.log(err.response.data);
 					unknownError.value = null;
 				} else {
 					unknownError.value =
@@ -382,6 +406,7 @@ export default {
 			closeModal,
 			unknownError,
 
+			code,
 			prepared_by,
 			p_position,
 			noted_by,

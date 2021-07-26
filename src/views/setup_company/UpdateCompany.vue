@@ -1268,17 +1268,27 @@
 
 									<div class="col-md-12">
 										<div
-											class="list"
+											class="list "
 											v-if="
 												item.setup_company_signatories
 													.length
 											"
 										>
 											<div
-												class="list-item"
+												class="list-item signatory"
 												v-for="signatory in item.setup_company_signatories"
 												:key="signatory.id"
 											>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>CODE</label
+													>
+													<h4 class="list-value">
+														{{ signatory.code }}
+													</h4>
+												</div>
 												<div class="list-col">
 													<label
 														for=""
@@ -1301,6 +1311,30 @@
 														{{
 															signatory.p_position
 														}}
+													</h4>
+												</div>
+
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>STATUS</label
+													>
+													<h4 class="list-value">
+														<span
+															class="custom-badge custom-badge-success"
+															v-if="
+																signatory.active ===
+																	1
+															"
+															>Active</span
+														>
+														<span
+															class="custom-badge custom-badge-danger"
+															v-else
+															>Inactive</span
+														>
+														<!-- {{ signatory.active }} -->
 													</h4>
 												</div>
 												<div class="list-actions">
@@ -1367,6 +1401,7 @@ import getItem from "@/composables/getItem";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
+import Badge from "@/components/Badge.vue";
 
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
@@ -1385,6 +1420,7 @@ export default {
 		CreateSignatory,
 		EditBank,
 		EditSignatory,
+		Badge,
 	},
 	computed: {
 		chevronRight: function() {
