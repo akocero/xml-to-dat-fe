@@ -1399,12 +1399,12 @@
 							<input
 								type="submit"
 								class="btn btn-custom-success"
-								v-if="!isPending"
+								v-if="!loading"
 								value="Save Changes"
 							/>
 							<button
 								class="btn btn-custom-success"
-								v-if="isPending"
+								v-if="loading"
 								disabled
 							>
 								Saving...
@@ -1427,6 +1427,7 @@ import { useRoute } from "vue-router";
 
 import getItem from "@/composables/getItem";
 import useAlert from "@/composables/useAlert";
+import useData from "@/composables/useData";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
@@ -1470,18 +1471,11 @@ export default {
 			"setupcompany"
 		);
 
+		const { response, error, create, loading, unknownError } = useData();
+
 		const { displayAlert, alert } = useAlert();
 
 		const input_image = ref(null);
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
-
-		const isBankAdded = ref(false);
-		const isBankUpdated = ref(false);
-		const isSignatoryAdded = ref(false);
-		const isSignatoryUpdated = ref(false);
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
@@ -1510,7 +1504,6 @@ export default {
 
 		// methods/functions
 		const handleSubmit = async () => {
-			response.value = null;
 			const form_data = new FormData();
 			const data = {
 				name: item.value.name,
@@ -1548,12 +1541,12 @@ export default {
 				form_data.append("image_path", selectedFile.value);
 			}
 
-			try {
-				const res = await axios.post(
-					`setupcompany/${route.params.id}?_method=PATCH`,
-					form_data
-				);
-				response.value = res.data;
+			await create(
+				`setupcompany/${route.params.id}?_method=PATCH`,
+				form_data
+			);
+
+			if (!error.value) {
 				if (selectedFile.value) {
 					item.value.image_path = res.data.image_path;
 					selectedFile.value = null;
@@ -1561,24 +1554,9 @@ export default {
 					input_image.value.value = null;
 				}
 
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
-				window.scrollTo(0, 0);
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					console.log(err.response.data);
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
+				displayAlert("info", "Company Updated");
+			} else {
+				displayAlert("error", error.value.message);
 			}
 		};
 
@@ -1613,39 +1591,34 @@ export default {
 
 		const bankAdded = (newBank) => {
 			creatingBank.value = false;
-			isBankAdded.value = true;
 			item.value.setup_company_banks = [
 				newBank,
 				...item.value.setup_company_banks,
 			];
 			console.log(newBank);
-			window.scrollTo(0, 0);
+			displayAlert("success", "Bank Added");
 		};
 
 		const bankUpdated = (updatedBank) => {
 			updatingBank.value = false;
-			isBankUpdated.value = true;
 			const newbanks = item.value.setup_company_banks.filter(
 				(bank) => bank.id !== updatedBank.id
 			);
 			item.value.setup_company_banks = [updatedBank, ...newbanks];
-			window.scrollTo(0, 0);
+			displayAlert("info", "Bank Updated");
 		};
 
 		const signatoryAdded = (newSignatory) => {
 			creatingSignatory.value = false;
-			isSignatoryAdded.value = true;
 			item.value.setup_company_signatories = [
 				newSignatory,
 				...item.value.setup_company_signatories,
 			];
-			console.log(newSignatory);
-			window.scrollTo(0, 0);
+			displayAlert("success", "Signatory Added");
 		};
 
 		const signatoryUpdated = (updatedSignatory) => {
 			updatingSignatory.value = false;
-			isSignatoryUpdated.value = true;
 			const newSignatories = item.value.setup_company_signatories.filter(
 				(signatory) => signatory.id !== updatedSignatory.id
 			);
@@ -1653,7 +1626,7 @@ export default {
 				updatedSignatory,
 				...newSignatories,
 			];
-			window.scrollTo(0, 0);
+			displayAlert("info", "Signatory Updated");
 		};
 
 		// computed error handling
@@ -1702,7 +1675,7 @@ export default {
 
 			handleSubmit,
 			error,
-			isPending,
+			loading,
 			response,
 			item,
 			imageUrl,
@@ -1712,16 +1685,12 @@ export default {
 
 			handleCloseModal,
 
-			isBankAdded,
-			isBankUpdated,
 			bankAdded,
 			bankUpdated,
 			creatingBank,
 			updatingBank,
 			showBankModal,
 
-			isSignatoryAdded,
-			isSignatoryUpdated,
 			signatoryAdded,
 			signatoryUpdated,
 			creatingSignatory,
