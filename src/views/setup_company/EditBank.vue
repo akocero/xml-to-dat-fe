@@ -73,7 +73,7 @@
 								]"
 								id="input_bank_code"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. BDO"
 								v-model="item.bank_code"
 							/>
 							<small
@@ -98,7 +98,7 @@
 								]"
 								id="input_bank_name"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Company 1"
 								v-model="item.name"
 							/>
 							<small
@@ -150,6 +150,7 @@
 								id="input_bank_description"
 								class="form-control"
 								v-model="item.description"
+								placeholder="Ex. Banco De Oro"
 							></textarea>
 							<small
 								v-if="error && error.errors.description"
@@ -164,7 +165,7 @@
 						>
 							<h5 class="h6 mb-0">Additional Details</h5>
 							<button
-								class="btn btn-sm btn-default"
+								class="btn btn-sm btn-primary"
 								@click="addingDetail = !addingDetail"
 							>
 								Add Details
@@ -193,11 +194,13 @@
 							<input
 								type="text"
 								v-model="detailLabel"
+								placeholder="Ex. Account No."
 								class="form-control mr-2 w-50 text-primary"
 							/>
 							<input
 								type="text"
 								v-model="detailValue"
+								placeholder="Ex. 11111111"
 								class="form-control mr-2"
 							/>
 							<button
