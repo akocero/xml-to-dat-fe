@@ -133,7 +133,7 @@
 										item?.setup_company_banks.length === 0
 									"
 									v-html="alertTriangle"
-									class="text-danger icon-error"
+									class="text-warning icon-error"
 								></i
 							></a>
 						</li>
@@ -156,7 +156,7 @@
 											.length === 0
 									"
 									v-html="alertTriangle"
-									class="text-danger icon-error"
+									class="text-warning icon-error"
 								></i
 							></a>
 						</li>

@@ -403,8 +403,8 @@
 						title="Sub Department"
 						:data="data.data"
 						:placeholder="{
-							value: 'Ex. Manager',
-							desc: 'Ex. Manger',
+							value: 'Ex. Consultant',
+							desc: 'Ex. Consultant',
 						}"
 					/>
 				</div>
@@ -420,8 +420,8 @@
 						title="Branch"
 						:data="data.data"
 						:placeholder="{
-							value: 'Ex. Manager',
-							desc: 'Ex. Manger',
+							value: 'Ex. Quezon City',
+							desc: 'Ex. Quezon City',
 						}"
 					/>
 				</div>

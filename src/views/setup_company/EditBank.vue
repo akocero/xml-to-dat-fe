@@ -160,12 +160,18 @@
 								{{ error.errors.description[0] }}
 							</small>
 						</div>
-						<div
-							class="col-12 d-flex justify-content-between align-items-center pt-4 pb-2"
-						>
-							<h5 class="h6 mb-0">Additional Details</h5>
+						<div class="col-12 d-flex align-items-center pt-4 pb-2">
+							<h5 class="h6 mb-0 pr-2">
+								Additional Details
+							</h5>
+							<i
+								data-toggle="tooltip"
+								data-placement="top"
+								title="Ex. Account No., SA Company Code, CA Company Code, Latest Company Code, Corp Card No."
+								v-html="help"
+							></i>
 							<button
-								class="btn btn-sm btn-primary"
+								class="btn btn-sm btn-primary ml-auto"
 								@click="addingDetail = !addingDetail"
 							>
 								Add Details
@@ -295,6 +301,11 @@ export default {
 				width: 18,
 			});
 		},
+		help: function() {
+			return feather.icons["help-circle"].toSvg({
+				width: 18,
+			});
+		},
 	},
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
@@ -313,6 +324,10 @@ export default {
 		const detailSuccess = ref(null);
 
 		load();
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
 
 		const handleUpdate = async () => {
 			const updatedBank = {

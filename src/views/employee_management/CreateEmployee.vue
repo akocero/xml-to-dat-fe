@@ -1195,6 +1195,10 @@ export default {
 
 			if (!error.value) {
 				displayAlert("success", "Employee Added");
+				router.push({
+					name: "view-employee",
+					params: { id: response.value.id },
+				});
 			} else {
 				displayAlert("error", "Invalid Inputs");
 			}
