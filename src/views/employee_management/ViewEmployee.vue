@@ -802,16 +802,16 @@ export default {
 			// console.log(item.value.addresses)
 			console.log(item.value);
 
-			// setTimeout(() => {
-			// 	const tags = ["input", "select", "textarea", "button"];
-			// 	tags.forEach((tagName) => {
-			// 		var inputs = document.getElementsByTagName(tagName);
-			// 		console.log(inputs[0]);
-			// 		for (var i = 0; i < inputs.length; i++) {
-			// 			inputs[i].disabled = true;
-			// 		}
-			// 	});
-			// }, 500);
+			setTimeout(() => {
+				const tags = ["input", "select", "textarea", "button"];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 500);
 		});
 
 		const selectedProfileFile = ref(null);
