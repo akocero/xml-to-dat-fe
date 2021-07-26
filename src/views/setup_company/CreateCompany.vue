@@ -272,7 +272,7 @@
 												>
 											</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -480,7 +480,7 @@
 												>
 											</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -686,7 +686,7 @@
 												>
 											</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -706,35 +706,6 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.sss_no[0] }}
-											</small>
-										</div>
-										<div class="form-group col-6">
-											<label>SSS Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_initial &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex.  "
-												v-model="sss_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_initial
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.sss_initial[0]
-												}}
 											</small>
 										</div>
 
@@ -834,7 +805,7 @@
 												>
 											</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -855,36 +826,6 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.phic_no[0] }}
-											</small>
-										</div>
-										<div class="form-group col-6">
-											<label>PhilHealth Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_initial &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. "
-												v-model="phic_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_initial
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.phic_initial[0]
-												}}
 											</small>
 										</div>
 
@@ -988,7 +929,7 @@
 												>
 											</label>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -1171,11 +1112,9 @@ export default {
 		const address = ref("");
 		const classification = ref("");
 		const sss_no = ref("");
-		const sss_initial = ref("");
 		const sss_doc_no = ref("");
 		const sss_emp_location_code = ref("");
 		const phic_no = ref("");
-		const phic_initial = ref("");
 		const phic_signatory = ref("");
 		const phic_position = ref("");
 		const hdmf_no = ref("");
@@ -1207,11 +1146,9 @@ export default {
 				address: address.value,
 				classification: classification.value,
 				sss_no: sss_no.value,
-				sss_initial: sss_initial.value,
 				sss_doc_no: sss_doc_no.value,
 				sss_emp_location_code: sss_emp_location_code.value,
 				phic_no: phic_no.value,
-				phic_initial: phic_initial.value,
 				phic_signatory: phic_signatory.value,
 				phic_position: phic_position.value,
 				hdmf_no: hdmf_no.value,
@@ -1311,11 +1248,9 @@ export default {
 			address,
 			classification,
 			sss_no,
-			sss_initial,
 			sss_doc_no,
 			sss_emp_location_code,
 			phic_no,
-			phic_initial,
 			phic_signatory,
 			phic_position,
 			hdmf_no,

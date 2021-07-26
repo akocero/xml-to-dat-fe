@@ -1,58 +1,12 @@
 <template>
 	<transition name="alert">
 		<Alert
-			v-if="response"
-			:status="'info'"
-			:message="'Company Updated'"
-			@closeModal="handleCloseModal"
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="alert = false"
 		/>
 	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankAdded"
-			:status="'success'"
-			:message="'Bank Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankUpdated"
-			:status="'info'"
-			:message="'Bank Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryAdded"
-			:status="'success'"
-			:message="'Signatory Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryUpdated"
-			:status="'info'"
-			:message="'Signatory Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
 	<CreateBank
 		v-if="item && creatingBank"
 		:companyID="item.id"
@@ -166,24 +120,45 @@
 								class="nav-link"
 								id="pills-banks-tab"
 								data-toggle="pill"
+								:class="
+									item?.setup_company_banks.length === 0 &&
+										'pr-4'
+								"
 								href="#pills-banks"
 								role="tab"
 								aria-controls="pills-banks"
 								aria-selected="false"
-								>Banks</a
-							>
+								>Banks<i
+									v-if="
+										item?.setup_company_banks.length === 0
+									"
+									v-html="alertTriangle"
+									class="text-warning icon-error"
+								></i
+							></a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
 								id="pills-signatories-tab"
 								data-toggle="pill"
+								:class="
+									item?.setup_company_signatories.length ===
+										0 && 'pr-4'
+								"
 								href="#pills-signatories"
 								role="tab"
 								aria-controls="pills-signatories"
 								aria-selected="false"
-								>Signatories</a
-							>
+								>Signatories<i
+									v-if="
+										item?.setup_company_signatories
+											.length === 0
+									"
+									v-html="alertTriangle"
+									class="text-warning icon-error"
+								></i
+							></a>
 						</li>
 					</ul>
 					<form
@@ -770,33 +745,6 @@
 												{{ error.errors.sss_no[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label>SSS Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_initial &&
-														'is-invalid',
-												]"
-												id="input_sss_initial"
-												placeholder="Ex.  "
-												v-model="item.sss_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.sss_initial[0]
-												}}
-											</small>
-										</div>
 
 										<div class="form-group col-6">
 											<label
@@ -909,34 +857,6 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.phic_no[0] }}
-											</small>
-										</div>
-										<div class="form-group col-6">
-											<label>Philhealth Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_initial &&
-														'is-invalid',
-												]"
-												id="input_phic_initial"
-												placeholder="Ex. "
-												v-model="item.phic_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.phic_initial[0]
-												}}
 											</small>
 										</div>
 
@@ -1324,7 +1244,7 @@
 														<span
 															class="custom-badge custom-badge-success"
 															v-if="
-																signatory.active ===
+																signatory.active ==
 																	1
 															"
 															>Active</span
@@ -1371,12 +1291,12 @@
 							<input
 								type="submit"
 								class="btn btn-custom-success"
-								v-if="!isPending"
+								v-if="!loading"
 								value="Save Changes"
 							/>
 							<button
 								class="btn btn-custom-success"
-								v-if="isPending"
+								v-if="loading"
 								disabled
 							>
 								Saving...
@@ -1394,10 +1314,12 @@
 
 <script>
 // import axios from 'axios';
-import { onUnmounted, computed, ref } from "vue";
+import { onUnmounted, computed, ref, onBeforeMount } from "vue";
 import { useRoute } from "vue-router";
 
 import getItem from "@/composables/getItem";
+import useAlert from "@/composables/useAlert";
+import useData from "@/composables/useData";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
@@ -1440,16 +1362,12 @@ export default {
 			route.params.id,
 			"setupcompany"
 		);
-		const input_image = ref(null);
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
 
-		const isBankAdded = ref(false);
-		const isBankUpdated = ref(false);
-		const isSignatoryAdded = ref(false);
-		const isSignatoryUpdated = ref(false);
+		const { response, error, create, loading, unknownError } = useData();
+
+		const { displayAlert, alert } = useAlert();
+
+		const input_image = ref(null);
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
@@ -1459,14 +1377,25 @@ export default {
 		const update_bank_id = ref(null);
 		const update_signatory_id = ref(null);
 
-		load();
+		onBeforeMount(async () => {
+			await load();
+
+			if (
+				item.value.setup_company_banks.length === 0 ||
+				item.value.setup_company_signatories.length === 0
+			) {
+				displayAlert(
+					"warning",
+					"Please add company banks or signatories"
+				);
+			}
+		});
 
 		const selectedFile = ref(null);
 		const imageUrl = ref(null);
 
 		// methods/functions
 		const handleSubmit = async () => {
-			response.value = null;
 			const form_data = new FormData();
 			const data = {
 				name: item.value.name,
@@ -1481,11 +1410,9 @@ export default {
 				address: item.value.address,
 				classification: item.value.classification,
 				sss_no: item.value.sss_no,
-				sss_initial: item.value.sss_initial,
 				sss_doc_no: item.value.sss_doc_no,
 				sss_emp_location_code: item.value.sss_emp_location_code,
 				phic_no: item.value.phic_no,
-				phic_initial: item.value.phic_initial,
 				phic_signatory: item.value.phic_signatory,
 				phic_position: item.value.phic_position,
 				hdmf_no: item.value.hdmf_no,
@@ -1504,37 +1431,22 @@ export default {
 				form_data.append("image_path", selectedFile.value);
 			}
 
-			try {
-				const res = await axios.post(
-					`setupcompany/${route.params.id}?_method=PATCH`,
-					form_data
-				);
-				response.value = res.data;
+			const res = await create(
+				`setupcompany/${route.params.id}?_method=PATCH`,
+				form_data
+			);
+
+			if (!error.value) {
 				if (selectedFile.value) {
-					item.value.image_path = res.data.image_path;
+					item.value.image_path = res.image_path;
 					selectedFile.value = null;
 					imageUrl.value = null;
 					input_image.value.value = null;
 				}
 
-				error.value = null;
-				unknownError.value = null;
-				isPending.value = false;
-				window.scrollTo(0, 0);
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					console.log(err.response.data);
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-				window.scrollTo(0, 0);
+				displayAlert("info", "Company Updated");
+			} else {
+				displayAlert("error", error.value.message);
 			}
 		};
 
@@ -1569,39 +1481,34 @@ export default {
 
 		const bankAdded = (newBank) => {
 			creatingBank.value = false;
-			isBankAdded.value = true;
 			item.value.setup_company_banks = [
 				newBank,
 				...item.value.setup_company_banks,
 			];
 			console.log(newBank);
-			window.scrollTo(0, 0);
+			displayAlert("success", "Bank Added");
 		};
 
 		const bankUpdated = (updatedBank) => {
 			updatingBank.value = false;
-			isBankUpdated.value = true;
 			const newbanks = item.value.setup_company_banks.filter(
 				(bank) => bank.id !== updatedBank.id
 			);
 			item.value.setup_company_banks = [updatedBank, ...newbanks];
-			window.scrollTo(0, 0);
+			displayAlert("info", "Bank Updated");
 		};
 
 		const signatoryAdded = (newSignatory) => {
 			creatingSignatory.value = false;
-			isSignatoryAdded.value = true;
 			item.value.setup_company_signatories = [
 				newSignatory,
 				...item.value.setup_company_signatories,
 			];
-			console.log(newSignatory);
-			window.scrollTo(0, 0);
+			displayAlert("success", "Signatory Added");
 		};
 
 		const signatoryUpdated = (updatedSignatory) => {
 			updatingSignatory.value = false;
-			isSignatoryUpdated.value = true;
 			const newSignatories = item.value.setup_company_signatories.filter(
 				(signatory) => signatory.id !== updatedSignatory.id
 			);
@@ -1609,7 +1516,7 @@ export default {
 				updatedSignatory,
 				...newSignatories,
 			];
-			window.scrollTo(0, 0);
+			displayAlert("info", "Signatory Updated");
 		};
 
 		// computed error handling
@@ -1654,9 +1561,11 @@ export default {
 		};
 
 		return {
+			alert,
+
 			handleSubmit,
 			error,
-			isPending,
+			loading,
 			response,
 			item,
 			imageUrl,
@@ -1666,16 +1575,12 @@ export default {
 
 			handleCloseModal,
 
-			isBankAdded,
-			isBankUpdated,
 			bankAdded,
 			bankUpdated,
 			creatingBank,
 			updatingBank,
 			showBankModal,
 
-			isSignatoryAdded,
-			isSignatoryUpdated,
 			signatoryAdded,
 			signatoryUpdated,
 			creatingSignatory,

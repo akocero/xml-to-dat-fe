@@ -40,7 +40,7 @@
 					<div class="row" v-if="!forEditCostCenterItem">
 						<div class="form-group col-12">
 							<label>
-								Value
+								Code
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
@@ -51,7 +51,7 @@
 								]"
 								id="input_cc_value"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. MSSC-DAV"
 								v-model="value"
 							/>
 							<small
@@ -77,7 +77,7 @@
 								]"
 								id="input_cc_description"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. MSSC Davao Branch"
 								v-model="description"
 							/>
 							<small
@@ -103,7 +103,7 @@
 								]"
 								id="input_cc_basic_daily_rate_amount"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. 300.00"
 								v-model="basicDailyRateAmount"
 							/>
 							<small
@@ -121,7 +121,7 @@
 					<div class="row" v-else>
 						<div class="form-group col-12">
 							<label>
-								Value
+								Code
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
@@ -132,7 +132,7 @@
 								]"
 								id="input_cc_value"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. MSSC-DAV"
 								v-model="updateValue"
 							/>
 							<small
@@ -158,7 +158,7 @@
 								]"
 								id="input_cc_description"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. MSSC Davao Branch"
 								v-model="updateDescription"
 							/>
 							<small
@@ -184,7 +184,7 @@
 								]"
 								id="input_cc_basic_daily_rate_amount"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. 300.00"
 								v-model="updateBasicDailyRateAmount"
 							/>
 							<small

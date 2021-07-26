@@ -604,7 +604,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.tel_no.com/hisoka.morow.904/"
+												placeholder="Ex. 1233334"
 												v-model="tel_no"
 											/>
 											<small
@@ -626,7 +626,7 @@
 												></label
 											>
 											<input
-												type="text"
+												type="number"
 												class="form-control"
 												:class="[
 													error &&
@@ -636,7 +636,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.mobile_no.com/hisoka.morow.904/ "
+												placeholder="Ex. 09999252144"
 												v-model="mobile_no"
 											/>
 											<small
@@ -1002,7 +1002,7 @@ export default {
 				id: uuidv4(),
 				full_name: "",
 				birthdate: "",
-				include: "included",
+				include: "yes",
 				active: "active",
 			},
 		]);
@@ -1195,6 +1195,10 @@ export default {
 
 			if (!error.value) {
 				displayAlert("success", "Employee Added");
+				router.push({
+					name: "view-employee",
+					params: { id: response.value.id },
+				});
 			} else {
 				displayAlert("error", "Invalid Inputs");
 			}

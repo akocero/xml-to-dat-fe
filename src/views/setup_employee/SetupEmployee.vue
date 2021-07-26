@@ -67,7 +67,7 @@
 						<div class="row" v-if="!editingDropdown">
 							<div class="form-group col-12">
 								<label>
-									Value
+									Code
 									<span class="text-danger text-bold">*</span>
 								</label>
 								<input
@@ -80,7 +80,7 @@
 									]"
 									id="input_value"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									:placeholder="placeholder.value"
 									v-model="value"
 								/>
 								<small
@@ -105,6 +105,7 @@
 									]"
 									id="input_description"
 									class="form-control"
+									:placeholder="placeholder.desc"
 									v-model="description"
 								></textarea>
 								<small
@@ -119,7 +120,7 @@
 						<div class="row" v-if="editingDropdown && forEditData">
 							<div class="form-group col-12">
 								<label>
-									Value
+									Code
 									<span class="text-danger text-bold">*</span>
 								</label>
 								<input
@@ -132,7 +133,7 @@
 									]"
 									id="input_value"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									:placeholder="placeholder.value"
 									v-model="newValue"
 								/>
 								<small
@@ -156,6 +157,7 @@
 											'is-invalid',
 									]"
 									id="input_description"
+									:placeholder="placeholder.desc"
 									class="form-control"
 									v-model="newDescription"
 								></textarea>
@@ -366,6 +368,10 @@
 						@openModal="handleShowModal($event)"
 						title="Department"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. ACT-AP',
+							desc: 'Ex. Accounts Payable',
+						}"
 					/>
 				</div>
 				<div
@@ -378,6 +384,10 @@
 						type="employee_rank"
 						@openModal="handleShowModal($event)"
 						title="Employee Rank"
+						:placeholder="{
+							value: 'Ex. Rank and File',
+							desc: 'Ex. Rank and File Employee',
+						}"
 						:data="data.data"
 					/>
 				</div>
@@ -392,6 +402,10 @@
 						@openModal="handleShowModal($event)"
 						title="Sub Department"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. Consultant',
+							desc: 'Ex. Consultant',
+						}"
 					/>
 				</div>
 				<div
@@ -405,6 +419,10 @@
 						@openModal="handleShowModal($event)"
 						title="Branch"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. Quezon City',
+							desc: 'Ex. Quezon City',
+						}"
 					/>
 				</div>
 				<div
@@ -418,6 +436,10 @@
 						@openModal="handleShowModal($event)"
 						title="Position"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. Manager',
+							desc: 'Ex. Manger',
+						}"
 					/>
 				</div>
 				<div
@@ -431,6 +453,11 @@
 						@openModal="handleShowModal($event)"
 						title="Frequency"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. Semi-monthly, Monthly, Weekly',
+							desc:
+								'Semi-monthly Payroll, Monthly Payroll, Weekly Payroll',
+						}"
 					/>
 				</div>
 				<div
@@ -444,6 +471,10 @@
 						@openModal="handleShowModal($event)"
 						title="Dimension"
 						:data="data.data"
+						:placeholder="{
+							value: 'Ex. AP-DAV',
+							desc: 'Ex. Accounts Payable – Davao Branch',
+						}"
 					/>
 				</div>
 			</div>
@@ -500,6 +531,10 @@ export default {
 		const newValue = ref("");
 		const newDescription = ref("");
 		const forEditData = ref(null);
+		const placeholder = ref({
+			value: "Value",
+			desc: "Desc",
+		});
 
 		// Fetch Data to Tables
 		onBeforeMount(async () => {
@@ -543,11 +578,13 @@ export default {
 				newValue.value = forEditData.value.value;
 				dropdownType.value = eventData.type;
 			} else {
+				console.log(eventData.placeholder);
 				forEditData.value = null;
 				editingDropdown.value = false;
 				dropdownType.value = eventData.type;
 				dropdownTypeTitle.value = eventData.title;
 			}
+			placeholder.value = eventData.placeholder;
 			$("#employeeSetupModal").modal("show");
 		};
 
@@ -684,6 +721,8 @@ export default {
 		};
 
 		return {
+			placeholder,
+
 			data,
 			error,
 

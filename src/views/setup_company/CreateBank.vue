@@ -34,7 +34,16 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-4">
-							<label>
+							<BaseTextField
+								id="input_bank_code"
+								label="Code"
+								v-model="bank_code"
+								:error="error"
+								:errorField="error?.errors?.bank_code || null"
+								placeholder="Ex. BDO"
+								:required="true"
+							/>
+							<!-- <label>
 								Code
 								<span class="text-danger text-bold">*</span>
 							</label>
@@ -57,7 +66,7 @@
 								class="form-text text-danger"
 							>
 								{{ error.errors.bank_code[0] }}
-							</small>
+							</small> -->
 						</div>
 
 						<div class="form-group col-8">
@@ -73,7 +82,7 @@
 								]"
 								id="input_bank_name"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Company 1"
 								v-model="name"
 							/>
 							<small
@@ -123,6 +132,7 @@
 										'is-invalid',
 								]"
 								id="input_bank_description"
+								placeholder="Ex. Banco De Oro"
 								class="form-control"
 								v-model="description"
 							></textarea>
@@ -159,11 +169,12 @@
 import axios from "@/axios/axios-instance";
 import { ref } from "vue";
 import $ from "jquery";
+import BaseTextField from "@/components/BaseTextField";
 
 export default {
 	name: "CreateBank",
 	props: ["companyID"],
-	components: {},
+	components: { BaseTextField },
 	setup(props, { emit }) {
 		const error = ref(null);
 		const unknownError = ref(null);

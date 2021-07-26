@@ -17,7 +17,7 @@
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
+						@click="$emit('hideEditSignatory')"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -25,6 +25,24 @@
 
 				<div class="modal-body">
 					<div class="row" v-if="signatory_id && item">
+						<div class="form-group col-7">
+							<BaseTextField
+								id="input_signatory_code"
+								label="Signatory Code"
+								v-model="item.code"
+								:error="error"
+								:errorField="error?.errors?.code || null"
+								placeholder="Ex. Signatory 1"
+								:required="true"
+							/>
+						</div>
+						<div class="form-group col-5">
+							<label for="">Status</label>
+							<select class="form-control" v-model="item.active">
+								<option value="1">Active</option>
+								<option value="0">Inactive</option>
+							</select>
+						</div>
 						<div class="form-group col-7">
 							<label>
 								Prepared by:
@@ -287,7 +305,7 @@
 						type="button"
 						class="btn btn-custom-success"
 						@click="handleUpdate"
-						v-if="!isPending"
+						v-if="!loading"
 					>
 						Save Changes
 					</button>
@@ -308,14 +326,16 @@
 <script>
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
-import { onUnmounted, ref } from "vue";
-import axios from "@/axios/axios-instance";
+import { onBeforeMount, onUnmounted, ref } from "vue";
+import BaseTextField from "@/components/BaseTextField";
+import useData from "@/composables/useData";
 import $ from "jquery";
 export default {
 	name: "EditSignatory",
 	props: ["signatory_id"],
 	components: {
 		Spinner,
+		BaseTextField,
 	},
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
@@ -323,15 +343,16 @@ export default {
 			"setupcompanysignatory"
 		);
 
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
+		const { response, error, update, loading, unknownError } = useData();
 
-		load();
+		onBeforeMount(async () => {
+			await load();
+		});
 
 		const handleUpdate = async () => {
 			const updatedSignatory = {
+				active: item.value.active,
+				code: item.value.code,
 				setup_company_id: item.value.setup_company_id,
 				prepared_by: item.value.prepared_by,
 				p_position: item.value.p_position,
@@ -345,33 +366,15 @@ export default {
 				payroll_journal_report: item.value.payroll_journal_report,
 			};
 
-			try {
-				const res = await axios.patch(
-					"setupcompanysignatory/" + props.signatory_id,
-					updatedSignatory
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
+			const res = await update(
+				"setupcompanysignatory/" + props.signatory_id,
+				updatedSignatory
+			);
 
+			if (!error.value) {
 				$("#update-signatory-modal").modal("hide");
-
 				emit("signatoryUpdated", response.value);
-
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					console.log(err.response.data);
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
+				console.log(res);
 			}
 		};
 
@@ -379,15 +382,10 @@ export default {
 			item.value = null;
 		});
 
-		const closeModal = () => {
-			emit("hideEditSignatory");
-		};
-
 		return {
 			error,
-			isPending,
+			loading,
 			handleUpdate,
-			closeModal,
 			item,
 		};
 	},

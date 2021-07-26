@@ -41,7 +41,7 @@
 						<div class="col-6">
 							<div class="form-group col-12">
 								<label>
-									Value
+									Code
 									<span class="text-danger text-bold">*</span>
 								</label>
 								<input
@@ -54,7 +54,7 @@
 									]"
 									id="input_ec_value"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Regular"
 									v-model="value"
 								/>
 								<small
@@ -80,7 +80,7 @@
 									]"
 									id="input_ec_description"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Regular Employee"
 									v-model="description"
 								/>
 								<small
@@ -106,7 +106,7 @@
 									]"
 									id="input_ec_tax_as"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Table / Setup"
 									v-model="taxAs"
 								/>
 								<small
@@ -155,7 +155,7 @@
 						<div class="col-6">
 							<div class="form-group col-12">
 								<label>
-									Value
+									Code
 									<span class="text-danger text-bold">*</span>
 								</label>
 								<input
@@ -168,7 +168,7 @@
 									]"
 									id="input_ec_value"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Regular"
 									v-model="updateValue"
 								/>
 								<small
@@ -194,7 +194,7 @@
 									]"
 									id="input_ec_description"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Regular Employee"
 									v-model="updateDescription"
 								/>
 								<small
@@ -220,7 +220,7 @@
 									]"
 									id="input_ec_tax_as"
 									aria-describedby="emailHelp"
-									placeholder="Ex. 1234567"
+									placeholder="Ex. Table / Setup"
 									v-model="updateTaxAs"
 								/>
 								<small
@@ -327,11 +327,12 @@ export default {
 
 		const classesArray = ref([
 			"is_resigned",
-			"paid_holiday",
-			"paid_holiday_restday",
+			"paid_legal_holiday",
+			"paid_legal_holiday_restday",
 			"paid_special_holiday",
 			"paid_special_holiday_restday",
 			"paid_double_holiday",
+			"paid_double_holiday_restday",
 		]);
 
 		const updateValue = ref("");

@@ -73,7 +73,7 @@
 								]"
 								id="input_bank_code"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. BDO"
 								v-model="item.bank_code"
 							/>
 							<small
@@ -98,7 +98,7 @@
 								]"
 								id="input_bank_name"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Company 1"
 								v-model="item.name"
 							/>
 							<small
@@ -150,6 +150,7 @@
 								id="input_bank_description"
 								class="form-control"
 								v-model="item.description"
+								placeholder="Ex. Banco De Oro"
 							></textarea>
 							<small
 								v-if="error && error.errors.description"
@@ -159,12 +160,18 @@
 								{{ error.errors.description[0] }}
 							</small>
 						</div>
-						<div
-							class="col-12 d-flex justify-content-between align-items-center pt-4 pb-2"
-						>
-							<h5 class="h6 mb-0">Additional Details</h5>
+						<div class="col-12 d-flex align-items-center pt-4 pb-2">
+							<h5 class="h6 mb-0 pr-2">
+								Additional Details
+							</h5>
+							<i
+								data-toggle="tooltip"
+								data-placement="top"
+								title="Ex. Account No., SA Company Code, CA Company Code, Latest Company Code, Corp Card No."
+								v-html="help"
+							></i>
 							<button
-								class="btn btn-sm btn-default"
+								class="btn btn-sm btn-primary ml-auto"
 								@click="addingDetail = !addingDetail"
 							>
 								Add Details
@@ -193,11 +200,13 @@
 							<input
 								type="text"
 								v-model="detailLabel"
+								placeholder="Ex. Account No."
 								class="form-control mr-2 w-50 text-primary"
 							/>
 							<input
 								type="text"
 								v-model="detailValue"
+								placeholder="Ex. 11111111"
 								class="form-control mr-2"
 							/>
 							<button
@@ -292,6 +301,11 @@ export default {
 				width: 18,
 			});
 		},
+		help: function() {
+			return feather.icons["help-circle"].toSvg({
+				width: 18,
+			});
+		},
 	},
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
@@ -310,6 +324,10 @@ export default {
 		const detailSuccess = ref(null);
 
 		load();
+
+		$(function() {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
 
 		const handleUpdate = async () => {
 			const updatedBank = {

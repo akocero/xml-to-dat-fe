@@ -15,8 +15,7 @@
 				<table class="table">
 					<thead>
 						<tr class="text-secondary">
-							<th class="text-center">ID</th>
-							<th>Value</th>
+							<th class="pl-4">Code</th>
 							<th>Description</th>
 							<th>Basic Daily Rate</th>
 							<th width="10%">Actions</th>
@@ -24,10 +23,7 @@
 					</thead>
 					<tbody v-if="costCenterData?.data?.length">
 						<tr v-for="item in costCenterData?.data" :key="item.id">
-							<td class="text-center">
-								{{ item.id }}
-							</td>
-							<td>{{ item.value }}</td>
+							<td class="pl-4">{{ item.value }}</td>
 							<td>{{ item.description }}</td>
 							<td>{{ item.basic_daily_rate_amount }}</td>
 							<td>

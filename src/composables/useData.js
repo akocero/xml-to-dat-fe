@@ -17,6 +17,7 @@ const useData = () => {
          error.value = null;
          unknownError.value = null;
          loading.value = false;
+         return res.data
 		} catch (err) {
          loading.value = false;
          console.log(err.response.data.message)
@@ -41,10 +42,11 @@ const useData = () => {
       try {
          const res = await axios.patch(url, data);
          response.value = res.data;
-         console.log(data.value.data);
+         // console.log('from useData',response.data);
          error.value = null;
          unknownError.value = null;
          loading.value = false;
+         return res.data
 		} catch (err) {
          loading.value = false;
 

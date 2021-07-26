@@ -192,6 +192,14 @@
 													.profile_image_path[0]
 											}}
 										</small>
+										<button
+											v-if="item.profile_image_path"
+											class="btn btn-sm btn-danger"
+											@click="deleteProfileImage(item.id)"
+											type="button"
+										>
+											Delete Profile
+										</button>
 									</div>
 								</div>
 
@@ -809,6 +817,16 @@
 													.signatory_image_path[0]
 											}}
 										</small>
+										<button
+											v-if="item.signatory_image_path"
+											class="btn btn-sm btn-danger"
+											@click="
+												deleteSignatureImage(item.id)
+											"
+											type="button"
+										>
+											Delete Signature
+										</button>
 									</div>
 
 									<div class="col-12 my-2">
@@ -975,6 +993,7 @@
 import { ref, computed, onBeforeMount } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
+import axios from "@/axios/axios-instance";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
@@ -1205,12 +1224,24 @@ export default {
 				console.log(pair[0] + ", " + pair[1]);
 			}
 
-			await create(
+			const res = await create(
 				`basicemployeeinformation/${route.params.id}?_method=PATCH`,
 				form_data
 			);
 
 			if (!error.value) {
+				if (selectedProfileFile.value) {
+					item.value.profile_image_path = res.profile_image_path;
+					selectedProfileFile.value = null;
+					profile_image_path.value = null;
+				}
+
+				if (selectedSignatureFile.value) {
+					item.value.signatory_image_path = res.signatory_image_path;
+					selectedSignatureFile.value = null;
+					signatory_image_path.value = null;
+				}
+
 				displayAlert("info", "Employee Updated");
 			} else {
 				displayAlert("error", "Invalid Inputs");
@@ -1257,7 +1288,28 @@ export default {
 			);
 		};
 
+		const deleteProfileImage = async (id) => {
+			if (confirm("Are you sure you want to delete this image?")) {
+				const res = await axios.delete(
+					"/basicemployeeinformation/deleteProfileImage/" + id
+				);
+				item.value.profile_image_path = null;
+			}
+		};
+
+		const deleteSignatureImage = async (id) => {
+			if (confirm("Are you sure you want to delete this image?")) {
+				const res = await axios.delete(
+					"/basicemployeeinformation/deleteSignatoryImage/" + id
+				);
+				item.value.signatory_image_path = null;
+			}
+		};
+
 		return {
+			deleteProfileImage,
+			deleteSignatureImage,
+
 			selectedProfileFile,
 			profile_image_path,
 			onProfileFileSelected,

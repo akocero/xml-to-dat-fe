@@ -13,7 +13,7 @@
 		</div>
 		<div class="w-10">
 			<label>
-				Include
+				Included
 			</label>
 		</div>
 		<div class="w-10">
@@ -54,7 +54,7 @@
 		<div class="w-10">
 			<select class="form-control" v-model="dependent.include">
 				<option value="no">No</option>
-				<option value="included">Included</option>
+				<option value="yes">Yes</option>
 			</select>
 		</div>
 		<div class="w-10">
