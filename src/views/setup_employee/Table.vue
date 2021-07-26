@@ -15,18 +15,14 @@
 				<table class="table">
 					<thead>
 						<tr class="text-secondary">
-							<th class="text-center">ID</th>
-							<th>Value</th>
+							<th class="pl-4">Code</th>
 							<th>Description</th>
 							<th width="10%">Actions</th>
 						</tr>
 					</thead>
 					<tbody v-if="filteredData.length">
 						<tr v-for="item in filteredData" :key="item.id">
-							<td class="text-center">
-								{{ item.id }}
-							</td>
-							<td>{{ item.value }}</td>
+							<td class="pl-4">{{ item.value }}</td>
 							<td>{{ item.description }}</td>
 							<td>
 								<button
@@ -59,7 +55,7 @@ import Spinner from "@/components/Spinner";
 import { computed } from "vue";
 export default {
 	name: "Table",
-	props: ["data", "title", "type"],
+	props: ["data", "title", "type", "placeholder"],
 	components: {
 		Spinner,
 	},
@@ -70,6 +66,7 @@ export default {
 				type: props.type,
 				title: props.title,
 				id: id,
+				placeholder: props.placeholder,
 			};
 
 			emit("openModal", data);

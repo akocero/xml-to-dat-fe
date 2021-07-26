@@ -1,57 +1,4 @@
 <template>
-	<!-- <transition name="alert">
-		<Alert
-			v-if="response"
-			:status="'info'"
-			:message="'Company Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankAdded"
-			:status="'success'"
-			:message="'Bank Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isBankUpdated"
-			:status="'info'"
-			:message="'Bank Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryAdded"
-			:status="'success'"
-			:message="'Signatory Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="isSignatoryUpdated"
-			:status="'info'"
-			:message="'Signatory Updated'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
-
-	<transition name="alert">
-		<Alert
-			v-if="error && error.message"
-			:status="'error'"
-			:message="error.message"
-			@closeModal="handleCloseModal"
-		/>
-	</transition> -->
 	<transition name="alert">
 		<Alert
 			v-if="alert"
@@ -798,33 +745,6 @@
 												{{ error.errors.sss_no[0] }}
 											</small>
 										</div>
-										<div class="form-group col-6">
-											<label>SSS Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_initial &&
-														'is-invalid',
-												]"
-												id="input_sss_initial"
-												placeholder="Ex.  "
-												v-model="item.sss_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.sss_initial[0]
-												}}
-											</small>
-										</div>
 
 										<div class="form-group col-6">
 											<label
@@ -937,34 +857,6 @@
 												class="form-text text-danger"
 											>
 												{{ error.errors.phic_no[0] }}
-											</small>
-										</div>
-										<div class="form-group col-6">
-											<label>Philhealth Initial</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_initial &&
-														'is-invalid',
-												]"
-												id="input_phic_initial"
-												placeholder="Ex. "
-												v-model="item.phic_initial"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_initial
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.phic_initial[0]
-												}}
 											</small>
 										</div>
 
@@ -1518,11 +1410,9 @@ export default {
 				address: item.value.address,
 				classification: item.value.classification,
 				sss_no: item.value.sss_no,
-				sss_initial: item.value.sss_initial,
 				sss_doc_no: item.value.sss_doc_no,
 				sss_emp_location_code: item.value.sss_emp_location_code,
 				phic_no: item.value.phic_no,
-				phic_initial: item.value.phic_initial,
 				phic_signatory: item.value.phic_signatory,
 				phic_position: item.value.phic_position,
 				hdmf_no: item.value.hdmf_no,
@@ -1541,14 +1431,14 @@ export default {
 				form_data.append("image_path", selectedFile.value);
 			}
 
-			await create(
+			const res = await create(
 				`setupcompany/${route.params.id}?_method=PATCH`,
 				form_data
 			);
 
 			if (!error.value) {
 				if (selectedFile.value) {
-					item.value.image_path = res.data.image_path;
+					item.value.image_path = res.image_path;
 					selectedFile.value = null;
 					imageUrl.value = null;
 					input_image.value.value = null;

@@ -15,8 +15,7 @@
 				<table class="table">
 					<thead>
 						<tr class="text-secondary">
-							<th class="text-center">ID</th>
-							<th>Value</th>
+							<th class="pl-4">Code</th>
 							<th>Description</th>
 							<th width="35%">Classes</th>
 							<th>Tax as</th>
@@ -28,10 +27,7 @@
 							v-for="item in employeeClassData?.data"
 							:key="item.id"
 						>
-							<td class="text-center">
-								{{ item.id }}
-							</td>
-							<td>{{ item.value }}</td>
+							<td class="pl-4">{{ item.value }}</td>
 							<td>{{ item.description }}</td>
 							<td>
 								<span

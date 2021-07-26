@@ -17,6 +17,7 @@ const useData = () => {
          error.value = null;
          unknownError.value = null;
          loading.value = false;
+         return res.data
 		} catch (err) {
          loading.value = false;
          console.log(err.response.data.message)
