@@ -992,7 +992,7 @@ export default {
 				bldg: "",
 				geocode: "",
 				zipcode: "",
-				region: "",
+				province: "",
 				brgy: "",
 			},
 		]);
@@ -1029,7 +1029,7 @@ export default {
 				bldg: "",
 				geocode: "",
 				zipcode: "",
-				region: "",
+				province: "",
 				brgy: "",
 			};
 

@@ -23,7 +23,7 @@
 		</div>
 		<div class="w-8">
 			<label>
-				Region
+				Province
 			</label>
 		</div>
 		<div class="w-12">
@@ -98,8 +98,8 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. NCR"
-				v-model="address.region"
+				placeholder="Ex. Bulacan"
+				v-model="address.province"
 			/>
 		</div>
 		<div class="w-12">
