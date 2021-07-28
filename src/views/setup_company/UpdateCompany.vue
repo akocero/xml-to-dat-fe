@@ -268,7 +268,7 @@
 														'is-invalid',
 												]"
 												id="input_code"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. ABC"
 												v-model="item.code"
 											/>
 											<small
@@ -298,7 +298,7 @@
 														'is-invalid',
 												]"
 												id="input_name"
-												placeholder="Ex. John Doe"
+												placeholder="Ex. ABC Company"
 												v-model="item.name"
 											/>
 											<small
@@ -328,7 +328,7 @@
 														'is-invalid',
 												]"
 												id="input_vat_reg"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 123-456-789-000"
 												v-model="item.vat_reg"
 											/>
 											<small
@@ -368,7 +368,7 @@
 														'is-invalid',
 												]"
 												id="input_classification"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Manufacturing Industry"
 												v-model="item.classification"
 											/>
 											<small
@@ -448,7 +448,7 @@
 												]"
 												id="input_decimal_place"
 												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. 2"
 												v-model="item.decimal_place"
 											/>
 											<small
@@ -632,7 +632,7 @@
 														'is-invalid',
 												]"
 												id="input_website"
-												placeholder="Ex. https://www.facebook.com/"
+												placeholder="Ex. http://www.company.com (include http:// or https://)"
 												v-model="item.website"
 											/>
 											<small
@@ -657,7 +657,7 @@
 														'is-invalid',
 												]"
 												id="input_facebook"
-												placeholder="Ex. https://www.facebook.com/hisoka.morow.904/"
+												placeholder="Ex. http://facebook.com/company (include http:// or https://)"
 												v-model="item.facebook"
 											/>
 											<small
@@ -682,7 +682,7 @@
 														'is-invalid',
 												]"
 												id="input_twitter"
-												placeholder="Ex. https://www.twitter.com/hisoka.morow.904/ "
+												placeholder="Ex. http://twitter.com/company (include http:// or https://)"
 												v-model="item.twitter"
 											/>
 											<small
@@ -733,7 +733,7 @@
 														'is-invalid',
 												]"
 												id="input_sss_no"
-												placeholder="Ex. 3484073113 "
+												placeholder="Ex. 0428881234"
 												v-model="item.sss_no"
 											/>
 											<small
@@ -764,7 +764,7 @@
 														'is-invalid',
 												]"
 												id="input_doc_no"
-												placeholder="Ex.  "
+												placeholder="Ex. PRN00001235467"
 												v-model="item.sss_doc_no"
 											/>
 											<small
@@ -796,7 +796,7 @@
 														'is-invalid',
 												]"
 												id="input_location_code"
-												placeholder="Ex.  "
+												placeholder="Ex. 000"
 												v-model="
 													item.sss_emp_location_code
 												"
@@ -846,7 +846,7 @@
 														'is-invalid',
 												]"
 												id="input_phic_no"
-												placeholder="Ex. 022500018635 "
+												placeholder="Ex. 00-000000000-0"
 												v-model="item.phic_no"
 											/>
 											<small
@@ -878,7 +878,7 @@
 														'is-invalid',
 												]"
 												id="input_phic_signatory"
-												placeholder="Ex."
+												placeholder="Ex. Juan Dela Cruz"
 												v-model="item.phic_signatory"
 											/>
 											<small
@@ -914,7 +914,7 @@
 														'is-invalid',
 												]"
 												id="input_phic_position"
-												placeholder="Ex. "
+												placeholder="Ex. General Manager"
 												v-model="item.phic_position"
 											/>
 											<small
@@ -962,7 +962,7 @@
 														'is-invalid',
 												]"
 												id="input_hdmf_no"
-												placeholder="Ex.123456789101 "
+												placeholder="Ex. 0000-0000-0000"
 												v-model="item.hdmf_no"
 											/>
 											<small
@@ -1011,7 +1011,7 @@
 														'is-invalid',
 												]"
 												id="input_tax_branch_code"
-												placeholder="Ex. "
+												placeholder="Ex. RD00"
 												v-model="item.tax_branch_code"
 											/>
 											<small
@@ -1041,7 +1041,7 @@
 														'is-invalid',
 												]"
 												id="input_alphalist_no"
-												placeholder="Ex. "
+												placeholder="Ex. 0000"
 												v-model="item.alphalist_no"
 											/>
 											<small

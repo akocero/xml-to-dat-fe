@@ -276,7 +276,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
+												placeholder="Ex. Juan"
 												v-model="item.first_name"
 											/>
 											<small
@@ -310,7 +310,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Dela Cruz"
 												v-model="item.last_name"
 											/>
 											<small
@@ -338,7 +338,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Santos"
 												v-model="item.maiden_name"
 											/>
 											<small
@@ -369,7 +369,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. Jr."
 												v-model="item.extension_name"
 											/>
 											<small
@@ -481,7 +481,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 02-8123-4567 "
+												placeholder="Ex. Manila"
 												v-model="item.birthplace"
 											/>
 											<small
@@ -514,7 +514,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.tel_no.com/"
+												placeholder="Ex. Filipino"
 												v-model="item.citizenship"
 											/>
 											<small
@@ -646,7 +646,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.tel_no.com/hisoka.morow.904/"
+												placeholder="Ex. 1233334"
 												v-model="item.tel_no"
 											/>
 											<small
@@ -678,7 +678,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.mobile_no.com/hisoka.morow.904/ "
+												placeholder="Ex. 09999252144"
 												v-model="item.mobile_no"
 											/>
 											<small
@@ -860,7 +860,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 3484073113 "
+												placeholder="Ex. 183 cm"
 												v-model="item.height"
 											/>
 											<small
@@ -885,7 +885,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex.  70 kilos"
 												v-model="item.weight"
 											/>
 											<small
@@ -918,7 +918,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex. O+"
 												v-model="item.blood_type"
 											/>
 											<small

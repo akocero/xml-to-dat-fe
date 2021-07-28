@@ -115,3 +115,16 @@ Content-Type: application/json
 # {city: "sadsadasd", street: "sadsadasd"},
 # {city: "sadsadasd", street: "sadsadasd"},
 # ]
+
+### 
+POST http://127.0.0.1:8000/api/payrolluser
+Accept: application/json
+Content-Type: application/json
+
+{
+   "employee_id": "1300",
+   "first_name": "Marlou",
+   "last_name": "Borough",
+   "maiden_name": "No2",
+   "companies" [1,2,3]
+}
