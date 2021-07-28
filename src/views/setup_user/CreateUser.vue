@@ -120,10 +120,17 @@
 								>Companies
 								<span class="text-danger text-bold">*</span>
 							</label>
+							<small
+								v-if="error && error.errors.companies"
+								id="emailHelp"
+								class="form-text text-danger"
+							>
+								{{ error.errors.companies[0] }}
+							</small>
 							<input
 								type="text"
 								v-model="search"
-								class="mini-search-company"
+								class="mini-search-company mt-2"
 								placeholder="Company name..."
 							/>
 						</div>

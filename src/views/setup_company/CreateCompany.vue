@@ -200,67 +200,32 @@
 
 									<div class="row col-8">
 										<div class="form-group col-4">
-											<label>
-												Code
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.code &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+											<BaseTextField
+												id="input_code"
+												label="Code"
 												v-model="code"
-											/>
-											<small
-												v-if="
-													error && error.errors.code
+												:error="error"
+												:errorField="
+													error?.errors?.code || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.code[0] }}
-											</small>
+												placeholder="Ex. ABC"
+												:required="true"
+											/>
 										</div>
+
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-8">
-											<label for=""
-												>Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. John Doe"
+											<BaseTextField
+												id="input_name"
+												label="Name"
 												v-model="name"
-											/>
-											<small
-												v-if="
-													error && error.errors.name
+												:error="error"
+												:errorField="
+													error?.errors?.name || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.name[0] }}
-											</small>
+												placeholder="Ex. ABC Company"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-4">
@@ -281,7 +246,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. 123-456-789-000"
 												v-model="vat_reg"
 											/>
 											<small
@@ -315,7 +280,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												placeholder="Ex. Manufacturing Industry"
 												v-model="classification"
 											/>
 											<small
@@ -397,7 +362,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 1234567"
+												placeholder="Ex. 2"
 												v-model="decimal_place"
 											/>
 											<small
@@ -587,7 +552,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.facebook.com/"
+												placeholder="Ex. http://www.company.com (include http:// or https://)"
 												v-model="website"
 											/>
 											<small
@@ -614,7 +579,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.facebook.com/hisoka.morow.904/"
+												placeholder="Ex. http://facebook.com/company (include http:// or https://)"
 												v-model="facebook"
 											/>
 											<small
@@ -641,7 +606,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. https://www.twitter.com/hisoka.morow.904/ "
+												placeholder="Ex. http://twitter.com/company (include http:// or https://)"
 												v-model="twitter"
 											/>
 											<small
@@ -695,7 +660,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 3484073113 "
+												placeholder="Ex. 0428881234"
 												v-model="sss_no"
 											/>
 											<small
@@ -728,7 +693,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex. PRN00001235467"
 												v-model="sss_doc_no"
 											/>
 											<small
@@ -762,7 +727,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.  "
+												placeholder="Ex. 000"
 												v-model="sss_emp_location_code"
 											/>
 											<small
@@ -814,7 +779,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 022500018635 "
+												placeholder="Ex. 00-000000000-0"
 												v-model="phic_no"
 											/>
 											<small
@@ -848,7 +813,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex."
+												placeholder="Ex. Juan Dela Cruz"
 												v-model="phic_signatory"
 											/>
 											<small
@@ -886,7 +851,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. "
+												placeholder="Ex. General Manager"
 												v-model="phic_position"
 											/>
 											<small
@@ -938,7 +903,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex.123456789101 "
+												placeholder="Ex. 0000-0000-0000"
 												v-model="hdmf_no"
 											/>
 											<small
@@ -992,7 +957,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. "
+												placeholder="Ex. RD00"
 												v-model="tax_branch_code"
 											/>
 											<small
@@ -1023,7 +988,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. "
+												placeholder="Ex. 0000"
 												v-model="alphalist_no"
 											/>
 											<small
@@ -1074,11 +1039,13 @@ import feather from "feather-icons";
 import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import axios from "@/axios/axios-instance";
+import BaseTextField from "@/components/BaseTextField";
 import $ from "jquery";
 export default {
 	name: "CreateCompany",
 	components: {
 		Alert,
+		BaseTextField,
 	},
 	computed: {
 		chevronRight: function() {
