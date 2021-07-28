@@ -1194,10 +1194,11 @@ export default {
 			await create("basicemployeeinformation", form_data);
 
 			if (!error.value) {
-				displayAlert("success", "Employee Added");
+				// displayAlert("success", "Employee Added");
 				router.push({
 					name: "view-employee",
 					params: { id: response.value.id },
+					query: { q: "employee added" },
 				});
 			} else {
 				displayAlert("error", "Invalid Inputs");
