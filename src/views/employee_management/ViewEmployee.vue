@@ -40,7 +40,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError && 'pr-4'"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
@@ -48,17 +47,11 @@
 								aria-controls="pills-main"
 								aria-selected="true"
 								>Employee Info
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError && 'pr-4'"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -67,17 +60,11 @@
 								aria-selected="false"
 							>
 								Contact Info
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -86,11 +73,6 @@
 								aria-selected="false"
 							>
 								Other Info
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -154,12 +136,6 @@
 											style="width: 90%"
 										/>
 										<img
-											v-else-if="profile_image_path"
-											:src="profile_image_path"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
 											v-else
 											src="../../assets/no-image.png"
 											alt=""
@@ -169,12 +145,6 @@
 
 									<div class="form-group col-md-6">
 										<label for="">Upload Image</label>
-										<input
-											type="file"
-											class="d-block mt-2"
-											@change="onProfileFileSelected"
-											disabled
-										/>
 										<small
 											>The maximum file size allowed is
 											200KB.</small
@@ -550,7 +520,6 @@
 									</div>
 									<EmployeeAddressList
 										:addresses="item.addresses"
-										@deleteAddress="deleteAddress($event)"
 									/>
 								</div>
 								<hr />
@@ -563,7 +532,6 @@
 
 									<EmployeeRelativeList
 										:relatives="item.relatives"
-										@deleteRelative="deleteRelative($event)"
 									/>
 								</div>
 								<hr />
@@ -608,12 +576,6 @@
 												'http://127.0.0.1:8000/storage/' +
 													item.signatory_image_path
 											"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else-if="signatory_image_path"
-											:src="signatory_image_path"
 											alt=""
 											style="width: 90%"
 										/>
@@ -730,9 +692,6 @@
 
 										<EmployeeDependentList
 											:dependents="item.dependents"
-											@deleteDependent="
-												deleteDependent($event)
-											"
 										/>
 									</div>
 								</div>
@@ -784,8 +743,8 @@ export default {
 		},
 	},
 	setup() {
-		const router = useRouter();
 		const route = useRoute();
+		const router = useRouter();
 		const { error, response, loading, create, unknownError } = useData();
 		const { item, error: errorData, load, loading: isLoading } = getItem(
 			route.params.id,
@@ -812,269 +771,21 @@ export default {
 					}
 				});
 			}, 500);
+
+			if (route.query.q) {
+				displayAlert("success", route.query.q);
+				router.replace({ query: null });
+			}
 		});
-
-		const selectedProfileFile = ref(null);
-		const profile_image_path = ref(null);
-
-		const selectedSignatureFile = ref(null);
-		const signatory_image_path = ref(null);
-
-		const addAddress = () => {
-			alert.value = null;
-
-			const tempAddress = {
-				id: uuidv4(),
-				street: "",
-				city: "",
-				country: "",
-				bldg: "",
-				geocode: "",
-				zipcode: "",
-				region: "",
-				brgy: "",
-			};
-
-			let err = false;
-			item.value.addresses.forEach((address) => {
-				if (!address.city || !address.country) {
-					err = true;
-				}
-			});
-
-			err
-				? displayAlert(
-						"info",
-						"Please fill out city and country in address list before adding one"
-				  )
-				: item.value.addresses.push(tempAddress);
-		};
-
-		const addDependent = () => {
-			alert.value = null;
-			const tempDependent = {
-				id: uuidv4(),
-				full_name: "",
-				birthdate: "",
-				include: "included",
-				active: "active",
-			};
-
-			let err = false;
-			item.value.dependents.forEach((dependent) => {
-				if (!dependent.full_name) {
-					err = true;
-				}
-			});
-
-			err
-				? displayAlert(
-						"info",
-						"Please fill out full name in dependent list before adding one"
-				  )
-				: item.value.dependents.push(tempDependent);
-		};
-
-		const addRelative = () => {
-			alert.value = null;
-			const tempRelative = {
-				id: uuidv4(),
-				relationship: "",
-				name: "",
-				address: "",
-				contact_no: "",
-				occupation: "",
-			};
-
-			let err = false;
-			item.value.relatives.forEach((relative) => {
-				if (!relative.relationship || !relative.name) {
-					err = true;
-				}
-			});
-
-			err
-				? displayAlert(
-						"info",
-						"Please fill out relationship and name in relative list before adding one"
-				  )
-				: item.value.relatives.push(tempRelative);
-		};
-
-		const deleteDependent = (id) => {
-			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the dependent?") &&
-				item.value.dependents.length !== 1
-			) {
-				item.value.dependents = item.value.dependents.filter(
-					(dependent) => dependent.id !== id
-				);
-			} else {
-				displayAlert("info", "Employee need atleast 1 dependent");
-			}
-		};
-
-		const deleteAddress = (id) => {
-			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the address?") &&
-				item.value.addresses.length !== 1
-			) {
-				item.value.addresses = item.value.addresses.filter(
-					(address) => address.id !== id
-				);
-			} else {
-				displayAlert("info", "Employee need atleast 1 address");
-			}
-		};
-
-		const deleteRelative = (id) => {
-			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the relative?") &&
-				item.value.relatives.length !== 1
-			) {
-				item.value.relatives = item.value.relatives.filter(
-					(relative) => relative.id !== id
-				);
-			} else {
-				displayAlert("info", "Employee need atleast 1 relative");
-			}
-		};
-
-		const handleSubmit = async () => {
-			const form_data = new FormData();
-			const data = {
-				first_name: item.value.first_name,
-				employee_id: item.value.employee_id,
-				tel_no: item.value.tel_no,
-				mobile_no: item.value.mobile_no,
-				last_name: item.value.last_name,
-				birthdate: item.value.birthdate,
-				birthplace: item.value.birthplace,
-				email: item.value.email,
-				citizenship: item.value.citizenship,
-				maiden_name: item.value.maiden_name,
-				height: item.value.height,
-				weight: item.value.weight,
-				blood_type: item.value.blood_type,
-				civil_status: item.value.civil_status,
-				extension_name: item.value.extension_name,
-				gender: item.value.gender,
-				addresses: JSON.stringify(item.value.addresses),
-				relatives: JSON.stringify(item.value.relatives),
-				dependents: JSON.stringify(item.value.dependents),
-				active: 1,
-			};
-
-			console.log(data);
-			// Checking form_data values
-
-			for (var key in data) {
-				form_data.append(key, data[key]);
-			}
-
-			if (selectedProfileFile.value) {
-				form_data.append(
-					"profile_image_path",
-					selectedProfileFile.value
-				);
-			}
-
-			if (selectedSignatureFile.value) {
-				form_data.append(
-					"signatory_image_path",
-					selectedSignatureFile.value
-				);
-			}
-
-			for (var pair of form_data.entries()) {
-				console.log(pair[0] + ", " + pair[1]);
-			}
-
-			await create(
-				`basicemployeeinformation/${route.params.id}?_method=PATCH`,
-				form_data
-			);
-
-			if (!error.value) {
-				displayAlert("info", "Employee Updated");
-			} else {
-				displayAlert("error", "Invalid Inputs");
-			}
-		};
-
-		const commTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.email) ||
-				(error.value && error.value.errors.birthdate)
-			);
-		});
-
-		const mainTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.employee_id) ||
-				(error.value && error.value.errors.first_name) ||
-				(error.value && error.value.errors.last_name) ||
-				(error.value && error.value.errors.address)
-			);
-		});
-
-		const connTabHasError = computed(() => {
-			return (
-				(error.value && error.value.errors.height) ||
-				(error.value && error.value.errors.tin_no) ||
-				(error.value && error.value.errors.hdmf_no) ||
-				(error.value && error.value.errors.tax_branch_code) ||
-				(error.value && error.value.errors.alphalist_no)
-			);
-		});
-
-		const onProfileFileSelected = (e) => {
-			selectedProfileFile.value = e.target.files[0];
-			profile_image_path.value = URL.createObjectURL(
-				selectedProfileFile.value
-			);
-		};
-
-		const onSignatureFileSelected = (e) => {
-			selectedSignatureFile.value = e.target.files[0];
-			signatory_image_path.value = URL.createObjectURL(
-				selectedSignatureFile.value
-			);
-		};
 
 		return {
-			selectedProfileFile,
-			profile_image_path,
-			onProfileFileSelected,
-
-			selectedSignatureFile,
-			signatory_image_path,
-			onSignatureFileSelected,
-
 			item,
 
-			handleSubmit,
 			error,
 			loading,
 			response,
 
 			alert,
-
-			commTabHasError,
-			mainTabHasError,
-			connTabHasError,
-
-			addAddress,
-			deleteAddress,
-
-			addRelative,
-			deleteRelative,
-
-			addDependent,
-			deleteDependent,
 		};
 	},
 };
