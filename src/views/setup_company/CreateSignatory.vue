@@ -38,7 +38,10 @@
 							/>
 						</div>
 						<div class="form-group col-5">
-							<label for="">Status</label>
+							<label for=""
+								>Status
+								<span class="text-danger text-bold">*</span>
+							</label>
 							<select class="form-control" disabled>
 								<option value="active">Active</option>
 							</select>
@@ -58,7 +61,7 @@
 								]"
 								id="input_signatory_prepared_by"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Juan Dela Cruz"
 								v-model="prepared_by"
 							/>
 							<small
@@ -96,7 +99,6 @@
 						<div class="form-group col-7">
 							<label>
 								Checked by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -108,7 +110,7 @@
 								]"
 								id="input_signatory_checked_by"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Juan Dela Cruz"
 								v-model="checked_by"
 							/>
 							<small
@@ -120,10 +122,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[
@@ -146,7 +145,6 @@
 						<div class="form-group col-7">
 							<label>
 								Approved by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -157,7 +155,7 @@
 										'is-invalid',
 								]"
 								id="input_signatory_approved_by"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Juan Dela Cruz"
 								v-model="approved_by"
 							/>
 							<small
@@ -169,10 +167,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[
@@ -195,7 +190,6 @@
 						<div class="form-group col-7">
 							<label>
 								Noted by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -207,7 +201,7 @@
 								]"
 								id="input_signatory_noted_by"
 								aria-describedby="emailHelp"
-								placeholder="Ex. 1234567"
+								placeholder="Ex. Juan Dela Cruz"
 								v-model="noted_by"
 							/>
 							<small
@@ -219,10 +213,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[

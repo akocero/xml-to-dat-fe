@@ -92,10 +92,7 @@
 								</small>
 							</div>
 							<div class="form-group col-12">
-								<label for=""
-									>Description
-									<span class="text-danger text-bold">*</span>
-								</label>
+								<label for="">Description </label>
 								<textarea
 									name=""
 									:class="[
@@ -145,10 +142,7 @@
 								</small>
 							</div>
 							<div class="form-group col-12">
-								<label for=""
-									>Description
-									<span class="text-danger text-bold">*</span>
-								</label>
+								<label for="">Description </label>
 								<textarea
 									name=""
 									:class="[
