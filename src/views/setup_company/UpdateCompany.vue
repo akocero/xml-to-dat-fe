@@ -747,13 +747,7 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>SSS Doc No
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+											<label>SSS Doc No </label>
 											<input
 												type="text"
 												class="form-control"
@@ -781,10 +775,6 @@
 										<div class="form-group col-6">
 											<label
 												>SSS Employer Location Code
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
 											</label>
 											<input
 												type="text"
@@ -861,13 +851,7 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Philhealth Signatory
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+											<label>Philhealth Signatory </label>
 											<input
 												type="text"
 												class="form-control"
@@ -897,13 +881,7 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Philhealth Position
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
+											<label>Philhealth Position </label>
 											<input
 												type="text"
 												class="form-control"
@@ -1030,7 +1008,13 @@
 										</div>
 
 										<div class="form-group col-6">
-											<label>Alphalist Number</label>
+											<label
+												>Alphalist Number
+												<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"

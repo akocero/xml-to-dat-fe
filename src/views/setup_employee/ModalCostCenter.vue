@@ -65,7 +65,6 @@
 						<div class="form-group col-12">
 							<label>
 								Description
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -146,7 +145,6 @@
 						<div class="form-group col-12">
 							<label>
 								Description
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"

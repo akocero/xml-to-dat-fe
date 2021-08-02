@@ -37,7 +37,12 @@
 							/>
 						</div>
 						<div class="form-group col-5">
-							<label for="">Status</label>
+							<label for=""
+								>Status
+								<span class="text-danger text-bold"
+									>*</span
+								></label
+							>
 							<select class="form-control" v-model="item.active">
 								<option value="1">Active</option>
 								<option value="0">Inactive</option>
@@ -96,7 +101,6 @@
 						<div class="form-group col-7">
 							<label>
 								Checked by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -120,10 +124,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[
@@ -146,7 +147,6 @@
 						<div class="form-group col-7">
 							<label>
 								Approved by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -169,10 +169,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[
@@ -195,7 +192,6 @@
 						<div class="form-group col-7">
 							<label>
 								Noted by:
-								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
 								type="text"
@@ -219,10 +215,7 @@
 						</div>
 
 						<div class="form-group col-md-5">
-							<label for=""
-								>Position
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Position </label>
 							<input
 								name=""
 								:class="[
