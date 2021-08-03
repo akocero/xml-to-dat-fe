@@ -32,7 +32,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="employeeTabHasError && 'pr-4'"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
@@ -40,6 +39,7 @@
 								aria-controls="pills-main"
 								aria-selected="true"
 								>Employee Info
+								{{ employeeTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="employeeTabHasError"
 									v-html="alertTriangle"
@@ -50,7 +50,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="contactTabHasError && 'pr-4'"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -59,6 +58,7 @@
 								aria-selected="false"
 							>
 								Contact Info
+								{{ contactTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="contactTabHasError"
 									v-html="alertTriangle"
@@ -69,7 +69,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="otherInfoTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -78,6 +77,7 @@
 								aria-selected="false"
 							>
 								Other Info
+								{{ otherInfoTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="otherInfoTabHasError"
 									v-html="alertTriangle"

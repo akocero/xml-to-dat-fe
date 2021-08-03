@@ -62,14 +62,13 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError ? 'pr-4' : ''"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
 								role="tab"
 								aria-controls="pills-main"
 								aria-selected="true"
-								>Main
+								>Main {{ mainTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="mainTabHasError"
 									v-html="alertTriangle"
@@ -80,7 +79,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError ? 'pr-4' : ''"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -89,6 +87,7 @@
 								aria-selected="false"
 							>
 								Communication
+								{{ commTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="commTabHasError"
 									v-html="alertTriangle"
@@ -99,7 +98,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -108,6 +106,7 @@
 								aria-selected="false"
 							>
 								Contribution
+								{{ connTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="connTabHasError"
 									v-html="alertTriangle"
@@ -120,15 +119,16 @@
 								class="nav-link"
 								id="pills-banks-tab"
 								data-toggle="pill"
-								:class="
-									item?.setup_company_banks.length === 0 &&
-										'pr-4'
-								"
 								href="#pills-banks"
 								role="tab"
 								aria-controls="pills-banks"
 								aria-selected="false"
-								>Banks<i
+								>Banks
+								{{
+									item?.setup_company_banks.length === 0 &&
+										"&nbsp; &nbsp;"
+								}}
+								<i
 									v-if="
 										item?.setup_company_banks.length === 0
 									"
@@ -142,15 +142,16 @@
 								class="nav-link"
 								id="pills-signatories-tab"
 								data-toggle="pill"
-								:class="
-									item?.setup_company_signatories.length ===
-										0 && 'pr-4'
-								"
 								href="#pills-signatories"
 								role="tab"
 								aria-controls="pills-signatories"
 								aria-selected="false"
-								>Signatories<i
+								>Signatories
+								{{
+									item?.setup_company_signatories.length ===
+										0 && "&nbsp; &nbsp;"
+								}}
+								<i
 									v-if="
 										item?.setup_company_signatories
 											.length === 0

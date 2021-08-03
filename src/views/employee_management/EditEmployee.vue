@@ -40,7 +40,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError && 'pr-4'"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
@@ -48,6 +47,7 @@
 								aria-controls="pills-main"
 								aria-selected="true"
 								>Employee Info
+								{{ mainTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="mainTabHasError"
 									v-html="alertTriangle"
@@ -58,7 +58,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError && 'pr-4'"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -67,6 +66,7 @@
 								aria-selected="false"
 							>
 								Contact Info
+								{{ commTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="commTabHasError"
 									v-html="alertTriangle"
@@ -77,7 +77,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -86,6 +85,7 @@
 								aria-selected="false"
 							>
 								Other Info
+								{{ connTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="connTabHasError"
 									v-html="alertTriangle"
@@ -1251,7 +1251,7 @@ export default {
 		const commTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
-				(error.value && error.value.errors.birthdate)
+				(error.value && error.value.errors.mobile_no)
 			);
 		});
 
