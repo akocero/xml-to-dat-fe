@@ -142,7 +142,7 @@
 
 									<div class="col-md-2">
 										<BaseImageField
-											:image_path="company_logo"
+											:image_path="image_path"
 										/>
 									</div>
 
@@ -256,12 +256,12 @@
 								<hr />
 								<div class="row pb-3">
 									<div class="col-4">
-										<h5 class="h5">Company Settings</h5>
-										<label for="" class="text-justify pr-4">
-											Choose settings to be applied across
+										<BaseRowHeading
+											heading="Company Settings"
+											para="Choose settings to be applied across
 											all modules in your Company's
-											payroll system.
-										</label>
+											payroll system."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -315,11 +315,11 @@
 							>
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Contact Info</h5>
-										<label for="" class="text-justify pr-4">
-											Provide your company's updated
-											contact information.
-										</label>
+										<BaseRowHeading
+											heading="Contact Info"
+											para="Provide your company's updated
+											contact information."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -373,12 +373,12 @@
 								<hr />
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Social Media</h5>
-										<label for="" class="text-justify pr-4">
-											Include social media handles of the
+										<BaseRowHeading
+											heading="Social Media"
+											para="Include social media handles of the
 											organization so your employees can
-											reach you.
-										</label>
+											reach you."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -440,14 +440,14 @@
 							>
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">SSS Info</h5>
-										<label for="" class="text-justify pr-4">
-											Provide your company's Social
+										<BaseRowHeading
+											heading="SSS Info"
+											para="Provide your company's Social
 											Security System (SSS) details. This
 											information will be used for your
 											monthly contribution as an employer,
-											as well as for generating reports.
-										</label>
+											as well as for generating reports."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -504,14 +504,14 @@
 								<hr class="pb-3" />
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">PhilHealth Info</h5>
-										<label for="" class="text-justify pr-4">
-											Provide your company's PhilHealth
+										<BaseRowHeading
+											heading="PhilHealth Info"
+											para="Provide your company's PhilHealth
 											details. This information will be
 											used for your monthly contribution
 											as an employer, as well as for
-											generating reports.
-										</label>
+											generating reports."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -567,14 +567,14 @@
 								<hr class="pb-3" />
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">Pag-IBIG Info</h5>
-										<label for="" class="text-justify pr-4">
-											Provide your company's Pag-IBIG Fund
+										<BaseRowHeading
+											heading="Pag-IBIG Info"
+											para="Provide your company's Pag-IBIG Fund
 											details. This information will be
 											used for your monthly contribution
 											as an employer, as well as for
-											generating reports.
-										</label>
+											generating reports."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -600,17 +600,15 @@
 
 								<div class="row">
 									<div class="col-4">
-										<h5 class="h5">
-											Other Contribution Details
-										</h5>
-										<label for="" class="text-justify pr-4">
-											Input additional contribution
+										<BaseRowHeading
+											heading="Other Contribution Details"
+											para="Input additional contribution
 											details as an employer. Any
 											information added here will be used
 											for your monthly dues as an
 											employer, as well as for generating
-											reports.
-										</label>
+											reports."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -675,6 +673,7 @@
 <script>
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
+import useImage from "@/composables/useImage";
 
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
@@ -716,6 +715,7 @@ export default {
 		const router = useRouter();
 		const { response, error, create, loading, unknownError } = useData();
 		const { alert, displayAlert } = useAlert();
+		const { image: image_path, selectedFile, onFileSelected } = useImage();
 
 		const name = ref("");
 		const code = ref("");
@@ -740,9 +740,6 @@ export default {
 		const decimal_place = ref("");
 		const currency = ref("");
 		const amount = ref("");
-
-		const selectedFile = ref(null);
-		const company_logo = ref(null);
 
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -780,9 +777,8 @@ export default {
 				form_data.append(key, data[key]);
 			}
 
-			if (selectedFile.value) {
+			selectedFile.value &&
 				form_data.append("image_path", selectedFile.value);
-			}
 
 			// Checking form_data values
 			// for (var pair of form_data.entries()) {
@@ -826,12 +822,6 @@ export default {
 			);
 		});
 
-		const onFileSelected = (e) => {
-			console.log(e);
-			selectedFile.value = e.target.files[0];
-			company_logo.value = URL.createObjectURL(selectedFile.value);
-		};
-
 		return {
 			alert,
 
@@ -859,7 +849,7 @@ export default {
 			currency,
 			amount,
 			selectedFile,
-			company_logo,
+			image_path,
 
 			handleSubmit,
 			error,
