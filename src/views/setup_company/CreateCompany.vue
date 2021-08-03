@@ -141,17 +141,8 @@
 									</div>
 
 									<div class="col-md-2">
-										<img
-											v-if="imageUrl"
-											:src="imageUrl"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else
-											src="../../assets/no-image.png"
-											alt=""
-											style="width: 90%"
+										<BaseImageField
+											:image_path="imageUrl"
 										/>
 									</div>
 
@@ -696,6 +687,7 @@ import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
 import BaseTextAreaField from "@/components/BaseTextAreaField";
 import BaseInputFileField from "@/components/BaseInputFileField";
+import BaseImageField from "@/components/BaseImageField";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -704,6 +696,7 @@ export default {
 		BaseSelectField,
 		BaseTextAreaField,
 		BaseInputFileField,
+		BaseImageField,
 	},
 	computed: {
 		chevronRight: function() {
