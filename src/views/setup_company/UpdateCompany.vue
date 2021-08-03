@@ -62,14 +62,13 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError ? 'pr-4' : ''"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
 								role="tab"
 								aria-controls="pills-main"
 								aria-selected="true"
-								>Main
+								>Main {{ mainTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="mainTabHasError"
 									v-html="alertTriangle"
@@ -80,7 +79,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError ? 'pr-4' : ''"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -89,6 +87,7 @@
 								aria-selected="false"
 							>
 								Communication
+								{{ commTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="commTabHasError"
 									v-html="alertTriangle"
@@ -99,7 +98,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -108,6 +106,7 @@
 								aria-selected="false"
 							>
 								Contribution
+								{{ connTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="connTabHasError"
 									v-html="alertTriangle"
@@ -120,15 +119,16 @@
 								class="nav-link"
 								id="pills-banks-tab"
 								data-toggle="pill"
-								:class="
-									item?.setup_company_banks.length === 0 &&
-										'pr-4'
-								"
 								href="#pills-banks"
 								role="tab"
 								aria-controls="pills-banks"
 								aria-selected="false"
-								>Banks<i
+								>Banks
+								{{
+									item?.setup_company_banks.length === 0 &&
+										"&nbsp; &nbsp;"
+								}}
+								<i
 									v-if="
 										item?.setup_company_banks.length === 0
 									"
@@ -142,15 +142,16 @@
 								class="nav-link"
 								id="pills-signatories-tab"
 								data-toggle="pill"
-								:class="
-									item?.setup_company_signatories.length ===
-										0 && 'pr-4'
-								"
 								href="#pills-signatories"
 								role="tab"
 								aria-controls="pills-signatories"
 								aria-selected="false"
-								>Signatories<i
+								>Signatories
+								{{
+									item?.setup_company_signatories.length ===
+										0 && "&nbsp; &nbsp;"
+								}}
+								<i
 									v-if="
 										item?.setup_company_signatories
 											.length === 0
@@ -312,42 +313,18 @@
 										</div>
 
 										<div class="form-group col-4">
-											<label
-												>Vat Registration
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.vat_reg &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_vat_reg"
-												placeholder="Ex. 123-456-789-000"
+												label="Vat Registration"
 												v-model="item.vat_reg"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.vat_reg
+												:error="error"
+												:errorField="
+													error?.errors?.vat_reg ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												<span
-													v-for="(err_vat_reg,
-													index) in error.errors
-														.vat_reg"
-													:key="index"
-													class="d-block"
-												>
-													{{ err_vat_reg }}</span
-												>
-											</small>
+												placeholder="Ex. 123-456-789-000"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-8">
@@ -1308,6 +1285,7 @@ import useData from "@/composables/useData";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
+import BaseInputField from "@/components/BaseInputField";
 
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
@@ -1327,6 +1305,7 @@ export default {
 		EditBank,
 		EditSignatory,
 		Badge,
+		BaseInputField,
 	},
 	computed: {
 		chevronRight: function() {

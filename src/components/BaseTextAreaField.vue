@@ -3,23 +3,24 @@
 		>{{ label }}
 		<span v-if="required" class="text-danger text-bold">*</span>
 	</label>
-	<input
-		type="text"
-		class="form-control"
-		:class="[error && errorField && 'is-invalid']"
+	<textarea
 		:id="id"
+		:class="[error && errorField && 'is-invalid']"
+		class="form-control"
 		:placeholder="placeholder"
 		:value="modelValue"
 		@input="$emit('update:modelValue', $event.target.value)"
-	/>
+	></textarea>
 	<small v-if="error && errorField" class="form-text text-danger">
-		{{ errorField[0] }}
+		<span v-for="(err, index) in errorField" :key="index" class="d-block">
+			{{ err }}</span
+		>
 	</small>
 </template>
 
 <script>
 export default {
-	name: "BaseTextField",
+	name: "BaseTextAreaField",
 	props: {
 		modelValue: String,
 		id: String,
