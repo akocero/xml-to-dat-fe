@@ -56,30 +56,18 @@
 							</div>
 
 							<div class="form-group col-12">
-								<label
-									>Email
-									<span class="text-danger text-bold">*</span>
-								</label>
-								<input
+								<BaseInputField
 									type="email"
-									class="form-control"
-									:class="[
-										error &&
-											error.errors.login_id &&
-											'is-invalid',
-									]"
-									id=""
-									aria-describedby="emailHelp"
-									placeholder="Ex. johndoe@example.com "
+									id="input_email"
+									label="Email"
 									v-model="login_id"
+									:error="error"
+									:errorField="
+										error?.errors?.login_id || null
+									"
+									placeholder="Ex. johndoe@example.com"
+									:required="true"
 								/>
-								<small
-									v-if="error && error.errors.login_id"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.login_id[0] }}
-								</small>
 							</div>
 
 							<div class="form-group col-12">

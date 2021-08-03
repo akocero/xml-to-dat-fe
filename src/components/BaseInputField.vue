@@ -38,7 +38,9 @@ export default {
 			default: "text",
 			validator: function(value) {
 				// The value must match one of these strings
-				return ["text", "date", "number"].indexOf(value) !== -1;
+				return (
+					["text", "date", "number", "email"].indexOf(value) !== -1
+				);
 			},
 		},
 	},

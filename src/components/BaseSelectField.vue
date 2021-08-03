@@ -10,7 +10,7 @@
 		:value="modelValue"
 		@change="$emit('update:modelValue', $event.target.value)"
 	>
-		<option value="">Choose ...</option>
+		<option value="" v-if="emptyOption">Choose</option>
 		<option
 			:value="option.value"
 			v-for="option in options"
@@ -30,12 +30,19 @@ export default {
 	name: "BaseSelectField",
 	props: {
 		modelValue: String,
+		emptyOption: {
+			type: Boolean,
+			default: true,
+		},
 		id: String,
 		label: String,
 		error: Object,
 		required: Boolean,
 		errorField: Object,
-		options: Array,
+		options: {
+			type: Array,
+			required: true,
+		},
 	},
 };
 </script>
