@@ -160,7 +160,7 @@
 						v-if="loading"
 						disabled
 					>
-						Loading ...
+						Saving ...
 					</button>
 				</div>
 			</form>

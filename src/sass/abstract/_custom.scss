@@ -4,7 +4,8 @@
 	color: $light-color;
 }
 
-.form-control {
+.form-control,
+.custom-select {
 	border: none;
 	border-radius: 0;
 	border-bottom: 2px solid $grey-color;
