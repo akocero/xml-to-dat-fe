@@ -156,25 +156,19 @@
 									</div>
 
 									<div class="form-group col-md-6">
-										<label for="">Upload Image</label>
-										<input
-											type="file"
-											class="d-block mt-2"
-											@change="onFileSelected"
-										/>
-										<small
-											>The maximum file size allowed is
-											200KB.</small
-										><br /><br />
-										<small
-											v-if="
-												error && error.errors.image_path
+										<BaseInputFileField
+											id="input_image_path"
+											label="Upload Company Logo"
+											@fileSelected="
+												onFileSelected($event)
 											"
-											id="emailHelp"
-											class="form-text text-danger"
-										>
-											{{ error.errors.image_path[0] }}
-										</small>
+											:error="error"
+											:errorField="
+												error?.errors?.image_path ||
+													null
+											"
+											:required="false"
+										/>
 									</div>
 								</div>
 
@@ -701,6 +695,7 @@ import Alert from "@/components/Alert";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
 import BaseTextAreaField from "@/components/BaseTextAreaField";
+import BaseInputFileField from "@/components/BaseInputFileField";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -708,6 +703,7 @@ export default {
 		BaseInputField,
 		BaseSelectField,
 		BaseTextAreaField,
+		BaseInputFileField,
 	},
 	computed: {
 		chevronRight: function() {
@@ -836,6 +832,7 @@ export default {
 		});
 
 		const onFileSelected = (e) => {
+			console.log(e);
 			selectedFile.value = e.target.files[0];
 			imageUrl.value = URL.createObjectURL(selectedFile.value);
 		};
