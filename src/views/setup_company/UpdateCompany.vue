@@ -312,42 +312,18 @@
 										</div>
 
 										<div class="form-group col-4">
-											<label
-												>Vat Registration
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.vat_reg &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_vat_reg"
-												placeholder="Ex. 123-456-789-000"
+												label="Vat Registration"
 												v-model="item.vat_reg"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.vat_reg
+												:error="error"
+												:errorField="
+													error?.errors?.vat_reg ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												<span
-													v-for="(err_vat_reg,
-													index) in error.errors
-														.vat_reg"
-													:key="index"
-													class="d-block"
-												>
-													{{ err_vat_reg }}</span
-												>
-											</small>
+												placeholder="Ex. 123-456-789-000"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-8">
@@ -1308,6 +1284,7 @@ import useData from "@/composables/useData";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
+import BaseInputField from "@/components/BaseInputField";
 
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
@@ -1327,6 +1304,7 @@ export default {
 		EditBank,
 		EditSignatory,
 		Badge,
+		BaseInputField,
 	},
 	computed: {
 		chevronRight: function() {

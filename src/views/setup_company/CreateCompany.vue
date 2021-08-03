@@ -200,7 +200,7 @@
 
 									<div class="row col-8">
 										<div class="form-group col-4">
-											<BaseTextField
+											<BaseInputField
 												id="input_code"
 												label="Code"
 												v-model="code"
@@ -215,7 +215,7 @@
 
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-8">
-											<BaseTextField
+											<BaseInputField
 												id="input_name"
 												label="Name"
 												v-model="name"
@@ -246,7 +246,7 @@
 												]"
 												id=""
 												aria-describedby="emailHelp"
-												placeholder="Ex. 123-456-789-000"
+												placeholder="Ex. 123456789000"
 												v-model="vat_reg"
 											/>
 											<small
@@ -1022,13 +1022,13 @@ import feather from "feather-icons";
 import Alert from "@/components/Alert";
 import { useRouter } from "vue-router";
 import axios from "@/axios/axios-instance";
-import BaseTextField from "@/components/BaseTextField";
+import BaseInputField from "@/components/BaseInputField";
 import $ from "jquery";
 export default {
 	name: "CreateCompany",
 	components: {
 		Alert,
-		BaseTextField,
+		BaseInputField,
 	},
 	computed: {
 		chevronRight: function() {

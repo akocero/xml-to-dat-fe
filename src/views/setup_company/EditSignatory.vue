@@ -26,7 +26,7 @@
 				<div class="modal-body">
 					<div class="row" v-if="signatory_id && item">
 						<div class="form-group col-7">
-							<BaseTextField
+							<BaseInputField
 								id="input_signatory_code"
 								label="Signatory Code"
 								v-model="item.code"
@@ -320,7 +320,7 @@
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
 import { onBeforeMount, onUnmounted, ref } from "vue";
-import BaseTextField from "@/components/BaseTextField";
+import BaseInputField from "@/components/BaseInputField";
 import useData from "@/composables/useData";
 import $ from "jquery";
 export default {
@@ -328,7 +328,7 @@ export default {
 	props: ["signatory_id"],
 	components: {
 		Spinner,
-		BaseTextField,
+		BaseInputField,
 	},
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(

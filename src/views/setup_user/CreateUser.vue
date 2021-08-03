@@ -28,7 +28,7 @@
 					<div class="col-md-6">
 						<div class="row pr-3">
 							<div class="form-group col-5">
-								<BaseTextField
+								<BaseInputField
 									id="input_employee_id"
 									label="Employee ID"
 									v-model="employee_id"
@@ -42,7 +42,7 @@
 							</div>
 
 							<div class="form-group col-7">
-								<BaseTextField
+								<BaseInputField
 									id="input_full_name"
 									label="Full Name"
 									v-model="full_name"
@@ -83,33 +83,27 @@
 							</div>
 
 							<div class="form-group col-12">
-								<label for=""
-									>Role
-									<span class="text-danger text-bold">*</span>
-								</label>
-								<select
-									name=""
-									id=""
-									class="form-control"
-									:class="[
-										error &&
-											error.errors.login_type &&
-											'is-invalid',
-									]"
+								<BaseSelectField
+									id="select_role"
+									label="Role"
 									v-model="login_type"
-								>
-									<option value="">Choose ...</option>
-									<option value="employee">Employee</option>
-									<option value="admin">Admin</option>
-									<option value="manager">Manager</option>
-								</select>
-								<small
-									v-if="error && error.errors.login_type"
-									id="emailHelp"
-									class="form-text text-danger"
-								>
-									{{ error.errors.login_type[0] }}
-								</small>
+									:error="error"
+									:errorField="
+										error?.errors?.login_type || null
+									"
+									:options="[
+										{
+											value: 'employee',
+											label: 'Employee',
+										},
+										{
+											value: 'admin',
+											label: 'Administrator',
+										},
+										{ value: 'manager', label: 'Manager' },
+									]"
+									:required="true"
+								/>
 							</div>
 						</div>
 					</div>
@@ -190,14 +184,16 @@ import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import useFetch from "@/composables/useFetch";
 import { useRouter } from "vue-router";
-import BaseTextField from "@/components/BaseTextField";
+import BaseInputField from "@/components/BaseInputField";
+import BaseSelectField from "@/components/BaseSelectField";
 
 export default {
 	name: "CreateUser",
 	components: {
 		Alert,
 		Spinner,
-		BaseTextField,
+		BaseInputField,
+		BaseSelectField,
 	},
 	data() {
 		return {

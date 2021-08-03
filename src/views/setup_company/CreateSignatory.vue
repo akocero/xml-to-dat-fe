@@ -27,7 +27,7 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="form-group col-7">
-							<BaseTextField
+							<BaseInputField
 								id="input_signatory_code"
 								label="Signatory Code"
 								v-model="code"
@@ -311,14 +311,14 @@
 <script>
 import { ref } from "vue";
 import $ from "jquery";
-import BaseTextField from "@/components/BaseTextField";
+import BaseInputField from "@/components/BaseInputField";
 import useData from "@/composables/useData";
 
 export default {
 	name: "CreateSignatory",
 	props: ["companyID"],
 	components: {
-		BaseTextField,
+		BaseInputField,
 	},
 	setup(props, { emit }) {
 		const { response, error, create, loading, unknownError } = useData();

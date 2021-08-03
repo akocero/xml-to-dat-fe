@@ -34,7 +34,7 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-4">
-							<BaseTextField
+							<BaseInputField
 								id="input_bank_code"
 								label="Code"
 								v-model="bank_code"
@@ -169,12 +169,12 @@
 import axios from "@/axios/axios-instance";
 import { ref } from "vue";
 import $ from "jquery";
-import BaseTextField from "@/components/BaseTextField";
+import BaseInputField from "@/components/BaseInputField";
 
 export default {
 	name: "CreateBank",
 	props: ["companyID"],
-	components: { BaseTextField },
+	components: { BaseInputField },
 	setup(props, { emit }) {
 		const error = ref(null);
 		const unknownError = ref(null);
