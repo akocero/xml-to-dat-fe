@@ -131,18 +131,18 @@
 							>
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
-										<h5 class="h5">Company Image</h5>
-										<label for="" class="text-justify pr-4">
-											Add your company's logo to
+										<BaseRowHeading
+											heading="Company Logo"
+											para="Add your company's logo to
 											personalize your company profile.
 											This logo can also be used in
-											payslips and generation of reports.
-										</label>
+											payslips and generation of reports."
+										/>
 									</div>
 
 									<div class="col-md-2">
 										<BaseImageField
-											:image_path="imageUrl"
+											:image_path="company_logo"
 										/>
 									</div>
 
@@ -167,12 +167,12 @@
 
 								<div class="row pb-3">
 									<div class="col-4">
-										<h5 class="h5">Main Information</h5>
-										<label for="" class="text-justify pr-4">
-											Input basic information of your
+										<BaseRowHeading
+											heading="Main Information"
+											para="Input basic information of your
 											company to provide more data about
-											your organization.
-										</label>
+											your organization."
+										/>
 									</div>
 
 									<div class="row col-8">
@@ -688,6 +688,7 @@ import BaseSelectField from "@/components/BaseSelectField";
 import BaseTextAreaField from "@/components/BaseTextAreaField";
 import BaseInputFileField from "@/components/BaseInputFileField";
 import BaseImageField from "@/components/BaseImageField";
+import BaseRowHeading from "@/components/BaseRowHeading";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -697,6 +698,7 @@ export default {
 		BaseTextAreaField,
 		BaseInputFileField,
 		BaseImageField,
+		BaseRowHeading,
 	},
 	computed: {
 		chevronRight: function() {
@@ -740,7 +742,7 @@ export default {
 		const amount = ref("");
 
 		const selectedFile = ref(null);
-		const imageUrl = ref(null);
+		const company_logo = ref(null);
 
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -827,7 +829,7 @@ export default {
 		const onFileSelected = (e) => {
 			console.log(e);
 			selectedFile.value = e.target.files[0];
-			imageUrl.value = URL.createObjectURL(selectedFile.value);
+			company_logo.value = URL.createObjectURL(selectedFile.value);
 		};
 
 		return {
@@ -857,7 +859,7 @@ export default {
 			currency,
 			amount,
 			selectedFile,
-			imageUrl,
+			company_logo,
 
 			handleSubmit,
 			error,
