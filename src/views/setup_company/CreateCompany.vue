@@ -33,14 +33,13 @@
 						<li class="nav-item">
 							<a
 								class="nav-link active"
-								:class="mainTabHasError && 'pr-4'"
 								id="pills-main-tab"
 								data-toggle="pill"
 								href="#pills-main"
 								role="tab"
 								aria-controls="pills-main"
 								aria-selected="true"
-								>Main
+								>Main {{ mainTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="mainTabHasError"
 									v-html="alertTriangle"
@@ -51,7 +50,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="commTabHasError && 'pr-4'"
 								id="pills-comm-tab"
 								data-toggle="pill"
 								href="#pills-comm"
@@ -60,6 +58,7 @@
 								aria-selected="false"
 							>
 								Communication
+								{{ commTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="commTabHasError"
 									v-html="alertTriangle"
@@ -70,7 +69,6 @@
 						<li class="nav-item">
 							<a
 								class="nav-link"
-								:class="connTabHasError ? 'pr-4' : ''"
 								id="pills-contri-tab"
 								data-toggle="pill"
 								href="#pills-contri"
@@ -79,6 +77,7 @@
 								aria-selected="false"
 							>
 								Contribution
+								{{ connTabHasError && "&nbsp; &nbsp;" }}
 								<i
 									v-if="connTabHasError"
 									v-html="alertTriangle"
