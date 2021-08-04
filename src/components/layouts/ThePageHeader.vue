@@ -4,9 +4,9 @@
 			class="col-md-12 d-flex justify-content-between align-items-center"
 		>
 			<h5 class="h4 mb-0 text-primary">{{ heading }}</h5>
-			<button class="btn btn-primary" @click="handleClick">
+			<a role="button" class="btn btn-primary" @click="handleClick">
 				Cancel <i v-html="chevronRight"></i>
-			</button>
+			</a>
 		</div>
 	</div>
 </template>
@@ -35,11 +35,15 @@ export default {
 	setup(props) {
 		const router = useRouter();
 		const handleClick = () => {
-			if (
-				confirm(
-					`Leave ${props.mode} mode? All unsaved changes will be lost.`
-				)
-			) {
+			if (props.mode !== "view") {
+				if (
+					confirm(
+						`Leave ${props.mode} mode? All unsaved changes will be lost.`
+					)
+				) {
+					router.push({ name: props.routeName });
+				}
+			} else {
 				router.push({ name: props.routeName });
 			}
 		};

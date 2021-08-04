@@ -1,5 +1,8 @@
 <template>
-	<div class="forgot-password-container w-75" v-if="!validatedEmail">
+	<div
+		class="forgot-password-container w-75"
+		v-if="!validatedEmail && !validatedOTP"
+	>
 		<h3 class="h3">Forgot Password</h3>
 		<hr />
 		<p class="">
@@ -25,22 +28,31 @@
 			</button>
 		</form>
 	</div>
-	<EnterOTP v-else />
+	<EnterOTP
+		v-if="validatedEmail && !validatedOTP"
+		@validatedOTP="validatedOTP = true"
+	/>
+	<ChangePassword v-if="validatedOTP" />
 </template>
 
 <script>
 import { ref } from "vue";
 import EnterOTP from "./EnterOTP";
+import ChangePassword from "./ChangePassword.vue";
 export default {
 	name: "ForgotPassword",
 	components: {
 		EnterOTP,
+		ChangePassword,
 	},
-	setup(context, { emit }) {
+	emits: ["cancelForgotPassword"],
+	setup(props, { emit }) {
 		const validatedEmail = ref(null);
+		const validatedOTP = ref(null);
 
 		const handleSubmit = () => {
 			validatedEmail.value = true;
+			console.log("email submitted");
 		};
 
 		const handleCancel = () => {
@@ -48,7 +60,7 @@ export default {
 			emit("cancelForgotPassword");
 		};
 
-		return { handleCancel, handleSubmit, validatedEmail };
+		return { handleCancel, handleSubmit, validatedEmail, validatedOTP };
 	},
 };
 </script>

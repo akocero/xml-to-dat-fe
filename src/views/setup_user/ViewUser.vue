@@ -1,19 +1,12 @@
 <template>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h4 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.full_name }} Information
-					</h4>
-					<router-link class="btn btn-light" :to="{ name: 'user' }"
-						>User List <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
-
+			<ThePageHeader
+				v-if="item"
+				:heading="item.full_name"
+				routeName="user"
+				mode="view"
+			/>
 			<hr />
 
 			<form action="" @submit.prevent="handleSubmit">
@@ -148,11 +141,12 @@ import { useRoute } from "vue-router";
 import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
 import useFetch from "@/composables/useFetch";
-import axios from "@/axios/axios-instance";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 export default {
 	name: "UpdateUser",
 	components: {
 		Spinner,
+		ThePageHeader,
 	},
 	computed: {
 		chevronRight: function() {

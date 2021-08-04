@@ -10,16 +10,7 @@
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0">New User</h5>
-					<router-link class="btn btn-primary" :to="{ name: 'user' }"
-						>User List<i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader heading="New User" routeName="user" mode="create" />
 
 			<hr />
 
@@ -177,6 +168,7 @@ import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 
 export default {
 	name: "CreateUser",
@@ -185,6 +177,7 @@ export default {
 		Spinner,
 		BaseInputField,
 		BaseSelectField,
+		ThePageHeader,
 	},
 	data() {
 		return {

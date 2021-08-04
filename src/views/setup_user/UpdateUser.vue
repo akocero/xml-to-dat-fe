@@ -9,18 +9,12 @@
 	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h4 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.full_name }} Information.
-					</h4>
-					<router-link class="btn btn-primary" :to="{ name: 'user' }"
-						>User List <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				v-if="item"
+				:heading="item.full_name"
+				routeName="user"
+				mode="edit"
+			/>
 
 			<hr />
 
@@ -182,6 +176,7 @@ import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 
 export default {
 	name: "UpdateUser",
@@ -190,6 +185,7 @@ export default {
 		Spinner,
 		BaseInputField,
 		BaseSelectField,
+		ThePageHeader,
 	},
 	computed: {
 		chevronRight: function() {
