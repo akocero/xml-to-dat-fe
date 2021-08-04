@@ -10,116 +10,60 @@
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0 text-primary">New Company</h5>
-					<router-link
-						class="btn btn-primary"
-						:to="{ name: 'company' }"
-						>Cancel <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				heading="New Company"
+				routeName="company"
+				mode="create"
+			/>
 
 			<div class="row">
 				<div class="col-12">
-					<ul
-						class="nav nav-pills mb-3"
-						id="pills-tab"
-						role="tablist"
-					>
-						<li class="nav-item">
-							<a
-								class="nav-link active"
-								id="pills-main-tab"
-								data-toggle="pill"
-								href="#pills-main"
-								role="tab"
-								aria-controls="pills-main"
-								aria-selected="true"
-								>Main {{ mainTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-comm-tab"
-								data-toggle="pill"
-								href="#pills-comm"
-								role="tab"
-								aria-controls="pills-comm"
-								aria-selected="false"
-							>
-								Communication
-								{{ commTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-contri-tab"
-								data-toggle="pill"
-								href="#pills-contri"
-								role="tab"
-								aria-controls="pills-contri"
-								aria-selected="false"
-							>
-								Contribution
-								{{ connTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li
-							class="nav-item"
-							data-toggle="tooltip"
-							data-placement="left"
-							title="Please save your information for Main, Communication, and Contribution tabs to enable Bank Tab"
-						>
-							<a
-								class="nav-link disabled"
-								id="pills-banks-tab"
-								data-toggle="pill"
-								href="#pills-banks"
-								role="tab"
-								aria-controls="pills-banks"
-								aria-selected="false"
-								>Banks</a
-							>
-						</li>
-						<li
-							class="nav-item"
-							data-toggle="tooltip"
-							data-placement="left"
-							title="Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab"
-						>
-							<a
-								class="nav-link disabled"
-								id="pills-signatory-tab"
-								data-toggle="pill"
-								href="#pills-signatory"
-								role="tab"
-								aria-controls="pills-signatory"
-								aria-selected="false"
-								>Signatory</a
-							>
-						</li>
-					</ul>
+					<BaseNavigationTab
+						:properties="[
+							{
+								id: 'main',
+								label: 'Main',
+								error: mainTabHasError,
+								active: true,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'comm',
+								label: 'Communication',
+								error: commTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'contri',
+								label: 'Contribution',
+								error: connTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'banks',
+								label: 'Banks',
+								error: null,
+								active: false,
+								disabled: true,
+								tooltip:
+									'Please save your information for Main, Communication, and Contribution tabs to enable Bank Tab',
+							},
+							{
+								id: 'signatory',
+								label: 'Signatories',
+								error: null,
+								active: false,
+								disabled: true,
+								tooltip:
+									'Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab',
+							},
+						]"
+					/>
 					<form @submit.prevent="handleSubmit" id="form_create_user">
 						<div class="tab-content pt-3" id="pills-tabContent">
 							<div
@@ -129,15 +73,13 @@
 								aria-labelledby="pills-main-tab"
 							>
 								<div class="row pr-3 pb-3">
-									<div class="col-md-4">
-										<BaseRowHeading
-											heading="Company Logo"
-											para="Add your company's logo to
+									<BaseRowHeading
+										heading="Company Logo"
+										para="Add your company's logo to
 											personalize your company profile.
 											This logo can also be used in
 											payslips and generation of reports."
-										/>
-									</div>
+									/>
 
 									<div class="col-md-2">
 										<BaseImageField
@@ -165,14 +107,12 @@
 								<hr />
 
 								<div class="row pb-3">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Main Information"
-											para="Input basic information of your
+									<BaseRowHeading
+										heading="Main Information"
+										para="Input basic information of your
 											company to provide more data about
 											your organization."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-4">
@@ -254,14 +194,12 @@
 								</div>
 								<hr />
 								<div class="row pb-3">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Company Settings"
-											para="Choose settings to be applied across
+									<BaseRowHeading
+										heading="Company Settings"
+										para="Choose settings to be applied across
 											all modules in your Company's
 											payroll system."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-4">
@@ -313,13 +251,11 @@
 								aria-labelledby="pills-comm-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Contact Info"
-											para="Provide your company's updated
+									<BaseRowHeading
+										heading="Contact Info"
+										para="Provide your company's updated
 											contact information."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -371,14 +307,12 @@
 								</div>
 								<hr />
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Social Media"
-											para="Include social media handles of the
+									<BaseRowHeading
+										heading="Social Media"
+										para="Include social media handles of the
 											organization so your employees can
 											reach you."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -438,16 +372,14 @@
 								aria-labelledby="pills-contri-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="SSS Info"
-											para="Provide your company's Social
+									<BaseRowHeading
+										heading="SSS Info"
+										para="Provide your company's Social
 											Security System (SSS) details. This
 											information will be used for your
 											monthly contribution as an employer,
 											as well as for generating reports."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -502,16 +434,14 @@
 								</div>
 								<hr class="pb-3" />
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="PhilHealth Info"
-											para="Provide your company's PhilHealth
+									<BaseRowHeading
+										heading="PhilHealth Info"
+										para="Provide your company's PhilHealth
 											details. This information will be
 											used for your monthly contribution
 											as an employer, as well as for
 											generating reports."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -565,16 +495,14 @@
 								</div>
 								<hr class="pb-3" />
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Pag-IBIG Info"
-											para="Provide your company's Pag-IBIG Fund
+									<BaseRowHeading
+										heading="Pag-IBIG Info"
+										para="Provide your company's Pag-IBIG Fund
 											details. This information will be
 											used for your monthly contribution
 											as an employer, as well as for
 											generating reports."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -598,17 +526,15 @@
 								<hr class="pb-3" />
 
 								<div class="row">
-									<div class="col-4">
-										<BaseRowHeading
-											heading="Other Contribution Details"
-											para="Input additional contribution
+									<BaseRowHeading
+										heading="Other Contribution Details"
+										para="Input additional contribution
 											details as an employer. Any
 											information added here will be used
 											for your monthly dues as an
 											employer, as well as for generating
 											reports."
-										/>
-									</div>
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
@@ -687,6 +613,8 @@ import BaseTextAreaField from "@/components/BaseTextAreaField";
 import BaseInputFileField from "@/components/BaseInputFileField";
 import BaseImageField from "@/components/BaseImageField";
 import BaseRowHeading from "@/components/BaseRowHeading";
+import BaseNavigationTab from "@/components/BaseNavigationTab";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 export default {
 	name: "CreateCompany",
 	components: {
@@ -697,6 +625,8 @@ export default {
 		BaseInputFileField,
 		BaseImageField,
 		BaseRowHeading,
+		ThePageHeader,
+		BaseNavigationTab,
 	},
 	computed: {
 		chevronRight: function() {

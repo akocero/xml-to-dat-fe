@@ -1,4 +1,5 @@
 import { ref } from "@vue/reactivity";
+import axios from "@/axios/axios-instance";
 
 export default function useImage() {
    const image = ref(null);
@@ -9,5 +10,14 @@ export default function useImage() {
 			image.value = URL.createObjectURL(selectedFile.value);
 	};
 
-   return { image, selectedFile, onFileSelected }
+   const deleteImage = async (url) => {
+      try {
+         const res = await axios.delete(url);
+         return res
+      } catch (err) {
+         console.log(err.message);
+      }
+	};
+
+   return { image, selectedFile, onFileSelected, deleteImage }
 }
