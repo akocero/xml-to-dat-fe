@@ -37,131 +37,63 @@
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.name }} Information.
-					</h5>
-					<router-link
-						class="btn btn-primary"
-						:to="{ name: 'company' }"
-						>Cancel <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				v-if="item"
+				:heading="item.name"
+				routeName="company"
+				mode="edit"
+			/>
 
 			<div class="row">
 				<div class="col-12">
-					<ul
-						class="nav nav-pills mb-3"
-						id="pills-tab"
-						role="tablist"
-					>
-						<li class="nav-item">
-							<a
-								class="nav-link active"
-								id="pills-main-tab"
-								data-toggle="pill"
-								href="#pills-main"
-								role="tab"
-								aria-controls="pills-main"
-								aria-selected="true"
-								>Main {{ mainTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-comm-tab"
-								data-toggle="pill"
-								href="#pills-comm"
-								role="tab"
-								aria-controls="pills-comm"
-								aria-selected="false"
-							>
-								Communication
-								{{ commTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-contri-tab"
-								data-toggle="pill"
-								href="#pills-contri"
-								role="tab"
-								aria-controls="pills-contri"
-								aria-selected="false"
-							>
-								Contribution
-								{{ connTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-banks-tab"
-								data-toggle="pill"
-								href="#pills-banks"
-								role="tab"
-								aria-controls="pills-banks"
-								aria-selected="false"
-								>Banks
-								{{
-									item?.setup_company_banks.length === 0 &&
-										"&nbsp; &nbsp;"
-								}}
-								<i
-									v-if="
-										item?.setup_company_banks.length === 0
-									"
-									v-html="alertTriangle"
-									class="text-warning icon-error"
-								></i
-							></a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-signatories-tab"
-								data-toggle="pill"
-								href="#pills-signatories"
-								role="tab"
-								aria-controls="pills-signatories"
-								aria-selected="false"
-								>Signatories
-								{{
+					<BaseNavigationTab
+						:properties="[
+							{
+								id: 'main',
+								label: 'Main',
+								error: mainTabHasError,
+								active: true,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'comm',
+								label: 'Communication',
+								error: commTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'contri',
+								label: 'Contribution',
+								error: connTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'banks',
+								label: 'Banks',
+								error: item?.setup_company_banks.length === 0,
+								active: false,
+								disabled: false,
+								tooltip: null,
+								errorType: 'warning',
+							},
+							{
+								id: 'signatories',
+								label: 'Signatories',
+								error:
 									item?.setup_company_signatories.length ===
-										0 && "&nbsp; &nbsp;"
-								}}
-								<i
-									v-if="
-										item?.setup_company_signatories
-											.length === 0
-									"
-									v-html="alertTriangle"
-									class="text-warning icon-error"
-								></i
-							></a>
-						</li>
-					</ul>
+									0,
+								active: false,
+								disabled: false,
+								tooltip: null,
+								errorType: 'warning',
+							},
+						]"
+					/>
 					<form
 						@submit.prevent="handleSubmit"
 						id="form_update_company"
@@ -175,63 +107,40 @@
 								aria-labelledby="pills-main-tab"
 							>
 								<div class="row pr-3 pb-3">
-									<div class="col-md-4">
-										<h5 class="h5">Company Image</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Company Logo"
+										para="Add your company's logo to
+											personalize your company profile.
+											This logo can also be used in
+											payslips and generation of reports."
+									/>
 
 									<div class="col-md-2">
-										<img
-											v-if="item.image_path && !imageUrl"
-											:src="
-												'http://127.0.0.1:8000/storage/' +
-													item.image_path
-											"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else-if="imageUrl"
-											:src="imageUrl"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else
-											src="../../assets/no-image.png"
-											alt=""
-											style="width: 90%"
+										<BaseImageField
+											:image_path="imageUrl"
+											:database="item?.image_path"
 										/>
 									</div>
 
 									<div class="form-group col-md-6">
-										<label for="">Upload Image</label>
-										<input
-											ref="input_image"
-											type="file"
-											class="d-block mt-2"
-											@change="onFileSelected"
-										/>
-										<small
-											>The maximum file size allowed is
-											200KB.</small
-										><br /><br />
-										<small
-											v-if="
-												error && error.errors.image_path
+										<BaseInputFileField
+											id="input_image_path"
+											label="Upload Company Logo"
+											@fileSelected="
+												onFileSelected($event)
 											"
-											class="form-text text-danger"
-										>
-											{{ error.errors.image_path[0] }}
-										</small>
+											:error="error"
+											:errorField="
+												error?.errors?.image_path ||
+													null
+											"
+											:required="false"
+										/>
+										<br />
 										<button
 											v-if="item.image_path"
 											class="btn btn-sm btn-danger"
-											@click="deleteImage(item.id)"
+											@click="handleDeleteImage(item.id)"
 											type="button"
 										>
 											Delete Image
@@ -242,79 +151,47 @@
 								<hr />
 
 								<div class="row pb-3">
-									<div class="col-4">
-										<h5 class="h5">Main Information</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Main Information"
+										para="Input basic information of your
+											company to provide more data about
+											your organization."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-4">
-											<label>
-												Code
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.code &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_code"
-												placeholder="Ex. ABC"
+												label="Code"
 												v-model="item.code"
-											/>
-											<small
-												v-if="
-													error && error.errors.code
+												:error="error"
+												:errorField="
+													error?.errors?.code || null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.code[0] }}
-											</small>
+												placeholder="Ex. ABC"
+												:required="true"
+											/>
 										</div>
+
 										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-8">
-											<label for=""
-												>Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.name &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_name"
-												placeholder="Ex. ABC Company"
+												label="Name"
 												v-model="item.name"
-											/>
-											<small
-												v-if="
-													error && error.errors.name
+												:error="error"
+												:errorField="
+													error?.errors?.name || null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.name[0] }}
-											</small>
+												placeholder="Ex. ABC Company"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-4">
 											<BaseInputField
 												id="input_vat_reg"
+												type="number"
 												label="Vat Registration"
 												v-model="item.vat_reg"
 												:error="error"
@@ -322,167 +199,95 @@
 													error?.errors?.vat_reg ||
 														null
 												"
-												placeholder="Ex. 123-456-789-000"
+												placeholder="Ex. 123456789000"
 												:required="true"
 											/>
 										</div>
 
 										<div class="form-group col-8">
-											<label
-												>Classification
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.classification &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_classification"
-												placeholder="Ex. Manufacturing Industry"
+												type="text"
+												label="Classification"
 												v-model="item.classification"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.classification
+												:error="error"
+												:errorField="
+													error?.errors
+														?.classification || null
 												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.classification[0]
-												}}
-											</small>
+												placeholder="Ex. Manufacturing Industry"
+												:required="true"
+											/>
 										</div>
 
 										<div class="col-md-12">
-											<label for=""
-												>Address
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<textarea
-												name=""
-												:class="[
-													error &&
-														error.errors.address &&
-														'is-invalid',
-												]"
+											<BaseTextAreaField
 												id="input_address"
-												class="form-control"
+												label="Address"
 												v-model="item.address"
-											></textarea>
-											<small
-												v-if="
-													error &&
-														error.errors.address
+												:error="error"
+												:errorField="
+													error?.errors?.address ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.address[0] }}
-											</small>
+												placeholder="Ex. "
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr />
 								<div class="row pb-3">
-									<div class="col-4">
-										<h5 class="h5">Company Settings</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Company Settings"
+										para="Choose settings to be applied across
+											all modules in your Company's
+											payroll system."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-4">
-											<label>
-												Decimal Place
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="number"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.decimal_place &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_decimal_place"
-												aria-describedby="emailHelp"
-												placeholder="Ex. 2"
+												type="number"
+												label="Decimal Place"
 												v-model="item.decimal_place"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.decimal_place || null
+												"
+												placeholder="Ex. 2"
+												:required="true"
 											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.decimal_place
-												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.decimal_place[0]
-												}}
-											</small>
 										</div>
+
 										<div class="form-group col-4">
-											<label for=""
-												>Currency
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<select
-												name=""
+											<BaseSelectField
 												id="input_currency"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.currency &&
-														'is-invalid',
-												]"
+												label="Currency"
 												v-model="item.currency"
-											>
-												<option value=""
-													>Choose ...</option
-												>
-												<option value="php">PHP</option>
-												<option value="usd">USD</option>
-											</select>
-											<small
-												v-if="
-													error &&
-														error.errors.currency
+												:error="error"
+												:errorField="
+													error?.errors?.currency ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.currency[0] }}
-											</small>
+												:options="[
+													{
+														value: 'php',
+														label: 'PHP',
+													},
+													{
+														value: 'usd',
+														label: 'USD',
+													},
+												]"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 							</div>
-
 							<div
 								class="tab-pane fade"
 								id="pills-comm"
@@ -490,192 +295,120 @@
 								aria-labelledby="pills-comm-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Contact Info</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Contact Info"
+										para="Provide your company's updated
+											contact information."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Tel No.
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.tel_no &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_tel_no"
-												placeholder="Ex. 02-8123-4567 "
+												type="text"
+												label="Telephone Number"
 												v-model="item.tel_no"
-											/>
-											<small
-												v-if="
-													error && error.errors.tel_no
+												:error="error"
+												:errorField="
+													error?.errors?.tel_no ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no[0] }}
-											</small>
+												placeholder="Ex. 02-8123-4567"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-6">
-											<label>Tel No Alt.</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.tel_no_alt &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_tel_no_alt"
-												placeholder="Ex. 02-8123-4567 "
+												type="text"
+												label="Alternative Telephone Number"
 												v-model="item.tel_no_alt"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.tel_no_alt
+												:error="error"
+												:errorField="
+													error?.errors?.tel_no_alt ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no_alt[0] }}
-											</small>
+												placeholder="Ex. 02-8123-4567"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Email
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="email"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.email &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_email"
-												placeholder="Ex. johndoe@example.com "
+												type="email"
+												label="Email"
 												v-model="item.email"
-											/>
-											<small
-												v-if="
-													error && error.errors.email
+												:error="error"
+												:errorField="
+													error?.errors?.email || null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.email[0] }}
-											</small>
+												placeholder="Ex. abccompany@example.com"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr />
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Social Media</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Social Media"
+										para="Include social media handles of the
+											organization so your employees can
+											reach you."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label>Website</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.website &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_website"
-												placeholder="Ex. http://www.company.com (include http:// or https://)"
-												v-model="item.website"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.website
-												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.website[0] }}
-											</small>
-										</div>
-										<!-- <div class="error">{{ error }}</div> -->
-										<div class="form-group col-6">
-											<label for="">Facebook</label>
-											<input
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.facebook &&
-														'is-invalid',
-												]"
-												id="input_facebook"
-												placeholder="Ex. http://facebook.com/company (include http:// or https://)"
-												v-model="item.facebook"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.facebook
+												label="Website"
+												v-model="item.website"
+												:error="error"
+												:errorField="
+													error?.errors?.website ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.facebook[0] }}
-											</small>
+												placeholder="Ex. http://www.company.com (include http:// or https://)"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label>Twitter</label>
-											<input
+											<BaseInputField
+												id="input_facebook"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.twitter &&
-														'is-invalid',
-												]"
-												id="input_twitter"
-												placeholder="Ex. http://twitter.com/company (include http:// or https://)"
-												v-model="item.twitter"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.twitter
+												label="Facebook"
+												v-model="item.facebook"
+												:error="error"
+												:errorField="
+													error?.errors?.facebook ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.twitter[0] }}
-											</small>
+												placeholder="Ex. http://facebook.com/company (include http:// or https://)"
+												:required="false"
+											/>
+										</div>
+
+										<div class="form-group col-6">
+											<BaseInputField
+												id="input_twitter"
+												type="text"
+												label="Twitter"
+												v-model="item.twitter"
+												:error="error"
+												:errorField="
+													error?.errors?.twitter ||
+														null
+												"
+												placeholder="Ex. http://twitter.com/company (include http:// or https://)"
+												:required="false"
+											/>
 										</div>
 									</div>
 								</div>
 							</div>
-
 							<div
 								class="tab-pane fade"
 								id="pills-contri"
@@ -683,252 +416,155 @@
 								aria-labelledby="pills-contri-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">SSS Info</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="SSS Info"
+										para="Provide your company's Social
+											Security System (SSS) details. This
+											information will be used for your
+											monthly contribution as an employer,
+											as well as for generating reports."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>SSS Number
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.sss_no &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_sss_no"
-												placeholder="Ex. 0428881234"
+												type="text"
+												label="SSS Number"
 												v-model="item.sss_no"
-											/>
-											<small
-												v-if="
-													error && error.errors.sss_no
+												:error="error"
+												:errorField="
+													error?.errors?.sss_no ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.sss_no[0] }}
-											</small>
+												placeholder="Ex. 04-2888123-4"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label>SSS Doc No </label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_doc_no &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_doc_no"
-												placeholder="Ex. PRN00001235467"
+												type="text"
+												label="SSS Doc Number"
 												v-model="item.sss_doc_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.sss_doc_no
+												:error="error"
+												:errorField="
+													error?.errors?.sss_doc_no ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.sss_doc_no[0] }}
-											</small>
+												placeholder="Ex. PRN00001235467"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>SSS Employer Location Code
-											</label>
-											<input
+											<BaseInputField
+												id="input_sss_emp_loc_code"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.sss_emp_location_code &&
-														'is-invalid',
-												]"
-												id="input_location_code"
-												placeholder="Ex. 000"
+												label="SSS Employer Location Code"
 												v-model="
 													item.sss_emp_location_code
 												"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.sss_emp_location_code
+												:error="error"
+												:errorField="
+													error?.errors
+														?.sss_emp_location_code ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.sss_emp_location_code[0]
-												}}
-											</small>
+												placeholder="Ex. 000"
+												:required="false"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr class="pb-3" />
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Philhealth Info</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="PhilHealth Info"
+										para="Provide your company's PhilHealth
+											details. This information will be
+											used for your monthly contribution
+											as an employer, as well as for
+											generating reports."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Philhealth Number
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.phic_no &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_phic_no"
-												placeholder="Ex. 00-000000000-0"
+												type="text"
+												label="PhilHealth Number"
 												v-model="item.phic_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.phic_no
+												:error="error"
+												:errorField="
+													error?.errors?.phic_no ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.phic_no[0] }}
-											</small>
+												placeholder="Ex. 00-000000000-0"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label>Philhealth Signatory </label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_signatory &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_phic_signatory"
-												placeholder="Ex. Juan Dela Cruz"
+												type="text"
+												label="PhilHealth Signatory"
 												v-model="item.phic_signatory"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_signatory
+												:error="error"
+												:errorField="
+													error?.errors
+														?.phic_signatory || null
 												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.phic_signatory[0]
-												}}
-											</small>
+												placeholder="Ex. Juan Dela Cruz"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label>Philhealth Position </label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.phic_position &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_phic_position"
-												placeholder="Ex. General Manager"
+												type="text"
+												label="PhilHealth Position"
 												v-model="item.phic_position"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.phic_position
+												:error="error"
+												:errorField="
+													error?.errors
+														?.phic_position || null
 												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.phic_position[0]
-												}}
-											</small>
+												placeholder="Ex. General Manager"
+												:required="false"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr class="pb-3" />
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Pag-ibig Info</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Pag-IBIG Info"
+										para="Provide your company's Pag-IBIG Fund
+											details. This information will be
+											used for your monthly contribution
+											as an employer, as well as for
+											generating reports."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Pag-ibig Number
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.hdmf_no &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_hdmf_no"
-												placeholder="Ex. 0000-0000-0000"
+												type="text"
+												label="Pag-IBIG Number"
 												v-model="item.hdmf_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.hdmf_no
+												:error="error"
+												:errorField="
+													error?.errors?.hdmf_no ||
+														null
 												"
-												class="form-text text-danger"
-											>
-												{{ error.errors.hdmf_no[0] }}
-											</small>
+												placeholder="Ex. 0000-0000-0000"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
@@ -936,87 +572,173 @@
 								<hr class="pb-3" />
 
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">
-											Other Conributon Details
-										</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Other Contribution Details"
+										para="Input additional contribution
+											details as an employer. Any
+											information added here will be used
+											for your monthly dues as an
+											employer, as well as for generating
+											reports."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Tax Branch Code
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.tax_branch_code &&
-														'is-invalid',
-												]"
+											<BaseInputField
 												id="input_tax_branch_code"
-												placeholder="Ex. RD00"
-												v-model="item.tax_branch_code"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.tax_branch_code
-												"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.tax_branch_code[0]
-												}}
-											</small>
-										</div>
-
-										<div class="form-group col-6">
-											<label
-												>Alphalist Number
-												<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.alphalist_no &&
-														'is-invalid',
-												]"
-												id="input_alphalist_no"
-												placeholder="Ex. 0000"
-												v-model="item.alphalist_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.alphalist_no
+												label="Tax Branch Code"
+												v-model="item.tax_branch_code"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.tax_branch_code ||
+														null
 												"
-												class="form-text text-danger"
+												placeholder="Ex. RD00"
+												:required="true"
+											/>
+										</div>
+										<div class="form-group col-6">
+											<BaseInputField
+												id="input_alphalist_no"
+												type="text"
+												label="Alphalist Number"
+												v-model="item.alphalist_no"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.alphalist_no || null
+												"
+												placeholder="Ex. 0000"
+												:required="true"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div
+								class="tab-pane fade"
+								id="pills-signatories"
+								role="tabpanel"
+								aria-labelledby="pills-signatories-tab"
+							>
+								<div class="row">
+									<div
+										class="col-12 d-flex justify-content-between mb-3 align-items-center"
+									>
+										<h4 class="tab-pane-title">
+											Signatory List
+										</h4>
+										<button
+											type="button"
+											class="btn btn-custom-primary btn-sm"
+											data-toggle="modal"
+											data-target="#create-signatory-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="
+												showSignatoryModal('create')
+											"
+										>
+											Add Signatory
+										</button>
+									</div>
+
+									<div class="col-md-12">
+										<div
+											class="list "
+											v-if="
+												item.setup_company_signatories
+													.length
+											"
+										>
+											<div
+												class="list-item signatory"
+												v-for="signatory in item.setup_company_signatories"
+												:key="signatory.id"
 											>
-												{{
-													error.errors.alphalist_no[0]
-												}}
-											</small>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>CODE</label
+													>
+													<h4 class="list-value">
+														{{ signatory.code }}
+													</h4>
+												</div>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>PREPARED BY:</label
+													>
+													<h4 class="list-value">
+														{{
+															signatory.prepared_by
+														}}
+													</h4>
+												</div>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>POSITION</label
+													>
+													<h4 class="list-value">
+														{{
+															signatory.p_position
+														}}
+													</h4>
+												</div>
+
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>STATUS</label
+													>
+													<h4 class="list-value">
+														<span
+															class="custom-badge custom-badge-success"
+															v-if="
+																signatory.active ==
+																	1
+															"
+															>Active</span
+														>
+														<span
+															class="custom-badge custom-badge-danger"
+															v-else
+															>Inactive</span
+														>
+													</h4>
+												</div>
+												<div class="list-actions">
+													<button
+														type="button"
+														class="btn btn-sm btn-light"
+														data-toggle="modal"
+														data-target="#update-signatory-modal"
+														data-backdrop="static"
+														data-keyboard="false"
+														@click="
+															showSignatoryModal(
+																'update',
+																signatory.id
+															)
+														"
+													>
+														<i
+															class="far fa-edit"
+														></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div v-else>
+											No Signatory available!
 										</div>
 									</div>
 								</div>
@@ -1118,134 +840,6 @@
 									</div>
 								</div>
 							</div>
-
-							<div
-								class="tab-pane fade"
-								id="pills-signatories"
-								role="tabpanel"
-								aria-labelledby="pills-signatories-tab"
-							>
-								<div class="row">
-									<div
-										class="col-12 d-flex justify-content-between mb-3 align-items-center"
-									>
-										<h4 class="tab-pane-title">
-											Signatory List
-										</h4>
-										<button
-											type="button"
-											class="btn btn-custom-primary btn-sm"
-											data-toggle="modal"
-											data-target="#create-signatory-modal"
-											data-backdrop="static"
-											data-keyboard="false"
-											@click="
-												showSignatoryModal('create')
-											"
-										>
-											Add Signatory
-										</button>
-									</div>
-
-									<div class="col-md-12">
-										<div
-											class="list "
-											v-if="
-												item.setup_company_signatories
-													.length
-											"
-										>
-											<div
-												class="list-item signatory"
-												v-for="signatory in item.setup_company_signatories"
-												:key="signatory.id"
-											>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>CODE</label
-													>
-													<h4 class="list-value">
-														{{ signatory.code }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>PREPARED BY:</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.prepared_by
-														}}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>POSITION</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.p_position
-														}}
-													</h4>
-												</div>
-
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>STATUS</label
-													>
-													<h4 class="list-value">
-														<span
-															class="custom-badge custom-badge-success"
-															v-if="
-																signatory.active ==
-																	1
-															"
-															>Active</span
-														>
-														<span
-															class="custom-badge custom-badge-danger"
-															v-else
-															>Inactive</span
-														>
-														<!-- {{ signatory.active }} -->
-													</h4>
-												</div>
-												<div class="list-actions">
-													<button
-														type="button"
-														class="btn btn-sm btn-light"
-														data-toggle="modal"
-														data-target="#update-signatory-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showSignatoryModal(
-																'update',
-																signatory.id
-															)
-														"
-													>
-														<i
-															class="far fa-edit"
-														></i>
-													</button>
-												</div>
-											</div>
-										</div>
-										<div v-else>
-											No Signatory available!
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 						<hr />
 						<div class="row col-12">
@@ -1281,11 +875,19 @@ import { useRoute } from "vue-router";
 import getItem from "@/composables/getItem";
 import useAlert from "@/composables/useAlert";
 import useData from "@/composables/useData";
+import useImage from "@/composables/useImage";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import BaseInputField from "@/components/BaseInputField";
+import BaseSelectField from "@/components/BaseSelectField";
+import BaseTextAreaField from "@/components/BaseTextAreaField";
+import BaseInputFileField from "@/components/BaseInputFileField";
+import BaseImageField from "@/components/BaseImageField";
+import BaseRowHeading from "@/components/BaseRowHeading";
+import BaseNavigationTab from "@/components/BaseNavigationTab";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
@@ -1293,7 +895,6 @@ import CreateSignatory from "./CreateSignatory";
 import EditSignatory from "./EditSignatory";
 
 import feather from "feather-icons";
-import axios from "@/axios/axios-instance";
 
 export default {
 	name: "UpdateCompany",
@@ -1306,13 +907,15 @@ export default {
 		EditSignatory,
 		Badge,
 		BaseInputField,
+		BaseSelectField,
+		BaseTextAreaField,
+		BaseInputFileField,
+		BaseImageField,
+		BaseRowHeading,
+		ThePageHeader,
+		BaseNavigationTab,
 	},
 	computed: {
-		chevronRight: function() {
-			return feather.icons["chevron-right"].toSvg({
-				width: 18,
-			});
-		},
 		alertTriangle: function() {
 			return feather.icons["alert-circle"].toSvg({
 				width: 18,
@@ -1327,10 +930,13 @@ export default {
 		);
 
 		const { response, error, create, loading, unknownError } = useData();
-
+		const {
+			image: imageUrl,
+			selectedFile,
+			onFileSelected,
+			deleteImage,
+		} = useImage();
 		const { displayAlert, alert } = useAlert();
-
-		const input_image = ref(null);
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
@@ -1353,9 +959,6 @@ export default {
 				);
 			}
 		});
-
-		const selectedFile = ref(null);
-		const imageUrl = ref(null);
 
 		// methods/functions
 		const handleSubmit = async () => {
@@ -1404,7 +1007,6 @@ export default {
 					item.value.image_path = res.image_path;
 					selectedFile.value = null;
 					imageUrl.value = null;
-					input_image.value.value = null;
 				}
 
 				displayAlert("info", "Company Updated");
@@ -1509,18 +1111,16 @@ export default {
 			);
 		});
 
-		const onFileSelected = (e) => {
-			selectedFile.value = e.target.files[0];
-			imageUrl.value = URL.createObjectURL(selectedFile.value);
-		};
-
-		const deleteImage = async (id) => {
-			if (confirm("Are you sure you want to delete this image?")) {
-				const res = axios.delete("setupcompany/deleteImage/" + id);
-				item.value.image_path = null;
+		const handleDeleteImage = async (id) => {
+			if (confirm("Company logo will be remove. Are you sure?")) {
+				const res = await deleteImage("setupcompany/deleteImage/" + id);
+				if (res.status === 204) {
+					item.value.image_path = null;
+					displayAlert("success", "Image Deleted");
+				} else {
+					displayAlert("error", "Error Deleting Image");
+				}
 			}
-
-			// console.log(id);
 		};
 
 		return {
@@ -1534,7 +1134,7 @@ export default {
 			imageUrl,
 			onFileSelected,
 			deleteImage,
-			input_image,
+			handleDeleteImage,
 
 			handleCloseModal,
 

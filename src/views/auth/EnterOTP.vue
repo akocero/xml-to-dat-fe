@@ -3,7 +3,7 @@
 		<h3 class="h3">Enter OTP</h3>
 		<hr />
 		<p class="">Please enter your OTP for verification.</p>
-		<form action="" class="pt-3">
+		<form action="" class="pt-3" @submit.prevent="handleSubmit">
 			<div class="form-group">
 				<div class="d-flex justify-content-between align-items-center">
 					<label for="">Enter OTP</label>
@@ -38,13 +38,19 @@
 <script>
 export default {
 	name: "Enter OTP",
-	setup(context, { emit }) {
+	emits: ["validatedOTP", "cancelForgotPassword"],
+	setup(props, { emit }) {
 		const resendOTP = () => {
 			console.log("canceled");
 			emit("cancelForgotPassword");
 		};
 
-		return { resendOTP };
+		const handleSubmit = () => {
+			emit("validatedOTP");
+			console.log("OTP Submitted");
+		};
+
+		return { resendOTP, handleSubmit };
 	},
 };
 </script>

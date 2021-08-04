@@ -26,7 +26,7 @@
 export default {
 	name: "BaseInputField",
 	props: {
-		modelValue: String,
+		modelValue: [String, Number],
 		id: String,
 		label: String,
 		error: Object,

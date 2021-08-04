@@ -1,18 +1,12 @@
 <template>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.name }} Info.
-					</h5>
-					<router-link class="btn btn-light" :to="{ name: 'company' }"
-						>Cancel <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				v-if="item"
+				:heading="item.name"
+				routeName="company"
+				mode="view"
+			/>
 
 			<div class="row">
 				<div class="col-12">
@@ -794,6 +788,8 @@
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import getItem from "@/composables/getItem";
+
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 import Spinner from "@/components/Spinner.vue";
 
 import feather from "feather-icons";
@@ -802,6 +798,7 @@ export default {
 	name: "UpdateCompany",
 	components: {
 		Spinner,
+		ThePageHeader,
 	},
 	computed: {
 		chevronRight: function() {
