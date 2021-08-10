@@ -601,7 +601,7 @@ import useAlert from "@/composables/useAlert";
 import useImage from "@/composables/useImage";
 
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 import feather from "feather-icons";
 import $ from "jquery";
@@ -749,6 +749,14 @@ export default {
 				(error.value && error.value.errors.tax_branch_code) ||
 				(error.value && error.value.errors.alphalist_no)
 			);
+		});
+
+		onBeforeRouteLeave((to, from) => {
+			const answer = window.confirm(
+				"Do you really want to leave? you have unsaved changes!"
+			);
+			// cancel the navigation and stay on the same page
+			if (!answer) return false;
 		});
 
 		return {

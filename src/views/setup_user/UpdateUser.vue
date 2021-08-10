@@ -119,7 +119,7 @@
 									v-model="companiesArray"
 								/>
 								<h6 class="h6 text-bold pb-0 mb-0">
-									{{ company.code }} - {{ company.name }}
+									{{ company.name }}
 								</h6>
 							</div>
 						</div>
@@ -168,7 +168,7 @@ import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 import useFetch from "@/composables/useFetch";
 
-import { useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { onMounted, computed, ref } from "vue";
 import feather from "feather-icons";
 
@@ -205,11 +205,6 @@ export default {
 
 		const { alert, displayAlert } = useAlert();
 		const { response, error, update, loading, unknownError } = useData();
-
-		// const error = ref(null);
-		// const unknownError = ref(null);
-		// const response = ref(null);
-		// const loading = ref(false);
 
 		fetch("setupcompany?page=1");
 
@@ -253,7 +248,7 @@ export default {
 		const handleSubmit = async () => {
 			const data = {
 				full_name: item.value.full_name,
-				login_id: item.value.login_id,
+				login_id: item.value.login_id.toLowerCase(),
 				login_type: item.value.login_type,
 				employee_id: item.value.employee_id,
 				active: 1,
@@ -263,13 +258,20 @@ export default {
 
 			await update(`payrolluser/${route.params.id}`, data);
 			if (!error.value) {
-				// router.push({ name: "user", params: { userAdded: true } });
 				displayAlert("info", "User Updated");
 			} else {
 				displayAlert("error", "Invalid Inputs");
 				// console.log("error: ", error.value);
 			}
 		};
+
+		onBeforeRouteLeave((to, from) => {
+			const answer = window.confirm(
+				"Do you really want to leave? you have unsaved changes!"
+			);
+			// cancel the navigation and stay on the same page
+			if (!answer) return false;
+		});
 
 		return {
 			handleSubmit,

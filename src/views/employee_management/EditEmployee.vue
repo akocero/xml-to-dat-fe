@@ -999,7 +999,7 @@ import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
-import { useRoute, useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
@@ -1173,6 +1173,14 @@ export default {
 				displayAlert("info", "Employee need atleast 1 relative");
 			}
 		};
+
+		onBeforeRouteLeave((to, from) => {
+			const answer = window.confirm(
+				"Do you really want to leave? you have unsaved changes!"
+			);
+			// cancel the navigation and stay on the same page
+			if (!answer) return false;
+		});
 
 		const handleSubmit = async () => {
 			const form_data = new FormData();

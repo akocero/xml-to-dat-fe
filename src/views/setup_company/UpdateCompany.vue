@@ -870,7 +870,7 @@
 <script>
 // import axios from 'axios';
 import { onUnmounted, computed, ref, onBeforeMount } from "vue";
-import { useRoute } from "vue-router";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
 
 import getItem from "@/composables/getItem";
 import useAlert from "@/composables/useAlert";
@@ -1122,6 +1122,14 @@ export default {
 				}
 			}
 		};
+
+		onBeforeRouteLeave((to, from) => {
+			const answer = window.confirm(
+				"Do you really want to leave? you have unsaved changes!"
+			);
+			// cancel the navigation and stay on the same page
+			if (!answer) return false;
+		});
 
 		return {
 			alert,

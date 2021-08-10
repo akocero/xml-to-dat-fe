@@ -124,7 +124,7 @@
 									v-model="companiesArray"
 								/>
 								<h6 class="h6 text-bold pb-0 mb-0">
-									{{ company.code }} - {{ company.name }}
+									{{ company.name }}
 								</h6>
 							</div>
 						</div>
@@ -162,7 +162,7 @@ import useFetch from "@/composables/useFetch";
 import feather from "feather-icons";
 
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
@@ -217,11 +217,11 @@ export default {
 		const login_id = ref("");
 		const login_type = ref("");
 		const employee_id = ref("");
-
+		const userAdded = ref(false);
 		const handleSubmit = async () => {
 			const data = {
 				full_name: full_name.value,
-				login_id: login_id.value,
+				login_id: login_id.value.toLowerCase(),
 				login_type: login_type.value,
 				employee_id: employee_id.value,
 				active: 1,
@@ -235,13 +235,27 @@ export default {
 
 			if (!error.value) {
 				console.log("user created");
-				router.push({ name: "user", params: { userAdded: true } });
+				userAdded.value = true;
+				router.push({
+					name: "user",
+					params: { userAdded: userAdded.value },
+				});
 				// displayAlert("success", "User Added");
 			} else {
 				displayAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
+
+		onBeforeRouteLeave((to, from) => {
+			if (!userAdded.value) {
+				const answer = window.confirm(
+					"Do you really want to leave? you have unsaved changes!"
+				);
+				// cancel the navigation and stay on the same page
+				if (!answer) return false;
+			}
+		});
 
 		return {
 			handleSubmit,

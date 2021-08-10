@@ -8,13 +8,13 @@
 					class="pec-logo"
 				/>
 				<p class="mssc">By Mustard Seed Systems Corporation</p>
-				<h4 class="h5 pb-2">Lorem, Ipsum</h4>
-				<p>
+				<h4 class="h6 pb-2">Version 1.0.1</h4>
+				<!-- <p>
 					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
 					Modi nostrum, exercitationem necessitatibus veniam ratione
 					deleniti expedita ipsum ducimus.
-				</p>
-				<h5 class="h6 mt-auto">Version 1.0.1</h5>
+				</p> -->
+				<!-- <h5 class="h6 mt-auto">Version 1.0.1</h5> -->
 			</div>
 		</div>
 		<div class="col-4 d-flex justify-content-center align-items-center">
@@ -176,7 +176,7 @@ export default {
 			error.value = null;
 
 			const data = {
-				login_id: login_id.value,
+				login_id: login_id.value.toLowerCase(),
 				password: password.value,
 			};
 

@@ -931,7 +931,7 @@ import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 
@@ -1243,6 +1243,14 @@ export default {
 				selectedFileSignature.value
 			);
 		};
+
+		onBeforeRouteLeave((to, from) => {
+			const answer = window.confirm(
+				"Do you really want to leave? you have unsaved changes!"
+			);
+			// cancel the navigation and stay on the same page
+			if (!answer) return false;
+		});
 
 		return {
 			employee_id,

@@ -4,16 +4,19 @@
 			class="col-md-12 d-flex justify-content-between align-items-center"
 		>
 			<h5 class="h4 mb-0 text-primary">{{ heading }}</h5>
-			<a role="button" class="btn btn-primary" @click="handleClick">
+			<router-link
+				role="button"
+				class="btn btn-primary"
+				:to="{ name: routeName }"
+			>
 				Cancel <i v-html="chevronRight"></i>
-			</a>
+			</router-link>
 		</div>
 	</div>
 </template>
 
 <script>
 import feather from "feather-icons";
-import { useRouter } from "vue-router";
 export default {
 	name: "ThePageHeader",
 	props: {
@@ -30,25 +33,6 @@ export default {
 				width: 18,
 			});
 		},
-	},
-	emits: [""],
-	setup(props) {
-		const router = useRouter();
-		const handleClick = () => {
-			if (props.mode !== "view") {
-				if (
-					confirm(
-						`Leave ${props.mode} mode? All unsaved changes will be lost.`
-					)
-				) {
-					router.push({ name: props.routeName });
-				}
-			} else {
-				router.push({ name: props.routeName });
-			}
-		};
-
-		return { handleClick };
 	},
 };
 </script>
