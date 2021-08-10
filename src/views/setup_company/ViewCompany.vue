@@ -716,10 +716,20 @@
 											"
 										>
 											<div
-												class="list-item"
+												class="list-item signatory"
 												v-for="signatory in item.setup_company_signatories"
 												:key="signatory.id"
 											>
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>CODE</label
+													>
+													<h4 class="list-value">
+														{{ signatory.code }}
+													</h4>
+												</div>
 												<div class="list-col">
 													<label
 														for=""
@@ -742,6 +752,29 @@
 														{{
 															signatory.p_position
 														}}
+													</h4>
+												</div>
+
+												<div class="list-col">
+													<label
+														for=""
+														class="list-label"
+														>STATUS</label
+													>
+													<h4 class="list-value">
+														<span
+															class="custom-badge custom-badge-success"
+															v-if="
+																signatory.active ==
+																	1
+															"
+															>Active</span
+														>
+														<span
+															class="custom-badge custom-badge-danger"
+															v-else
+															>Inactive</span
+														>
 													</h4>
 												</div>
 												<!-- <div class="list-actions">

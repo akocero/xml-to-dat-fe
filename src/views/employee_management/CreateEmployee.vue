@@ -983,6 +983,8 @@ export default {
 		const selectedFileSignature = ref(null);
 		const signatory_image_path = ref(null);
 
+		const employeeAdded = ref(false);
+
 		const addresses = ref([
 			{
 				id: uuidv4(),
@@ -1195,6 +1197,7 @@ export default {
 
 			if (!error.value) {
 				// displayAlert("success", "Employee Added");
+				employeeAdded.value = true;
 				router.push({
 					name: "view-employee",
 					params: { id: response.value.id },
@@ -1245,11 +1248,13 @@ export default {
 		};
 
 		onBeforeRouteLeave((to, from) => {
-			const answer = window.confirm(
-				"Do you really want to leave? you have unsaved changes!"
-			);
-			// cancel the navigation and stay on the same page
-			if (!answer) return false;
+			if (!employeeAdded.value) {
+				const answer = window.confirm(
+					"Do you really want to leave? you have unsaved changes!"
+				);
+				// cancel the navigation and stay on the same page
+				if (!answer) return false;
+			}
 		});
 
 		return {
