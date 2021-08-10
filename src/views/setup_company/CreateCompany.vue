@@ -646,6 +646,8 @@ export default {
 		const { alert, displayAlert } = useAlert();
 		const { image: image_path, selectedFile, onFileSelected } = useImage();
 
+		const companyAdded = ref(false);
+
 		const name = ref("");
 		const code = ref("");
 		const vat_reg = ref("");
@@ -716,6 +718,7 @@ export default {
 			const res = await create("setupcompany", form_data);
 
 			if (!error.value) {
+				companyAdded.value = true;
 				router.push({
 					name: "update-company",
 					params: { id: response.value.id },
@@ -752,11 +755,13 @@ export default {
 		});
 
 		onBeforeRouteLeave((to, from) => {
-			const answer = window.confirm(
-				"Do you really want to leave? you have unsaved changes!"
-			);
-			// cancel the navigation and stay on the same page
-			if (!answer) return false;
+			if (!companyAdded.value) {
+				const answer = window.confirm(
+					"Do you really want to leave? you have unsaved changes!"
+				);
+				// cancel the navigation and stay on the same page
+				if (!answer) return false;
+			}
 		});
 
 		return {
