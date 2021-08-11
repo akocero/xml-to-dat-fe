@@ -9,7 +9,7 @@
 				class="btn btn-primary"
 				:to="{ name: routeName }"
 			>
-				Cancel <i v-html="chevronRight"></i>
+				Back to list <i v-html="chevronRight"></i>
 			</router-link>
 		</div>
 	</div>

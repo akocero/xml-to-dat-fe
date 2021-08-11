@@ -51,7 +51,7 @@
 							id="exampleModalLabel"
 							v-if="editingDropdown && forEditData"
 						>
-							Update {{ forEditData.type }}
+							Update {{ dropdownTypeTitle }}
 						</h5>
 						<button
 							type="button"
@@ -432,7 +432,7 @@
 						:data="data.data"
 						:placeholder="{
 							value: 'Ex. Manager',
-							desc: 'Ex. Manger',
+							desc: 'Ex. Manager',
 						}"
 					/>
 				</div>
@@ -571,6 +571,7 @@ export default {
 				newDescription.value = forEditData.value.description;
 				newValue.value = forEditData.value.value;
 				dropdownType.value = eventData.type;
+				dropdownTypeTitle.value = eventData.title;
 			} else {
 				console.log(eventData.placeholder);
 				forEditData.value = null;
