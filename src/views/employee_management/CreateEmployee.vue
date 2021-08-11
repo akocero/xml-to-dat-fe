@@ -9,18 +9,11 @@
 	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0 text-primary">New Employee</h5>
-					<router-link
-						class="btn btn-primary"
-						:to="{ name: 'employee-management' }"
-						>Cancel <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				heading="New Employee"
+				routeName="employee-management"
+				mode="create"
+			/>
 
 			<div class="row">
 				<div class="col-12">
@@ -153,7 +146,7 @@
 										/>
 										<small
 											>The maximum file size allowed is
-											200KB.</small
+											1000KB/1MB.</small
 										><br /><br />
 										<small
 											v-if="
@@ -463,7 +456,12 @@
 											</small>
 										</div>
 										<div class="form-group col-3">
-											<label>Citizenship</label>
+											<label
+												>Citizenship<span
+													class="text-danger text-bold"
+													>*</span
+												></label
+											>
 											<input
 												type="text"
 												class="form-control"
@@ -931,6 +929,7 @@ import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
@@ -942,6 +941,7 @@ export default {
 		EmployeeAddressList,
 		EmployeeRelativeList,
 		EmployeeDependentList,
+		ThePageHeader,
 	},
 	computed: {
 		chevronRight: function() {
@@ -982,6 +982,8 @@ export default {
 
 		const selectedFileSignature = ref(null);
 		const signatory_image_path = ref(null);
+
+		const employeeAdded = ref(false);
 
 		const addresses = ref([
 			{
@@ -1035,7 +1037,7 @@ export default {
 
 			let err = false;
 			addresses.value.forEach((address) => {
-				if (!address.city || !address.country || !address.brgy) {
+				if (!address.city || !address.country) {
 					err = true;
 				}
 			});
@@ -1195,8 +1197,9 @@ export default {
 
 			if (!error.value) {
 				// displayAlert("success", "Employee Added");
+				employeeAdded.value = true;
 				router.push({
-					name: "view-employee",
+					name: "edit-employee",
 					params: { id: response.value.id },
 					query: { q: "employee added" },
 				});
@@ -1245,11 +1248,13 @@ export default {
 		};
 
 		onBeforeRouteLeave((to, from) => {
-			const answer = window.confirm(
-				"Do you really want to leave? you have unsaved changes!"
-			);
-			// cancel the navigation and stay on the same page
-			if (!answer) return false;
+			if (!employeeAdded.value) {
+				const answer = window.confirm(
+					"Do you really want to leave? you have unsaved changes!"
+				);
+				// cancel the navigation and stay on the same page
+				if (!answer) return false;
+			}
 		});
 
 		return {

@@ -9,26 +9,17 @@
 	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<div class="row mb-3">
-				<div
-					class="col-md-12 d-flex justify-content-between align-items-center"
-				>
-					<h5 class="h4 mb-0 text-primary" v-if="item">
-						{{ item.last_name }},
-						{{ item.first_name }}
-						{{ item.maiden_name }} {{ item.extension_name }}
-						Information
-					</h5>
-					<h5 v-else class="h4 mb-0 text-primary">
-						N/A
-					</h5>
-					<router-link
-						class="btn btn-primary"
-						:to="{ name: 'employee-management' }"
-						>Cancel <i v-html="chevronRight"></i>
-					</router-link>
-				</div>
-			</div>
+			<ThePageHeader
+				v-if="item"
+				:heading="
+					`${item.last_name},
+						${item.first_name} 
+						 ${item.maiden_name} ${item.extension_name}
+						Information`
+				"
+				routeName="employee-management"
+				mode="view"
+			/>
 
 			<div class="row">
 				<div class="col-12">
@@ -147,7 +138,7 @@
 										<label for="">Upload Image</label>
 										<small
 											>The maximum file size allowed is
-											200KB.</small
+											1000KB/1MB.</small
 										><br /><br />
 									</div>
 								</div>
@@ -720,6 +711,7 @@ import { useRoute, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
+import ThePageHeader from "@/components/layouts/ThePageHeader";
 
 export default {
 	name: "CreateCompany",
@@ -729,6 +721,7 @@ export default {
 		EmployeeAddressList,
 		EmployeeRelativeList,
 		EmployeeDependentList,
+		ThePageHeader,
 	},
 	computed: {
 		chevronRight: function() {

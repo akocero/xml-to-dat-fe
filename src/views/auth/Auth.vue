@@ -1,7 +1,7 @@
 <template>
 	<div class="row auth-container">
 		<div class="col-8 bg-navy-blue auth-right">
-			<div class="content">
+			<div class="content pt-5">
 				<img
 					src="@/assets/images/Payroll-Pro-Logo-white.png"
 					alt=""
