@@ -362,6 +362,8 @@ export default {
 
 			if (!error.value) {
 				emit("employeeClassAdded", response.value);
+			} else {
+				console.log("may error");
 			}
 		};
 

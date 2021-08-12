@@ -96,8 +96,8 @@
 					</small>
 				</div>
 				<div class="mb-4 text-right">
-					<a role="button" class="" @click="showForgotPassword = true"
-						>Forgot Password?</a
+					<router-link :to="{ name: 'password-reset' }"
+						>Forgot Password?</router-link
 					>
 				</div>
 				<div class="">
@@ -119,10 +119,6 @@
 				</div>
 			</form>
 			<SelectCompany v-if="user" :user="user?.id" />
-			<ForgotPassword
-				v-if="showForgotPassword"
-				@cancelForgotPassword="showForgotPassword = false"
-			/>
 		</div>
 	</div>
 </template>
@@ -132,8 +128,6 @@ import { ref, computed } from "vue";
 import useLogin from "@/composables/useLogin";
 import Alert from "@/components/Alert";
 import SelectCompany from "./SelectCompany";
-import ForgotPassword from "./ForgotPassword";
-import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import feather from "feather-icons";
 
@@ -143,7 +137,6 @@ export default {
 	components: {
 		Alert,
 		SelectCompany,
-		ForgotPassword,
 	},
 	computed: {
 		mailIcon: function() {
@@ -166,10 +159,8 @@ export default {
 		const login_id = ref("");
 		const password = ref("");
 		const showPassword = ref(false);
-		const router = useRouter();
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
-		const showForgotPassword = ref(false);
 		const user = computed(() => store.getters.getUser);
 
 		const handleSubmit = async () => {
@@ -220,7 +211,6 @@ export default {
 			user,
 			showPassword,
 			handleShowPassword,
-			showForgotPassword,
 		};
 	},
 };

@@ -7,6 +7,7 @@
 		type="file"
 		class="d-block mt-2"
 		:id="id"
+		accept="image/*"
 		@change="$emit('fileSelected', $event)"
 	/>
 	<small>The maximum file size allowed is 1000KB/1MB.</small>

@@ -17,6 +17,12 @@ const routes = [
     beforeEnter: noAuthRequired
   },
   {
+    path: '/auth/password-reset',
+    name: 'password-reset',
+    component: () => import('@/views/password_reset/PasswordReset'),
+    beforeEnter: noAuthRequired
+  },
+  {
     path: '/app',
     name: 'admin-lte',
     component: () => import('@/components/AdminLTE'),
