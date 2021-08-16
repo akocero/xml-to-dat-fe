@@ -21,6 +21,12 @@
 		@hideEditBank="updatingBank = false"
 	/>
 
+	<ViewBank
+		v-if="item && viewingBank"
+		:bank_id="update_bank_id"
+		@hideEditBank="viewingBank = false"
+	/>
+
 	<EditSignatory
 		v-if="item && updatingSignatory"
 		:signatory_id="update_signatory_id"
@@ -815,6 +821,24 @@
 												<div class="list-actions">
 													<button
 														type="button"
+														class="btn btn-sm btn-light mr-2"
+														data-toggle="modal"
+														data-target="#update-bank-modal"
+														data-backdrop="static"
+														data-keyboard="false"
+														@click="
+															showBankModal(
+																'view',
+																bank.id
+															)
+														"
+													>
+														<i
+															class="far fa-eye"
+														></i>
+													</button>
+													<button
+														type="button"
 														class="btn btn-sm btn-light"
 														data-toggle="modal"
 														data-target="#update-bank-modal"
@@ -891,6 +915,7 @@ import ThePageHeader from "@/components/layouts/ThePageHeader";
 
 import CreateBank from "./CreateBank";
 import EditBank from "./EditBank";
+import ViewBank from "./ViewBank";
 import CreateSignatory from "./CreateSignatory";
 import EditSignatory from "./EditSignatory";
 
@@ -904,6 +929,7 @@ export default {
 		CreateBank,
 		CreateSignatory,
 		EditBank,
+		ViewBank,
 		EditSignatory,
 		Badge,
 		BaseInputField,
@@ -940,6 +966,7 @@ export default {
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
+		const viewingBank = ref(false);
 		const creatingSignatory = ref(false);
 		const updatingSignatory = ref(false);
 
@@ -1018,10 +1045,13 @@ export default {
 		const showBankModal = (type, value = null) => {
 			if (type === "create") {
 				creatingBank.value = true;
-			} else {
+			} else if (type === "update") {
 				updatingBank.value = true;
 				update_bank_id.value = value;
 				console.log(update_bank_id.value);
+			} else {
+				viewingBank.value = true;
+				update_bank_id.value = value;
 			}
 		};
 
@@ -1150,6 +1180,7 @@ export default {
 			bankUpdated,
 			creatingBank,
 			updatingBank,
+			viewingBank,
 			showBankModal,
 
 			signatoryAdded,

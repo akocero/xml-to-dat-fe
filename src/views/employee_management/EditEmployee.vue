@@ -1049,6 +1049,7 @@ export default {
 
 			const tempAddress = {
 				id: uuidv4(),
+				type: "",
 				street: "",
 				city: "",
 				country: "",
