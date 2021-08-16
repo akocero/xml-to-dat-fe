@@ -988,6 +988,7 @@ export default {
 		const addresses = ref([
 			{
 				id: uuidv4(),
+				type: "",
 				street: "",
 				city: "",
 				country: "",
@@ -1025,6 +1026,7 @@ export default {
 			console.log(addresses.value);
 			const tempAddress = {
 				id: uuidv4(),
+				type: "",
 				street: "",
 				city: "",
 				country: "",

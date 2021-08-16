@@ -118,7 +118,7 @@
 										/>
 									</div>
 
-									<div class="form-group col-md-6">
+									<!-- <div class="form-group col-md-6">
 										<label for="">Upload Image</label>
 										<input
 											ref="input_image"
@@ -130,7 +130,7 @@
 											>The maximum file size allowed is
 											200KB.</small
 										>
-									</div>
+									</div> -->
 								</div>
 
 								<hr />

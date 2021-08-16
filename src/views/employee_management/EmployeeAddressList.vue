@@ -1,5 +1,10 @@
 <template>
 	<div class="row w-100 d-flex px-3 mt-4" v-if="addresses.length">
+		<div class="w-8">
+			<label>
+				Type
+			</label>
+		</div>
 		<div class="w-12">
 			<label>
 				Building No.
@@ -52,6 +57,12 @@
 		v-for="(address, index) in addresses"
 		:key="index"
 	>
+		<div class="w-8">
+			<select class="form-control" v-model="address.type">
+				<option value="current" selected>Current</option>
+				<option value="permanent">Permanent</option>
+			</select>
+		</div>
 		<div class="w-12">
 			<input
 				type="text"
@@ -132,6 +143,7 @@
 				v-model="address.geocode"
 			/>
 		</div>
+
 		<div>
 			<button
 				type="button"
@@ -181,12 +193,12 @@ export default {
 	max-width: 44px;
 }
 .w-8 {
-	width: 8%;
+	width: 8.1%;
 	margin-right: 8px;
 }
 
 .w-12 {
-	width: 13%;
+	width: 11%;
 	margin-right: 8px;
 }
 

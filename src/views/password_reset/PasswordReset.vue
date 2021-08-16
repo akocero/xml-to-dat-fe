@@ -86,7 +86,6 @@ export default {
 					"Failed Sending OTP please check your email"
 				);
 			}
-
 			loading.value = false;
 		};
 
