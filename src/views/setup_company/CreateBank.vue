@@ -120,10 +120,7 @@
 						</div>
 
 						<div class="form-group col-md-8">
-							<label for=""
-								>Description
-								<span class="text-danger text-bold">*</span>
-							</label>
+							<label for="">Description </label>
 							<textarea
 								name=""
 								:class="[
