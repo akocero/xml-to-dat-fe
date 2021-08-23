@@ -1,7 +1,7 @@
 <template>
 	<p>
-		You are only one step a way from your new password, recover your
-		password now.
+		You are only one step away from logging in. Create your new password
+		now.
 	</p>
 
 	<form @submit.prevent="handleSubmit">
