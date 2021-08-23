@@ -27,6 +27,7 @@
 						:error="error"
 						v-if="emailValidated && !otpValidated && !loading"
 						@sendOTP="handleSendOTP($event)"
+						@resendOTP="handleResendOTP"
 					/>
 					<NewPassword
 						:error="error"
@@ -76,21 +77,39 @@ export default {
 				login_id: event,
 			});
 			if (res && !error.value) {
-				user_email.value = res;
-				displayAlert("success", "OTP Sent - Please Check your email");
+				user_email.value = res.login_id;
+				console.log(res);
+				displayAlert("success", "OTP Sent - Please check your email.");
 				emailValidated.value = true;
 			} else {
 				console.log(error.value);
 				displayAlert(
 					"error",
-					"Failed Sending OTP please check your email"
+					"Failed sending OTP please check your email."
+				);
+			}
+			loading.value = false;
+		};
+
+		const handleResendOTP = async () => {
+			loading.value = true;
+			const res = await create("/forgot/send_validated_email", {
+				login_id: user_email.value,
+			});
+			if (res && !error.value) {
+				displayAlert("success", "OTP Sent - Please check your email.");
+			} else {
+				console.log(error.value);
+				displayAlert(
+					"error",
+					"Failed sending OTP please check your email."
 				);
 			}
 			loading.value = false;
 		};
 
 		const handleSendOTP = async (event) => {
-			if (user_email) {
+			if (user_email.value) {
 				loading.value = true;
 				const data = {
 					login_id: user_email.value,
@@ -103,7 +122,7 @@ export default {
 					otpValidated.value = true;
 					displayAlert(
 						"success",
-						"OTP Verified - Please Change your Password"
+						"OTP Verified - Please change your password."
 					);
 				} else {
 					displayAlert("error", "Invalid OTP");
@@ -123,13 +142,13 @@ export default {
 				if (res && !error.value) {
 					displayAlert(
 						"success",
-						"Password Successfully Changed - Redirecting"
+						"Password successfully changed - Redirecting"
 					);
 					setTimeout(() => {
 						router.push({ name: "auth" });
 					}, 3000);
 				} else {
-					displayAlert("error", "Failed Changing Password");
+					displayAlert("error", "Failed changing password");
 				}
 				loading.value = false;
 			}
@@ -141,6 +160,7 @@ export default {
 			handleSendEmail,
 			handleSendOTP,
 			handleSendNewPassword,
+			handleResendOTP,
 			alert,
 			loading,
 			error,

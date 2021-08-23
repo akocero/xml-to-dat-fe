@@ -34,6 +34,12 @@
 		@hideEditSignatory="updatingSignatory = false"
 	/>
 
+	<ViewSignatory
+		v-if="item && viewingSignatory"
+		:signatory_id="update_signatory_id"
+		@hideEditSignatory="viewingSignatory = false"
+	/>
+
 	<CreateSignatory
 		v-if="item && creatingSignatory"
 		:companyID="item.id"
@@ -724,6 +730,24 @@
 												<div class="list-actions">
 													<button
 														type="button"
+														class="btn btn-sm btn-light mr-2"
+														data-toggle="modal"
+														data-target="#update-signatory-modal"
+														data-backdrop="static"
+														data-keyboard="false"
+														@click="
+															showSignatoryModal(
+																'view',
+																signatory.id
+															)
+														"
+													>
+														<i
+															class="far fa-eye"
+														></i>
+													</button>
+													<button
+														type="button"
 														class="btn btn-sm btn-light"
 														data-toggle="modal"
 														data-target="#update-signatory-modal"
@@ -918,6 +942,7 @@ import EditBank from "./EditBank";
 import ViewBank from "./ViewBank";
 import CreateSignatory from "./CreateSignatory";
 import EditSignatory from "./EditSignatory";
+import ViewSignatory from "./ViewSignatory";
 
 import feather from "feather-icons";
 
@@ -940,6 +965,7 @@ export default {
 		BaseRowHeading,
 		ThePageHeader,
 		BaseNavigationTab,
+		ViewSignatory,
 	},
 	computed: {
 		alertTriangle: function() {
@@ -966,7 +992,10 @@ export default {
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
+
 		const viewingBank = ref(false);
+		const viewingSignatory = ref(false);
+
 		const creatingSignatory = ref(false);
 		const updatingSignatory = ref(false);
 
@@ -1058,10 +1087,13 @@ export default {
 		const showSignatoryModal = (type, value = null) => {
 			if (type === "create") {
 				creatingSignatory.value = true;
-			} else {
+			} else if (type === "update") {
 				updatingSignatory.value = true;
 				update_signatory_id.value = value;
 				// console.log(update_bank_id.value);
+			} else {
+				viewingSignatory.value = true;
+				update_signatory_id.value = value;
 			}
 		};
 
@@ -1187,6 +1219,7 @@ export default {
 			signatoryUpdated,
 			creatingSignatory,
 			updatingSignatory,
+			viewingSignatory,
 			showSignatoryModal,
 
 			update_bank_id,
