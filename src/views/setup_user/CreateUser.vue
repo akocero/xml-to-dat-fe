@@ -65,22 +65,10 @@
 								<BaseSelectField
 									id="select_role"
 									label="Role"
-									v-model="login_type"
+									v-model="role_id"
 									:error="error"
-									:errorField="
-										error?.errors?.login_type || null
-									"
-									:options="[
-										{
-											value: 'employee',
-											label: 'Employee',
-										},
-										{
-											value: 'admin',
-											label: 'Administrator',
-										},
-										{ value: 'manager', label: 'Manager' },
-									]"
+									:errorField="error?.errors?.role_id || null"
+									:options="convertRoleToValidArray || []"
 									:required="true"
 								/>
 							</div>
@@ -110,7 +98,7 @@
 
 						<div
 							class="multi-select text-secondary"
-							v-if="!loadingCompany && companies.data?.length"
+							v-if="!loading && companies.data?.length"
 						>
 							<div
 								v-for="company in matchCompanies"
@@ -138,12 +126,12 @@
 					<input
 						type="submit"
 						class="btn btn-custom-success"
-						v-if="!loading"
+						v-if="!saving"
 						value="Save"
 					/>
 					<button
 						class="btn btn-custom-success"
-						v-if="loading"
+						v-if="saving"
 						disabled
 					>
 						Saving ...
@@ -161,7 +149,7 @@ import useFetch from "@/composables/useFetch";
 
 import feather from "feather-icons";
 
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 
 import Alert from "@/components/Alert";
@@ -195,14 +183,38 @@ export default {
 		const {
 			data: companies,
 			error: errorCompany,
-			fetch,
-			isPending: loadingCompany,
+			fetch: fetchCompanies,
 		} = useFetch();
-		const { response, error, create, loading, unknownError } = useData();
+		const { data: roles, fetch: fetchRoles } = useFetch();
+		const {
+			response,
+			error,
+			create,
+			loading: saving,
+			unknownError,
+		} = useData();
 		const { alert, displayAlert } = useAlert();
 		const router = useRouter();
+		const loading = ref(false);
 
-		fetch("setupcompany?page=1");
+		onBeforeMount(async () => {
+			loading.value = true;
+			await fetchCompanies("setupcompany?page=1");
+			await fetchRoles("roles");
+			loading.value = false;
+			console.log("roles", roles.value);
+		});
+
+		const convertRoleToValidArray = computed(() => {
+			if (!loading.value && roles.value) {
+				return roles.value.data.map((role) => {
+					return {
+						value: role.id,
+						label: role.name,
+					};
+				});
+			}
+		});
 
 		const search = ref("");
 
@@ -215,14 +227,15 @@ export default {
 		const companiesArray = ref([]);
 		const full_name = ref("");
 		const login_id = ref("");
-		const login_type = ref("");
+		const role_id = ref("");
 		const employee_id = ref("");
 		const userAdded = ref(false);
+
 		const handleSubmit = async () => {
 			const data = {
 				full_name: full_name.value,
 				login_id: login_id.value.toLowerCase(),
-				login_type: login_type.value,
+				role_id: role_id.value,
 				employee_id: employee_id.value,
 				active: 1,
 				password: "password",
@@ -262,20 +275,22 @@ export default {
 
 			full_name,
 			login_id,
-			login_type,
+			role_id,
 			employee_id,
 
 			error,
-			loading,
+			saving,
 			response,
+			loading,
 
 			companies,
 			companiesArray,
 			matchCompanies,
-			loadingCompany,
 
 			search,
 			alert,
+
+			convertRoleToValidArray,
 		};
 	},
 };

@@ -65,22 +65,18 @@
 
 							<div class="form-group col-12">
 								<label for="">Role</label>
-								<select
-									name=""
-									id="select_role"
+								<input
+									type="text"
 									class="form-control"
 									:class="[
 										error &&
-											error.errors.login_type &&
+											error.errors.role_id &&
 											'is-invalid',
 									]"
-									v-model="item.login_type"
-								>
-									<option value="">Choose ...</option>
-									<option value="employee">Employee</option>
-									<option value="admin">Admin</option>
-									<option value="manager">Manager</option>
-								</select>
+									id="input_role_id"
+									placeholder="Enter email "
+									v-model="item.role.name"
+								/>
 							</div>
 						</div>
 					</div>

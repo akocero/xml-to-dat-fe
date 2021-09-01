@@ -112,6 +112,18 @@
 								</router-link>
 							</li>
 						</ul>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<router-link
+									:to="{ name: 'role' }"
+									class="nav-link"
+								>
+									<i class="nav-icon far pr-2">&#9679;</i>
+									<!-- <i class="far fa-circle nav-icon"></i> -->
+									<p>Roles</p>
+								</router-link>
+							</li>
+						</ul>
 					</li>
 
 					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
