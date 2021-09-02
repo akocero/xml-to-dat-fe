@@ -21,7 +21,7 @@
 			<form
 				class="w-75 auth-form"
 				@submit.prevent="handleSubmit"
-				v-if="!user && !showForgotPassword"
+				v-if="!user"
 			>
 				<h3 class="h3">Sign In</h3>
 				<hr />
