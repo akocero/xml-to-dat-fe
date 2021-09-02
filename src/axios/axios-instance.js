@@ -1,4 +1,5 @@
 import axios from "axios";
+import store from "@/store";
 
 const instance = axios.create({
 	//baseURL: 'https://payroll-ent-cloud.herokuapp.com/api/', // heroku
@@ -6,7 +7,7 @@ const instance = axios.create({
 	// baseURL: 'http://pecbe-env.eba-jrab52bp.us-east-2.elasticbeanstalk.com/api/',
 	baseURL: "http://127.0.0.1:8000/api/",
 	headers: {
-		Authorization: `Bearer 11|HKPxl1aJmhkyfAYmXQs3scgp7eCkDGAvC3OhV9cX`,
+		Authorization: `Bearer ${store.getters.getToken}`,
 	},
 });
 

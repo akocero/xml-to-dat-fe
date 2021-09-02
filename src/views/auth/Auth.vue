@@ -178,6 +178,7 @@ export default {
 				// user.value = response.value
 				// console.log(response.value.login_id)
 				store.commit("setUser", response.value.user);
+				store.commit("setToken", response.value.token);
 				//   router.push({path: '/app/dashboard'} )
 				// window.location = "http://localhost:8080/app/dashboard";
 			}
