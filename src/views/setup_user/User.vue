@@ -17,6 +17,7 @@
 					<router-link
 						:to="{ name: 'create-user' }"
 						class="btn btn-custom-primary"
+						v-if="userCan('user:create')"
 						>New User</router-link
 					>
 				</div>
@@ -91,6 +92,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('user:read')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -103,6 +105,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('user:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -134,6 +137,7 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
+import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
@@ -145,6 +149,7 @@ export default {
 	components: { Spinner, Pagination, Badge, Alert },
 	setup(props) {
 		const { data, error, fetch, isPending } = useFetch();
+		const { userCan } = useAbility();
 		const search = ref("");
 		onBeforeMount(() => {
 			fetchAll();
@@ -177,6 +182,7 @@ export default {
 			search,
 			isPending,
 			handleCloseModal,
+			userCan,
 		};
 	},
 };

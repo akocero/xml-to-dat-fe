@@ -10,7 +10,7 @@ export default createStore({
 		token: Cookies.get("token") ? Cookies.get("token") : null,
 		abilities: [
 			{
-				module: "user",
+				module: "user setup",
 				details: "user details",
 				methods: [
 					"user:list",
@@ -20,7 +20,7 @@ export default createStore({
 				],
 			},
 			{
-				module: "role",
+				module: "role setup",
 				details: "role details",
 				methods: [
 					"role:list",
@@ -30,7 +30,7 @@ export default createStore({
 				],
 			},
 			{
-				module: "employee",
+				module: "employee management",
 				details: "employee details",
 				methods: [
 					"employee:list",
@@ -40,7 +40,7 @@ export default createStore({
 				],
 			},
 			{
-				module: "employee-setup",
+				module: "employee setup",
 				details: "employee-setup details",
 				methods: [
 					"employee-setup:list",
@@ -50,7 +50,7 @@ export default createStore({
 				],
 			},
 			{
-				module: "company",
+				module: "company setup",
 				details: "company details",
 				methods: [
 					"company:list",
