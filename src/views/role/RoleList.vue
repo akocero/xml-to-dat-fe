@@ -48,7 +48,7 @@
 							<thead>
 								<tr class="text-secondary">
 									<th class="text-center">Role Code</th>
-									<th>Permissions / Abilities</th>
+									<th class="text-center">Description</th>
 									<th width="12%">Actions</th>
 								</tr>
 							</thead>
@@ -57,19 +57,13 @@
 									<td class="text-center">
 										{{ item.name }}
 									</td>
-									<td>
-										<span
-											class="custom-badge custom-badge-info"
-											v-for="item in item.abilities"
-											:key="item"
-										>
-											{{ item.replace(/_/g, " ") }}
-										</span>
-									</td>
+									<th class="text-center">
+										Sample Description
+									</th>
 									<td>
 										<router-link
 											:to="{
-												name: 'view-user',
+												name: 'view-role',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
@@ -81,7 +75,7 @@
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
 										<router-link
 											:to="{
-												name: 'update-user',
+												name: 'edit-role',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"

@@ -61,26 +61,26 @@
 									</td>
 									<td>{{ item.full_name }}</td>
 									<td>{{ item.login_id }}</td>
-									<td class="text-center">
+									<td class="text-center" v-if="item.role">
 										<Badge
 											v-if="
-												item?.login_type?.toLowerCase() ===
+												item?.role.name?.toLowerCase() ===
 													'admin'
 											"
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="'success'"
 										/>
 										<Badge
 											v-else-if="
-												item?.login_type?.toLowerCase() ===
+												item?.role.name?.toLowerCase() ===
 													'manager'
 											"
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="'warning'"
 										/>
 										<Badge
 											v-else
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="''"
 										/>
 									</td>
@@ -150,9 +150,11 @@ export default {
 			fetchAll();
 		});
 
-		const fetchAll = () => {
+		const fetchAll = async () => {
 			search.value = "";
-			fetch("payrolluser");
+			await fetch("payrolluser");
+
+			console.log(data.value);
 		};
 
 		const paginate = async (url) => {

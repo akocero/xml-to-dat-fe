@@ -123,6 +123,16 @@ const routes = [
 				name: "create-role",
 				component: () => import("@/views/role/CreateRole.vue"),
 			},
+			{
+				path: "role/edit/:id",
+				name: "edit-role",
+				component: () => import("@/views/role/EditRole.vue"),
+			},
+			{
+				path: "role/view/:id",
+				name: "view-role",
+				component: () => import("@/views/role/ViewRole.vue"),
+			},
 		],
 	},
 ];

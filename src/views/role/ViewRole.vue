@@ -10,11 +10,20 @@
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<ThePageHeader heading="New Role" routeName="role" mode="create" />
+			<ThePageHeader
+				:heading="item.name"
+				routeName="role"
+				mode="update"
+				v-if="item"
+			/>
 
 			<hr />
 
-			<form @submit.prevent="handleSubmit" id="form_create_user">
+			<form
+				@submit.prevent="handleSubmit"
+				id="form_create_user"
+				v-if="item && !loading"
+			>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="row pr-3">
@@ -22,24 +31,26 @@
 								<BaseInputField
 									id="input_name"
 									label="Role Code"
-									v-model="name"
+									v-model="item.name"
 									:error="error"
 									:errorField="error?.errors?.name || null"
 									placeholder="Ex. admin, user, hr, payroll master"
 									:required="true"
+									:disabled="true"
 								/>
 							</div>
 							<div class="form-group col-md-7">
 								<BaseTextAreaField
 									id="input_description"
 									label="Role Description"
-									v-model="description"
+									v-model="item.description"
 									:error="error"
 									:errorField="
 										error?.errors?.description || null
 									"
 									placeholder="Ex."
 									:required="false"
+									:disabled="true"
 								/>
 							</div>
 						</div>
@@ -92,24 +103,24 @@
 								</thead>
 								<tbody v-if="abilitiesArray.length">
 									<tr
-										v-for="item in abilitiesArray"
-										:key="item.id"
+										v-for="ability in abilitiesArray"
+										:key="ability.id"
 									>
 										<td width="20%" class="pl-4">
-											{{ item.module }}
+											{{ ability.module }}
 										</td>
-										<td>{{ item.details }}</td>
+										<td>{{ ability.details }}</td>
 										<td
 											width="6%"
 											class="text-center"
-											v-for="method in item.methods"
+											v-for="method in ability.methods"
 											:key="method"
 										>
 											<input
 												type="checkbox"
 												v-if="method !== 'disabled'"
 												:value="method"
-												v-model="abilities"
+												v-model="item.abilities"
 												name=""
 												id=""
 											/>
@@ -117,8 +128,6 @@
 												type="checkbox"
 												v-else
 												disabled
-												:value="method"
-												v-model="abilities"
 												name=""
 												id=""
 											/>
@@ -136,22 +145,6 @@
 						</div>
 					</div>
 				</div>
-				<hr />
-				<div class="row col-12">
-					<input
-						type="submit"
-						class="btn btn-custom-success"
-						v-if="!loading"
-						value="Save"
-					/>
-					<button
-						class="btn btn-custom-success"
-						v-if="loading"
-						disabled
-					>
-						Saving ...
-					</button>
-				</div>
 			</form>
 		</div>
 	</div>
@@ -163,17 +156,18 @@ import useAlert from "@/composables/useAlert";
 
 import feather from "feather-icons";
 
-import { ref, computed } from "vue";
-import { onBeforeRouteLeave, useRouter } from "vue-router";
+import { ref, computed, onBeforeMount } from "vue";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import BaseInputField from "@/components/BaseInputField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseTextAreaField from "@/components/BaseTextAreaField.vue";
+import getItem from "@/composables/getItem";
 
 export default {
-	name: "CreateRole",
+	name: "ViewRole",
 	components: {
 		Alert,
 		Spinner,
@@ -189,13 +183,18 @@ export default {
 		},
 	},
 	setup() {
-		const { response, error, create, loading, unknownError } = useData();
+		const {
+			response,
+			error,
+			update,
+			loading: saving,
+			unknownError,
+		} = useData();
 		const { alert, displayAlert } = useAlert();
+		const route = useRoute();
+		const { item, load } = getItem(route.params.id, "roles");
 		const router = useRouter();
-
-		const name = ref("");
-		const description = ref("");
-		const abilities = ref([]);
+		const loading = ref(false);
 		const roleAdded = ref(false);
 		const abilitiesArray = ref([
 			{
@@ -239,19 +238,47 @@ export default {
 				],
 			},
 		]);
+
+		onBeforeMount(async () => {
+			loading.value = true;
+			await load();
+			console.log(item.value);
+			item.value.abilities = JSON.parse(item.value.abilities);
+
+			loading.value = false;
+
+			console.log(item.value.abilities);
+
+			setTimeout(() => {
+				const tags = [
+					"input",
+					"select",
+					"textarea",
+					"button",
+					"checkbox",
+				];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 100);
+		});
 		const handleSubmit = async () => {
 			const data = {
-				name: name.value,
-				abilities: abilities.value,
-				description: description.value,
+				name: item.value.name,
+				abilities: item.value.abilities,
+				description: item.value.description,
 			};
 
 			console.log(data);
 
-			await create("roles", data);
+			await update(`roles/${route.params.id}`, data);
 
 			if (!error.value) {
-				console.log("user created");
+				console.log("user updated");
 				roleAdded.value = true;
 				router.push({
 					name: "role",
@@ -292,13 +319,11 @@ export default {
 
 		return {
 			handleSubmit,
-
-			name,
-			abilities,
-			description,
+			loading,
+			item,
 
 			error,
-			loading,
+			saving,
 			response,
 			alert,
 			abilitiesArray,
