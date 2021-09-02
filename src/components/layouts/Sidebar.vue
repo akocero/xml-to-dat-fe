@@ -76,7 +76,11 @@
 								<!-- <i v-html="chevronLeft" class="right fe"></i> -->
 							</p>
 						</a>
-						<ul class="nav nav-treeview">
+
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('user:list')"
+						>
 							<li class="nav-item">
 								<router-link
 									:to="{ name: 'user' }"
@@ -88,7 +92,10 @@
 								</router-link>
 							</li>
 						</ul>
-						<ul class="nav nav-treeview">
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('company:list')"
+						>
 							<li class="nav-item">
 								<router-link
 									:to="{ name: 'company' }"
@@ -100,7 +107,10 @@
 								</router-link>
 							</li>
 						</ul>
-						<ul class="nav nav-treeview">
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('employee-setup:list')"
+						>
 							<li class="nav-item">
 								<router-link
 									:to="{ name: 'setup-employee' }"
@@ -112,7 +122,10 @@
 								</router-link>
 							</li>
 						</ul>
-						<ul class="nav nav-treeview">
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('role:list')"
+						>
 							<li class="nav-item">
 								<router-link
 									:to="{ name: 'role' }"
@@ -127,7 +140,7 @@
 					</li>
 
 					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
-					<li class="nav-item">
+					<li class="nav-item" v-if="userCan('employee:list')">
 						<router-link
 							:to="{ name: 'employee-management' }"
 							class="nav-link"
@@ -150,8 +163,9 @@
 </template>
 <script>
 import feather from "feather-icons";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import useAbility from "@/composables/useAbility";
 export default {
 	name: "Sidebar",
 	computed: {
@@ -206,6 +220,7 @@ export default {
 		const user = computed(() => store.getters.getUser);
 		const company = computed(() => store.getters.getCompany);
 		const user_name_array = user.value.full_name.split(" ");
+		const { userCan } = useAbility();
 		//console.log(user_name_array)
 		const userInitial = `${user_name_array[0].substr(
 			0,
@@ -216,6 +231,7 @@ export default {
 			user,
 			userInitial,
 			company,
+			userCan,
 		};
 	},
 };

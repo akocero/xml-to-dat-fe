@@ -171,6 +171,7 @@ import Spinner from "@/components/Spinner";
 import BaseInputField from "@/components/BaseInputField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseTextAreaField from "@/components/BaseTextAreaField.vue";
+import { useStore } from "vuex";
 
 export default {
 	name: "CreateRole",
@@ -192,53 +193,13 @@ export default {
 		const { response, error, create, loading, unknownError } = useData();
 		const { alert, displayAlert } = useAlert();
 		const router = useRouter();
+		const store = useStore();
 
 		const name = ref("");
 		const description = ref("");
 		const abilities = ref([]);
 		const roleAdded = ref(false);
-		const abilitiesArray = ref([
-			{
-				module: "user",
-				details: "user details",
-				methods: [
-					"user:list",
-					"user:read",
-					"user:create",
-					"user:update",
-				],
-			},
-			{
-				module: "role",
-				details: "role details",
-				methods: [
-					"role:list",
-					"role:read",
-					"role:create",
-					"role:update",
-				],
-			},
-			{
-				module: "employee",
-				details: "employee details",
-				methods: [
-					"employee:list",
-					"employee:read",
-					"employee:create",
-					"employee:update",
-				],
-			},
-			{
-				module: "employee-setup",
-				details: "employee-setup details",
-				methods: [
-					"employee-setup:list",
-					"disabled",
-					"employee-setup:create",
-					"employee-setup:update",
-				],
-			},
-		]);
+		const abilitiesArray = computed(() => store.getters.getAbilities);
 		const handleSubmit = async () => {
 			const data = {
 				name: name.value,

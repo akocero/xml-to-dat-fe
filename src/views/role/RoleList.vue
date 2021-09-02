@@ -17,6 +17,7 @@
 					<router-link
 						:to="{ name: 'create-role' }"
 						class="btn btn-custom-primary"
+						v-if="userCan('role:create')"
 						>New Role</router-link
 					>
 				</div>
@@ -67,6 +68,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('role:read')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -79,6 +81,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('role:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -115,11 +118,14 @@ import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
 import Alert from "@/components/Alert.vue";
 
+import useAbility from "@/composables/useAbility";
+
 export default {
 	name: "RoleList",
 	props: ["userAdded"],
 	components: { Spinner, Pagination, Badge, Alert },
 	setup(props) {
+		const { userCan } = useAbility();
 		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
 		onBeforeMount(() => {
@@ -161,6 +167,8 @@ export default {
 			search,
 			isPending,
 			handleCloseModal,
+
+			userCan,
 		};
 	},
 };

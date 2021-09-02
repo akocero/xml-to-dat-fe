@@ -8,6 +8,58 @@ export default createStore({
 			? JSON.parse(Cookies.get("company"))
 			: null,
 		token: Cookies.get("token") ? Cookies.get("token") : null,
+		abilities: [
+			{
+				module: "user",
+				details: "user details",
+				methods: [
+					"user:list",
+					"user:read",
+					"user:create",
+					"user:update",
+				],
+			},
+			{
+				module: "role",
+				details: "role details",
+				methods: [
+					"role:list",
+					"role:read",
+					"role:create",
+					"role:update",
+				],
+			},
+			{
+				module: "employee",
+				details: "employee details",
+				methods: [
+					"employee:list",
+					"employee:read",
+					"employee:create",
+					"employee:update",
+				],
+			},
+			{
+				module: "employee-setup",
+				details: "employee-setup details",
+				methods: [
+					"employee-setup:list",
+					"disabled",
+					"employee-setup:create",
+					"employee-setup:update",
+				],
+			},
+			{
+				module: "company",
+				details: "company details",
+				methods: [
+					"company:list",
+					"company:read",
+					"company:create",
+					"company:update",
+				],
+			},
+		],
 	},
 	mutations: {
 		setUser(state, payload) {
@@ -53,6 +105,9 @@ export default createStore({
 
 		getToken(state) {
 			return state.token;
+		},
+		getAbilities(state) {
+			return state.abilities;
 		},
 	},
 });

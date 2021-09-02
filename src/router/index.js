@@ -15,6 +15,12 @@ const noAuthRequired = (to, from, next) => {
 			: next();
 };
 
+const userCan = (ability, next) => {
+	const userAbilities = store.getters.getUser.role.abilities;
+	if (userAbilities.includes(ability)) return next();
+	else return next({ name: "dashboard" });
+};
+
 const routes = [
 	{
 		path: "/",
@@ -122,16 +128,25 @@ const routes = [
 				path: "role/create",
 				name: "create-role",
 				component: () => import("@/views/role/CreateRole.vue"),
+				beforeEnter: (to, from, next) => {
+					userCan("role:create", next);
+				},
 			},
 			{
 				path: "role/edit/:id",
 				name: "edit-role",
 				component: () => import("@/views/role/EditRole.vue"),
+				beforeEnter: (to, from, next) => {
+					userCan("role:update", next);
+				},
 			},
 			{
 				path: "role/view/:id",
 				name: "view-role",
 				component: () => import("@/views/role/ViewRole.vue"),
+				beforeEnter: (to, from, next) => {
+					userCan("role:read", next);
+				},
 			},
 		],
 	},
