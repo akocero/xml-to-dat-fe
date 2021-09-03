@@ -4,6 +4,7 @@
 		<button
 			class="btn btn-sm btn-custom-primary"
 			@click="handleShowModal(0)"
+			v-if="userCan('setup:employee:store')"
 		>
 			New {{ title }}
 		</button>
@@ -28,6 +29,7 @@
 								<button
 									class="btn btn-sm btn-light"
 									@click="handleShowModal(item.id)"
+									v-if="userCan('setup:employee:update')"
 								>
 									<i class="far fa-edit text-secondary"></i>
 								</button>
@@ -53,6 +55,7 @@
 <script>
 import Spinner from "@/components/Spinner";
 import { computed } from "vue";
+import useAbility from "@/composables/useAbility";
 export default {
 	name: "Table",
 	props: ["data", "title", "type", "placeholder"],
@@ -61,6 +64,7 @@ export default {
 	},
 	emits: ["openModal"],
 	setup(props, { emit }) {
+		const { userCan } = useAbility();
 		const handleShowModal = (id) => {
 			const data = {
 				type: props.type,
@@ -75,7 +79,7 @@ export default {
 		const filteredData = computed(() =>
 			props.data.filter((item) => item.type === props.type)
 		);
-		return { handleShowModal, filteredData };
+		return { handleShowModal, filteredData, userCan };
 	},
 };
 </script>

@@ -129,7 +129,7 @@ const routes = [
 				name: "create-role",
 				component: () => import("@/views/role/CreateRole.vue"),
 				beforeEnter: (to, from, next) => {
-					userCan("role:create", next);
+					userCan("role:store", next);
 				},
 			},
 			{
@@ -145,7 +145,7 @@ const routes = [
 				name: "view-role",
 				component: () => import("@/views/role/ViewRole.vue"),
 				beforeEnter: (to, from, next) => {
-					userCan("role:read", next);
+					userCan("setup:role:show", next);
 				},
 			},
 		],

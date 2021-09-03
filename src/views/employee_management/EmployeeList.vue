@@ -9,6 +9,7 @@
 					<router-link
 						:to="{ name: 'create-employee' }"
 						class="btn btn-custom-primary"
+						v-if="userCan('employee:store')"
 						>New Employee</router-link
 					>
 				</div>
@@ -71,6 +72,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('employee:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -83,6 +85,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('employee:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -114,6 +117,7 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
+import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
@@ -123,6 +127,7 @@ export default {
 	name: "Employee",
 	components: { Spinner, Pagination, Badge },
 	setup() {
+		const { userCan } = useAbility();
 		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
 
@@ -151,6 +156,8 @@ export default {
 			search,
 			HandleSearch,
 			fetchAll,
+
+			userCan,
 		};
 	},
 };
