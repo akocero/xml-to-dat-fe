@@ -22,7 +22,7 @@
 					<small class="text-white role">{{
 						user.login_type === "admin"
 							? "administrator"
-							: user.login_type
+							: user.role.name
 					}}</small>
 				</div>
 			</div>

@@ -119,6 +119,7 @@ import Pagination from "@/components/Pagination.vue";
 import Alert from "@/components/Alert.vue";
 
 import useAbility from "@/composables/useAbility";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "RoleList",
@@ -134,7 +135,7 @@ export default {
 
 		const fetchAll = async () => {
 			search.value = "";
-			await fetch("roles");
+			await fetch(endpoints.setupRole);
 			convertAbilitiesToArray();
 		};
 
@@ -151,7 +152,7 @@ export default {
 		};
 
 		const HandleSearch = async () => {
-			await fetch(`roles?search=${search.value}`);
+			await fetch(`${endpoints.setupRole}?search=${search.value}`);
 			convertAbilitiesToArray();
 		};
 		const handleCloseModal = () => {

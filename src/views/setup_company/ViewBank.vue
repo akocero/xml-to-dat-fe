@@ -278,6 +278,8 @@ import Spinner from "@/components/Spinner";
 import { onUnmounted, ref } from "vue";
 import feather from "feather-icons";
 import $ from "jquery";
+import endpoints from "@/utils/endpoints";
+
 export default {
 	name: "ViewBank",
 	props: ["bank_id"],
@@ -304,7 +306,7 @@ export default {
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
 			props.bank_id,
-			"setupcompanybank"
+			endpoints.setupCompanyBank
 		);
 		const error = ref(null);
 		const unknownError = ref(null);
@@ -335,7 +337,7 @@ export default {
 
 			try {
 				const res = await axios.patch(
-					"setupcompanybank/" + props.bank_id,
+					`${endpoints.setupCompanyBank}/${props.bank_id}`,
 					updatedBank
 				);
 				response.value = res.data;

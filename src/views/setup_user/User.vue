@@ -142,7 +142,7 @@ import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
 import Alert from "@/components/Alert.vue";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "User",
 	props: ["userAdded"],
@@ -157,7 +157,7 @@ export default {
 
 		const fetchAll = async () => {
 			search.value = "";
-			await fetch("payrolluser");
+			await fetch(endpoints.setupUser);
 
 			console.log(data.value);
 		};
@@ -167,7 +167,7 @@ export default {
 		};
 
 		const HandleSearch = () => {
-			fetch(`payrolluser?search=${search.value}`);
+			fetch(`${endpoints.setupUser}?search=${search.value}`);
 		};
 		const handleCloseModal = () => {
 			props.userAdded = false;

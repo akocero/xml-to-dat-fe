@@ -995,6 +995,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "CreateCompany",
@@ -1024,7 +1025,7 @@ export default {
 		const { error, response, loading, create, unknownError } = useData();
 		const { item, error: errorData, load, loading: isLoading } = getItem(
 			route.params.id,
-			"basicemployeeinformation"
+			endpoints.employee
 		);
 		const { alert, displayAlert } = useAlert();
 
@@ -1227,7 +1228,7 @@ export default {
 			}
 
 			const res = await create(
-				`basicemployeeinformation/${route.params.id}?_method=PATCH`,
+				`${endpoints.employee}/${route.params.id}?_method=PATCH`,
 				form_data
 			);
 
@@ -1293,7 +1294,7 @@ export default {
 		const deleteProfileImage = async (id) => {
 			if (confirm("Are you sure you want to delete this image?")) {
 				const res = await axios.delete(
-					"/basicemployeeinformation/deleteProfileImage/" + id
+					`${endpoints.employeeImageProfile}/${id}`
 				);
 				item.value.profile_image_path = null;
 			}
@@ -1302,7 +1303,7 @@ export default {
 		const deleteSignatureImage = async (id) => {
 			if (confirm("Are you sure you want to delete this image?")) {
 				const res = await axios.delete(
-					"/basicemployeeinformation/deleteSignatoryImage/" + id
+					`${endpoints.employeeImageSignatory}/${id}`
 				);
 				item.value.signatory_image_path = null;
 			}

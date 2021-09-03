@@ -172,7 +172,7 @@ import BaseInputField from "@/components/BaseInputField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseTextAreaField from "@/components/BaseTextAreaField.vue";
 import { useStore } from "vuex";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "CreateRole",
 	components: {
@@ -209,7 +209,7 @@ export default {
 
 			console.log(data);
 
-			await create("roles", data);
+			await create(endpoints.setupRole, data);
 
 			if (!error.value) {
 				console.log("user created");

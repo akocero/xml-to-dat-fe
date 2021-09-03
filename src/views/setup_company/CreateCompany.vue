@@ -615,6 +615,8 @@ import BaseImageField from "@/components/BaseImageField";
 import BaseRowHeading from "@/components/BaseRowHeading";
 import BaseNavigationTab from "@/components/BaseNavigationTab";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
+import endpoints from "@/utils/endpoints";
+
 export default {
 	name: "CreateCompany",
 	components: {
@@ -715,7 +717,7 @@ export default {
 			// for (var pair of form_data.entries()) {
 			// 	console.log(pair[0]+ ', ' + pair[1]);
 			// }
-			const res = await create("setupcompany", form_data);
+			const res = await create(endpoints.setupCompany, form_data);
 
 			if (!error.value) {
 				companyAdded.value = true;

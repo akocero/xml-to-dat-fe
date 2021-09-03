@@ -109,6 +109,7 @@ import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "Company",
@@ -124,7 +125,7 @@ export default {
 
 		const fetchAll = () => {
 			search.value = "";
-			fetch("setupcompany");
+			fetch(endpoints.setupCompany);
 		};
 
 		const paginate = async (url) => {
@@ -132,7 +133,7 @@ export default {
 		};
 
 		const HandleSearch = () => {
-			fetch(`setupcompany?search=${search.value}`);
+			fetch(`${endpoints.setupCompany}?search=${search.value}`);
 		};
 
 		return {

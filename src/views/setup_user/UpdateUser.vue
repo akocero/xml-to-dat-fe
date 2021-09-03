@@ -165,7 +165,7 @@ import Spinner from "@/components/Spinner.vue";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "UpdateUser",
 	components: {
@@ -205,8 +205,8 @@ export default {
 
 		onBeforeMount(async () => {
 			loading.value = true;
-			await fetchCompanies("setupcompany?page=1");
-			await fetchRoles("roles");
+			await fetchCompanies(`${endpoints.setupCompany}?page=1`);
+			await fetchRoles(endpoints.setupRole);
 			loading.value = false;
 
 			console.log(roles.value);
@@ -234,7 +234,7 @@ export default {
 
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
-			"payrolluser"
+			endpoints.setupUser
 		);
 
 		const companiesArray = ref([100]);
@@ -272,7 +272,7 @@ export default {
 				companies: companiesArray.value,
 			};
 
-			await update(`payrolluser/${route.params.id}`, data);
+			await update(`${endpoints.setupUser}/${route.params.id}`, data);
 			if (!error.value) {
 				displayAlert("info", "User Updated");
 			} else {

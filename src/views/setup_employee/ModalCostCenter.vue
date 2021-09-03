@@ -240,6 +240,8 @@
 <script>
 import useData from "@/composables/useData";
 import { onBeforeMount, ref } from "vue";
+import endpoints from "@/utils/endpoints";
+
 export default {
 	name: "ModalCostCenter",
 	emits: ["closeCostCenterModal", "costCenterAdded", "costCenterUpdated"],
@@ -275,7 +277,7 @@ export default {
 
 			console.log(data);
 
-			await create("setup_employee_cost_center", data);
+			await create(endpoints.setupEmployeeCostCenter, data);
 
 			if (!error.value) {
 				emit("costCenterAdded", response.value);
@@ -291,8 +293,7 @@ export default {
 					active: 1,
 				};
 				await update(
-					"setup_employee_cost_center/" +
-						props.forEditCostCenterItem.id,
+					`${endpoints.setupEmployeeCostCenter}/${props.forEditCostCenterItem.id}`,
 					data
 				);
 

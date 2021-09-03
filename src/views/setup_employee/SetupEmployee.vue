@@ -492,6 +492,8 @@ import ModalEmployeeClass from "./ModalEmployeeClass";
 import Alert from "@/components/Alert";
 import { onBeforeMount, ref } from "vue";
 import $ from "jquery";
+import endpoints from "@/utils/endpoints";
+
 export default {
 	name: "Employee",
 	components: {
@@ -533,9 +535,9 @@ export default {
 		// Fetch Data to Tables
 		onBeforeMount(async () => {
 			loading.value = true;
-			await fetch("/setup_employee_dropdown");
-			await costCnterFetch("/setup_employee_cost_center");
-			await employeeClassFetch("/setup_employee_class");
+			await fetch(endpoints.setupEmployeeEmployeeDropdown);
+			await costCnterFetch(endpoints.setupEmployeeCostCenter);
+			await employeeClassFetch(endpoints.setupEmployeeEmployeeClass);
 			loading.value = false;
 		});
 
@@ -592,7 +594,10 @@ export default {
 				description: description.value,
 			};
 
-			await create("/setup_employee_dropdown", newEmpployeeDropdown);
+			await create(
+				endpoints.setupEmployeeEmployeeDropdown,
+				newEmpployeeDropdown
+			);
 			if (!error.value) {
 				$("#employeeSetupModal").modal("hide");
 				data.value.data = [response.value, ...data.value.data]; // append reponse from api to table related to it
@@ -613,7 +618,7 @@ export default {
 			};
 
 			await update(
-				`/setup_employee_dropdown/${forEditData.value.id}`,
+				`${endpoints.setupEmployeeEmployeeDropdown}/${forEditData.value.id}`,
 				newEmpployeeDropdown
 			);
 			if (!error.value) {

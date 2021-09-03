@@ -704,6 +704,7 @@ import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "CreateCompany",
@@ -733,7 +734,7 @@ export default {
 		const { error, response, loading, create, unknownError } = useData();
 		const { item, error: errorData, load, loading: isLoading } = getItem(
 			route.params.id,
-			"basicemployeeinformation"
+			endpoints.employee
 		);
 		const { alert, displayAlert } = useAlert();
 

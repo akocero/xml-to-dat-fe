@@ -171,7 +171,7 @@ export default {
 				password: password.value,
 			};
 
-			await login("payrolluser/auth", data);
+			await login("auth", data);
 			if (error.value) {
 				console.log(error.value);
 			} else {

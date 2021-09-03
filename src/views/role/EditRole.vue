@@ -180,6 +180,7 @@ import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseTextAreaField from "@/components/BaseTextAreaField.vue";
 import getItem from "@/composables/getItem";
 import { useStore } from "vuex";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "EditRole",
@@ -208,7 +209,7 @@ export default {
 		} = useData();
 		const { alert, displayAlert } = useAlert();
 		const route = useRoute();
-		const { item, load } = getItem(route.params.id, "roles");
+		const { item, load } = getItem(route.params.id, endpoints.setupRole);
 		const router = useRouter();
 		const loading = ref(false);
 		const roleAdded = ref(false);
@@ -233,7 +234,7 @@ export default {
 
 			console.log(data);
 
-			await update(`roles/${route.params.id}`, data);
+			await update(`${endpoints.setupRole}/${route.params.id}`, data);
 
 			if (!error.value) {
 				console.log("user updated");

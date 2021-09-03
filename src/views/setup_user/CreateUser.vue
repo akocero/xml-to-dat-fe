@@ -157,7 +157,7 @@ import Spinner from "@/components/Spinner";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "CreateUser",
 	components: {
@@ -199,8 +199,8 @@ export default {
 
 		onBeforeMount(async () => {
 			loading.value = true;
-			await fetchCompanies("setupcompany?page=1");
-			await fetchRoles("roles");
+			await fetchCompanies(`${endpoints.setupCompany}?page=1`);
+			await fetchRoles(endpoints.setupRole);
 			loading.value = false;
 			console.log("roles", roles.value);
 		});
@@ -244,7 +244,7 @@ export default {
 
 			console.log(data);
 
-			await create("payrolluser", data);
+			await create(endpoints.setupUser, data);
 
 			if (!error.value) {
 				console.log("user created");

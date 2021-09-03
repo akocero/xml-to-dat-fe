@@ -167,7 +167,7 @@ import axios from "@/axios/axios-instance";
 import { ref } from "vue";
 import $ from "jquery";
 import BaseInputField from "@/components/BaseInputField";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "CreateBank",
 	props: ["companyID"],
@@ -195,7 +195,10 @@ export default {
 			};
 
 			try {
-				const res = await axios.post("setupcompanybank", newBank);
+				const res = await axios.post(
+					endpoints.setupCompanyBank,
+					newBank
+				);
 				response.value = res.data;
 				error.value = null;
 				unknownError.value = null;
