@@ -17,7 +17,7 @@
 					<router-link
 						:to="{ name: 'create-role' }"
 						class="btn btn-custom-primary"
-						v-if="userCan('role:create')"
+						v-if="userCan('setup:role:store')"
 						>New Role</router-link
 					>
 				</div>
@@ -68,7 +68,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('role:read')"
+											v-if="userCan('setup:role:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -81,7 +81,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('role:update')"
+											v-if="userCan('setup:role:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"

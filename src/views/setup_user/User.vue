@@ -17,7 +17,7 @@
 					<router-link
 						:to="{ name: 'create-user' }"
 						class="btn btn-custom-primary"
-						v-if="userCan('user:create')"
+						v-if="userCan('setup:user:store')"
 						>New User</router-link
 					>
 				</div>
@@ -92,7 +92,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('user:read')"
+											v-if="userCan('setup:user:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -105,7 +105,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('user:update')"
+											v-if="userCan('setup:user:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"

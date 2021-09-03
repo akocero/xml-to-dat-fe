@@ -1,6 +1,7 @@
 const endpoints = {
 	setupUser: "setup/user",
 	setupCompany: "setup/company",
+	setupCompanyImageLogo: "setup/company/image/logo",
 	setupCompanyBank: "setup/company/bank",
 	setupCompanySignatory: "setup/company/signatory",
 	setupEmployee: "setup/employee",
@@ -11,7 +12,6 @@ const endpoints = {
 	employee: "employee",
 	employeeImageProfile: "employee/image/profile",
 	employeeImageSignatory: "employee/image/signatory",
-	setupCompanyImageLogo: "setup/company/image/logo",
 };
 
 export default endpoints;

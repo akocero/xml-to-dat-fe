@@ -9,7 +9,7 @@
 					<router-link
 						:to="{ name: 'create-company' }"
 						class="btn btn-custom-primary"
-						v-if="userCan('company:create')"
+						v-if="userCan('setup:company:store')"
 						>New Company</router-link
 					>
 				</div>
@@ -60,7 +60,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('company:read')"
+											v-if="userCan('setup:company:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -73,7 +73,9 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('company:update')"
+											v-if="
+												userCan('setup:company:update')
+											"
 										>
 											<i
 												class="far fa-edit text-secondary"

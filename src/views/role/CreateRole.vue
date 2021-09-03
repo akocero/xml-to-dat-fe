@@ -80,7 +80,7 @@
 										</th>
 										<th width="6%" class="text-center">
 											<small class="text-bold text-sm"
-												>Create</small
+												>Store</small
 											>
 										</th>
 										<th width="6%" class="text-center">

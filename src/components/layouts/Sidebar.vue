@@ -79,7 +79,7 @@
 
 						<ul
 							class="nav nav-treeview"
-							v-if="userCan('user:list')"
+							v-if="userCan('setup:user:list')"
 						>
 							<li class="nav-item">
 								<router-link
@@ -94,7 +94,7 @@
 						</ul>
 						<ul
 							class="nav nav-treeview"
-							v-if="userCan('company:list')"
+							v-if="userCan('setup:company:list')"
 						>
 							<li class="nav-item">
 								<router-link
@@ -109,7 +109,7 @@
 						</ul>
 						<ul
 							class="nav nav-treeview"
-							v-if="userCan('employee-setup:list')"
+							v-if="userCan('setup:employee:list')"
 						>
 							<li class="nav-item">
 								<router-link
@@ -124,7 +124,7 @@
 						</ul>
 						<ul
 							class="nav nav-treeview"
-							v-if="userCan('role:list')"
+							v-if="userCan('setup:role:list')"
 						>
 							<li class="nav-item">
 								<router-link
