@@ -133,7 +133,7 @@
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
 									<!-- <i class="far fa-circle nav-icon"></i> -->
-									<p>Roles</p>
+									<p>Role</p>
 								</router-link>
 							</li>
 						</ul>
