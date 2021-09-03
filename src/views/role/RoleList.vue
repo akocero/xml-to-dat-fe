@@ -27,7 +27,7 @@
 				<input
 					type="text"
 					v-model="search"
-					placeholder="Type Role Code"
+					placeholder="Type Role Code, Description"
 					class="input-custom-search"
 					required
 				/>
@@ -59,7 +59,7 @@
 										{{ item.name }}
 									</td>
 									<th class="text-center">
-										Sample Description
+										{{ item.description }}
 									</th>
 									<td>
 										<router-link

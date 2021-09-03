@@ -2,7 +2,7 @@
 	<img v-if="image_path" :src="image_path" alt="" style="width: 90%" />
 	<img
 		v-else-if="database"
-		:src="'http://127.0.0.1:8000/storage/' + database"
+		:src="imageBaseURL + database"
 		alt=""
 		style="width: 90%"
 	/>
@@ -12,6 +12,11 @@
 <script>
 export default {
 	name: "BaseImageField",
+	data() {
+		return {
+			imageBaseURL: process.env.VUE_APP_BASE_URL_SERVER + "/storage/",
+		};
+	},
 	props: {
 		image_path: String,
 		database: {
