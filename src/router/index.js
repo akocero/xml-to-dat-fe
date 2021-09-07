@@ -148,6 +148,38 @@ const routes = [
 					userCan("setup:role:show", next);
 				},
 			},
+			{
+				path: "payroll_parameter",
+				name: "payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/PayrollParameterList.vue"
+					),
+			},
+			{
+				path: "payroll_parameter/create",
+				name: "create-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/CreatePayrollParameter.vue"
+					),
+			},
+			{
+				path: "payroll_parameter/edit/:id",
+				name: "edit-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/EditPayrollParameter.vue"
+					),
+			},
+			{
+				path: "payroll_parameter/view/:id",
+				name: "view-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/ViewPayrollParameter.vue"
+					),
+			},
 		],
 	},
 ];
