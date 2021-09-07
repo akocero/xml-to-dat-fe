@@ -933,6 +933,7 @@ import ThePageHeader from "@/components/layouts/ThePageHeader";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "CreateCompany",
@@ -1195,7 +1196,7 @@ export default {
 			// 	console.log(pair[0] + ", " + pair[1]);
 			// }
 
-			await create("basicemployeeinformation", form_data);
+			await create(endpoints.employee, form_data);
 
 			if (!error.value) {
 				// displayAlert("success", "Employee Added");

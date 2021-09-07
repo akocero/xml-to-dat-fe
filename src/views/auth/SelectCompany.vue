@@ -38,7 +38,7 @@ export default {
 		const { data, error, fetch, isPending } = useFetch();
 		const store = useStore();
 
-		fetch("/payrolluser/companies/" + props.user);
+		fetch("setup/user/companies/" + props.user);
 
 		const handleClick = (item) => {
 			store.commit("setCompany", item);

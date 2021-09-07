@@ -65,22 +65,18 @@
 
 							<div class="form-group col-12">
 								<label for="">Role</label>
-								<select
-									name=""
-									id="select_role"
+								<input
+									type="text"
 									class="form-control"
 									:class="[
 										error &&
-											error.errors.login_type &&
+											error.errors.role_id &&
 											'is-invalid',
 									]"
-									v-model="item.login_type"
-								>
-									<option value="">Choose ...</option>
-									<option value="employee">Employee</option>
-									<option value="admin">Admin</option>
-									<option value="manager">Manager</option>
-								</select>
+									id="input_role_id"
+									placeholder="Enter email "
+									v-model="item.role.name"
+								/>
 							</div>
 						</div>
 					</div>
@@ -142,6 +138,7 @@ import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
 import useFetch from "@/composables/useFetch";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "UpdateUser",
 	components: {
@@ -169,7 +166,20 @@ export default {
 		const response = ref(null);
 		const isPending = ref(false);
 
-		fetch("setupcompany?page=1");
+		onBeforeMount(async () => {
+			await fetch(`${endpoints.setupCompany}?page=1`);
+			pushToCompaniesArray();
+			setTimeout(() => {
+				const tags = ["input", "select", "textarea", "button"];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 1000);
+		});
 
 		const search = ref("");
 
@@ -181,7 +191,7 @@ export default {
 
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
-			"payrolluser"
+			endpoints.setupUser
 		);
 
 		const companiesArray = ref([100]);
@@ -195,20 +205,6 @@ export default {
 				});
 			}
 		};
-
-		onBeforeMount(() => {
-			pushToCompaniesArray();
-			setTimeout(() => {
-				const tags = ["input", "select", "textarea", "button"];
-				tags.forEach((tagName) => {
-					var inputs = document.getElementsByTagName(tagName);
-					console.log(inputs[0]);
-					for (var i = 0; i < inputs.length; i++) {
-						inputs[i].disabled = true;
-					}
-				});
-			}, 1000);
-		});
 
 		return {
 			error,

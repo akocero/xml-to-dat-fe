@@ -4,6 +4,7 @@
 		<button
 			class="btn btn-sm btn-custom-primary"
 			@click="handleShowModal(0)"
+			v-if="userCan('setup:employee:store')"
 		>
 			New Cost Center
 		</button>
@@ -30,6 +31,7 @@
 								<button
 									class="btn btn-sm btn-light"
 									@click="handleShowModal(item.id)"
+									v-if="userCan('setup:employee:update')"
 								>
 									<i class="far fa-edit text-secondary"></i>
 								</button>
@@ -51,6 +53,7 @@
 
 <script>
 import Spinner from "@/components/Spinner";
+import useAbility from "@/composables/useAbility";
 export default {
 	name: "TableCostCenter",
 	components: {
@@ -59,11 +62,12 @@ export default {
 	props: ["costCenterData"],
 	emits: ["showCostCenterModal"],
 	setup(props, { emit }) {
+		const { userCan } = useAbility();
 		const handleShowModal = (id) => {
 			emit("showCostCenterModal", id);
 		};
 
-		return { handleShowModal };
+		return { handleShowModal, userCan };
 	},
 };
 </script>

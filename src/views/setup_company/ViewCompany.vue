@@ -827,6 +827,8 @@ import Spinner from "@/components/Spinner.vue";
 
 import feather from "feather-icons";
 
+import endpoints from "@/utils/endpoints";
+
 export default {
 	name: "UpdateCompany",
 	components: {
@@ -849,7 +851,7 @@ export default {
 		const route = useRoute();
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
-			"setupcompany"
+			endpoints.setupCompany
 		);
 
 		load();

@@ -1,16 +1,24 @@
 <template>
+	<transition name="alert">
+		<Alert
+			v-if="userAdded"
+			:status="'success'"
+			:message="'User Added'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body pt-4">
 			<div class="row mb-4">
 				<div
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
-					<h4 class="h4 mb-0 text-primary">Employee List</h4>
+					<h4 class="h4 mb-0 text-primary">Role List</h4>
 					<router-link
-						:to="{ name: 'create-employee' }"
+						:to="{ name: 'create-role' }"
 						class="btn btn-custom-primary"
-						v-if="userCan('employee:store')"
-						>New Employee</router-link
+						v-if="userCan('setup:role:store')"
+						>New Role</router-link
 					>
 				</div>
 			</div>
@@ -19,7 +27,7 @@
 				<input
 					type="text"
 					v-model="search"
-					placeholder="Type Employee Code, Name, Classification"
+					placeholder="Type Role Code, Description"
 					class="input-custom-search"
 					required
 				/>
@@ -40,39 +48,27 @@
 						<table class="table">
 							<thead>
 								<tr class="text-secondary">
-									<th class="text-center">Employee ID</th>
-									<th>Full Name</th>
-									<th>Email</th>
-									<th>Department</th>
-									<th>Position</th>
-									<th>Branch</th>
-
+									<th class="text-center">Role Code</th>
+									<th class="text-center">Description</th>
 									<th width="12%">Actions</th>
 								</tr>
 							</thead>
 							<tbody v-if="!isPending && data?.data?.length">
 								<tr v-for="item in data.data" :key="item.id">
 									<td class="text-center">
-										{{ item.employee_id }}
+										{{ item.name }}
 									</td>
-									<td>
-										{{ item.last_name }},
-										{{ item.first_name }}
-										{{ item.maiden_name }}
-										{{ item.extension_name }}
-									</td>
-									<td>{{ item.email }}</td>
-									<td></td>
-									<td></td>
-									<td></td>
+									<th class="text-center">
+										{{ item.description }}
+									</th>
 									<td>
 										<router-link
 											:to="{
-												name: 'view-employee',
+												name: 'view-role',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('employee:show')"
+											v-if="userCan('setup:role:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -81,11 +77,11 @@
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
 										<router-link
 											:to="{
-												name: 'edit-employee',
+												name: 'edit-role',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('employee:update')"
+											v-if="userCan('setup:role:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -117,45 +113,61 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
-import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
+import Alert from "@/components/Alert.vue";
+
+import useAbility from "@/composables/useAbility";
 import endpoints from "@/utils/endpoints";
 
 export default {
-	name: "Employee",
-	components: { Spinner, Pagination, Badge },
-	setup() {
+	name: "RoleList",
+	props: ["userAdded"],
+	components: { Spinner, Pagination, Badge, Alert },
+	setup(props) {
 		const { userCan } = useAbility();
 		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
-
 		onBeforeMount(() => {
 			fetchAll();
 		});
 
-		const fetchAll = () => {
+		const fetchAll = async () => {
 			search.value = "";
-			fetch(endpoints.employee);
+			await fetch(endpoints.setupRole);
+			convertAbilitiesToArray();
 		};
 
 		const paginate = async (url) => {
 			await fetch(url);
+			convertAbilitiesToArray();
 		};
 
-		const HandleSearch = () => {
-			fetch(`${endpoints.employee}?search=${search.value}`);
+		const convertAbilitiesToArray = () => {
+			data.value.data.forEach((item) => {
+				item.abilities = JSON.parse(item.abilities);
+				// console.log(item);
+			});
+		};
+
+		const HandleSearch = async () => {
+			await fetch(`${endpoints.setupRole}?search=${search.value}`);
+			convertAbilitiesToArray();
+		};
+		const handleCloseModal = () => {
+			props.userAdded = false;
 		};
 
 		return {
 			data,
 			error,
 			paginate,
-			isPending,
-			search,
-			HandleSearch,
 			fetchAll,
+			HandleSearch,
+			search,
+			isPending,
+			handleCloseModal,
 
 			userCan,
 		};

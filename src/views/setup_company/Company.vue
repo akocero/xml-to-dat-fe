@@ -9,6 +9,7 @@
 					<router-link
 						:to="{ name: 'create-company' }"
 						class="btn btn-custom-primary"
+						v-if="userCan('setup:company:store')"
 						>New Company</router-link
 					>
 				</div>
@@ -59,6 +60,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('setup:company:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -71,6 +73,9 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="
+												userCan('setup:company:update')
+											"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -102,9 +107,11 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
+import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "Company",
@@ -112,6 +119,7 @@ export default {
 	setup() {
 		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
+		const { userCan } = useAbility();
 
 		onBeforeMount(() => {
 			fetchAll();
@@ -119,7 +127,7 @@ export default {
 
 		const fetchAll = () => {
 			search.value = "";
-			fetch("setupcompany");
+			fetch(endpoints.setupCompany);
 		};
 
 		const paginate = async (url) => {
@@ -127,7 +135,7 @@ export default {
 		};
 
 		const HandleSearch = () => {
-			fetch(`setupcompany?search=${search.value}`);
+			fetch(`${endpoints.setupCompany}?search=${search.value}`);
 		};
 
 		return {
@@ -138,6 +146,8 @@ export default {
 			search,
 			HandleSearch,
 			fetchAll,
+
+			userCan,
 		};
 	},
 };

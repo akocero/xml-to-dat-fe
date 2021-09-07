@@ -1,29 +1,26 @@
-import { ref } from 'vue'
-import axios from '../axios/axios-instance'
+import { ref } from "vue";
+import axios from "../axios/axios-instance";
 
 const getItem = (id, url) => {
+	const item = ref(null);
+	const error = ref(null);
+	const loading = ref(false);
 
-    const item = ref(null)
-    const error = ref(null)
-    const loading = ref(false)
-    
-    const load = async () => {
-        loading.value = true
-        try {
-           const res = await axios.get(`${url}/${id}`);
-            console.log(res.data)
-            item.value = res.data
-            loading.value = false
-           return res.data
-           
-        }
-        catch (err) {
-            console.log(err.message)
-            loading.value = false
-        }
-    }
+	const load = async () => {
+		loading.value = true;
+		try {
+			const res = await axios.get(`${url}/${id}`);
+			// console.log(res.data)
+			item.value = res.data;
+			loading.value = false;
+			return res.data;
+		} catch (err) {
+			console.log(err.message);
+			loading.value = false;
+		}
+	};
 
-    return { item, error, load }
-}
+	return { item, error, load };
+};
 
-export default getItem
+export default getItem;

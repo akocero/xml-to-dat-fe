@@ -54,6 +54,7 @@ export default {
 	setup() {
 		const store = useStore();
 		const user = computed(() => store.getters.getUser);
+		// console.log(JSON.parse(user.value.role.abilities));
 		return {
 			// access a getter in computed function
 			user,

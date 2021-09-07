@@ -21,7 +21,7 @@
 			<form
 				class="w-75 auth-form"
 				@submit.prevent="handleSubmit"
-				v-if="!user && !showForgotPassword"
+				v-if="!user"
 			>
 				<h3 class="h3">Sign In</h3>
 				<hr />
@@ -171,13 +171,14 @@ export default {
 				password: password.value,
 			};
 
-			await login("payrolluser/auth", data);
+			await login("auth", data);
 			if (error.value) {
 				console.log(error.value);
 			} else {
 				// user.value = response.value
 				// console.log(response.value.login_id)
-				store.commit("setUser", response.value);
+				store.commit("setUser", response.value.user);
+				store.commit("setToken", response.value.token);
 				//   router.push({path: '/app/dashboard'} )
 				// window.location = "http://localhost:8080/app/dashboard";
 			}

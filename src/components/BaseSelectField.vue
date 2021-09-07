@@ -29,7 +29,7 @@
 export default {
 	name: "BaseSelectField",
 	props: {
-		modelValue: String,
+		modelValue: String | Number,
 		emptyOption: {
 			type: Boolean,
 			default: true,

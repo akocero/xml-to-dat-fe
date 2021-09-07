@@ -322,6 +322,7 @@ import Spinner from "@/components/Spinner";
 import { onBeforeMount, onUnmounted, ref } from "vue";
 import BaseInputField from "@/components/BaseInputField";
 import useData from "@/composables/useData";
+import endpoints from "@/utils/endpoints";
 import $ from "jquery";
 export default {
 	name: "EditSignatory",
@@ -333,7 +334,7 @@ export default {
 	setup(props, { emit }) {
 		const { item, error: errorData, load } = getItem(
 			props.signatory_id,
-			"setupcompanysignatory"
+			endpoints.setupCompanySignatory
 		);
 
 		const { response, error, update, loading, unknownError } = useData();
@@ -360,7 +361,7 @@ export default {
 			};
 
 			const res = await update(
-				"setupcompanysignatory/" + props.signatory_id,
+				`${endpoints.setupCompanySignatory}/${props.signatory_id}`,
 				updatedSignatory
 			);
 

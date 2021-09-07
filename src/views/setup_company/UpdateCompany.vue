@@ -943,6 +943,7 @@ import ViewBank from "./ViewBank";
 import CreateSignatory from "./CreateSignatory";
 import EditSignatory from "./EditSignatory";
 import ViewSignatory from "./ViewSignatory";
+import endpoints from "@/utils/endpoints";
 
 import feather from "feather-icons";
 
@@ -978,7 +979,7 @@ export default {
 		const route = useRoute();
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
-			"setupcompany"
+			endpoints.setupCompany
 		);
 
 		const { response, error, create, loading, unknownError } = useData();
@@ -1054,7 +1055,7 @@ export default {
 			}
 
 			const res = await create(
-				`setupcompany/${route.params.id}?_method=PATCH`,
+				`${endpoints.setupCompany}/${route.params.id}?_method=PATCH`,
 				form_data
 			);
 
@@ -1175,7 +1176,9 @@ export default {
 
 		const handleDeleteImage = async (id) => {
 			if (confirm("Company logo will be remove. Are you sure?")) {
-				const res = await deleteImage("setupcompany/deleteImage/" + id);
+				const res = await deleteImage(
+					`${endpoints.setupCompanyImageLogo}/${id}`
+				);
 				if (res.status === 204) {
 					item.value.image_path = null;
 					displayAlert("success", "Image Deleted");

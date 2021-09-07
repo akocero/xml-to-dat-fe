@@ -17,6 +17,7 @@
 					<router-link
 						:to="{ name: 'create-user' }"
 						class="btn btn-custom-primary"
+						v-if="userCan('setup:user:store')"
 						>New User</router-link
 					>
 				</div>
@@ -61,26 +62,26 @@
 									</td>
 									<td>{{ item.full_name }}</td>
 									<td>{{ item.login_id }}</td>
-									<td class="text-center">
+									<td class="text-center" v-if="item.role">
 										<Badge
 											v-if="
-												item?.login_type?.toLowerCase() ===
+												item?.role.name?.toLowerCase() ===
 													'admin'
 											"
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="'success'"
 										/>
 										<Badge
 											v-else-if="
-												item?.login_type?.toLowerCase() ===
+												item?.role.name?.toLowerCase() ===
 													'manager'
 											"
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="'warning'"
 										/>
 										<Badge
 											v-else
-											:type="item?.login_type"
+											:type="item?.role.name"
 											:badge="''"
 										/>
 									</td>
@@ -91,6 +92,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('setup:user:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -103,6 +105,7 @@
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
+											v-if="userCan('setup:user:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -134,25 +137,29 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
+import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
 import Alert from "@/components/Alert.vue";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "User",
 	props: ["userAdded"],
 	components: { Spinner, Pagination, Badge, Alert },
 	setup(props) {
 		const { data, error, fetch, isPending } = useFetch();
+		const { userCan } = useAbility();
 		const search = ref("");
 		onBeforeMount(() => {
 			fetchAll();
 		});
 
-		const fetchAll = () => {
+		const fetchAll = async () => {
 			search.value = "";
-			fetch("payrolluser");
+			await fetch(endpoints.setupUser);
+
+			console.log(data.value);
 		};
 
 		const paginate = async (url) => {
@@ -160,7 +167,7 @@ export default {
 		};
 
 		const HandleSearch = () => {
-			fetch(`payrolluser?search=${search.value}`);
+			fetch(`${endpoints.setupUser}?search=${search.value}`);
 		};
 		const handleCloseModal = () => {
 			props.userAdded = false;
@@ -175,6 +182,7 @@ export default {
 			search,
 			isPending,
 			handleCloseModal,
+			userCan,
 		};
 	},
 };

@@ -313,6 +313,7 @@ import { ref } from "vue";
 import $ from "jquery";
 import BaseInputField from "@/components/BaseInputField";
 import useData from "@/composables/useData";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "CreateSignatory",
@@ -352,7 +353,7 @@ export default {
 				payroll_journal_report: payroll_journal_report.value,
 			};
 
-			await create("setupcompanysignatory", newSignatory);
+			await create(endpoints.setupCompanySignatory, newSignatory);
 
 			if (!error.value) {
 				$("#create-signatory-modal").modal("hide");

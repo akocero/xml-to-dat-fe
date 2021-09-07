@@ -22,7 +22,11 @@
 				</a>
 			</li>
 			<li class="nav-item">
-				<router-link class="nav-link" :to="{name: 'dashboard'}" role="button">
+				<router-link
+					class="nav-link"
+					:to="{ name: 'dashboard' }"
+					role="button"
+				>
 					<i v-html="home"></i>
 				</router-link>
 			</li>
@@ -134,13 +138,12 @@ export default {
 		};
 
 		const logout = () => {
-
-			if (confirm('Are you sure you want to sign out?')) {
+			if (confirm("Are you sure you want to sign out?")) {
 				store.commit("removeUser");
 				store.commit("removeCompany");
+				store.commit("removeToken");
 				window.location.reload();
 			}
-			
 		};
 
 		return { logout, toggleSidebarDocked };

@@ -306,6 +306,7 @@
 <script>
 import useData from "@/composables/useData";
 import { onBeforeMount, ref } from "vue";
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "ModalEmployeeClass",
 	emits: [
@@ -358,7 +359,7 @@ export default {
 
 			console.log(data);
 
-			await create("setup_employee_class", data);
+			await create(endpoints.setupEmployeeEmployeeClass, data);
 
 			if (!error.value) {
 				emit("employeeClassAdded", response.value);
@@ -377,7 +378,7 @@ export default {
 					active: 1,
 				};
 				await update(
-					"setup_employee_class/" + props.forEditEmployeeClassItem.id,
+					`${endpoints.setupEmployeeEmployeeClass}/${props.forEditEmployeeClassItem.id}`,
 					data
 				);
 

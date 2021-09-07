@@ -69,22 +69,10 @@
 								<BaseSelectField
 									id="select_role"
 									label="Role"
-									v-model="item.login_type"
+									v-model="item.role_id"
 									:error="error"
-									:errorField="
-										error?.errors?.login_type || null
-									"
-									:options="[
-										{
-											value: 'employee',
-											label: 'Employee',
-										},
-										{
-											value: 'admin',
-											label: 'Administrator',
-										},
-										{ value: 'manager', label: 'Manager' },
-									]"
+									:errorField="error?.errors?.role_id || null"
+									:options="convertRoleToValidArray || []"
 									:required="true"
 								/>
 							</div>
@@ -102,7 +90,7 @@
 						<div
 							class="multi-select text-secondary"
 							v-if="
-								!isPendingCompany &&
+								!loading &&
 									companies.data?.length &&
 									companiesArray.length
 							"
@@ -145,13 +133,13 @@
 				<div class="row col-12">
 					<button
 						class="btn btn-custom-success"
-						v-if="!loading && !disabledSaveChanges"
+						v-if="!saving && !disabledSaveChanges"
 					>
 						Save Changes
 					</button>
 					<button
 						class="btn btn-custom-success"
-						v-if="loading"
+						v-if="saving"
 						disabled
 					>
 						Saving ...
@@ -169,7 +157,7 @@ import useAlert from "@/composables/useAlert";
 import useFetch from "@/composables/useFetch";
 
 import { onBeforeRouteLeave, useRoute } from "vue-router";
-import { onMounted, computed, ref } from "vue";
+import { onMounted, computed, ref, onBeforeMount } from "vue";
 import feather from "feather-icons";
 
 import Alert from "@/components/Alert";
@@ -177,7 +165,7 @@ import Spinner from "@/components/Spinner.vue";
 import BaseInputField from "@/components/BaseInputField";
 import BaseSelectField from "@/components/BaseSelectField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
-
+import endpoints from "@/utils/endpoints";
 export default {
 	name: "UpdateUser",
 	components: {
@@ -199,14 +187,41 @@ export default {
 		const {
 			data: companies,
 			error: errorCompany,
-			fetch,
-			isPending: isPendingCompany,
+			fetch: fetchCompanies,
 		} = useFetch();
 
 		const { alert, displayAlert } = useAlert();
-		const { response, error, update, loading, unknownError } = useData();
+		const {
+			response,
+			error,
+			update,
+			loading: saving,
+			unknownError,
+		} = useData();
 
-		fetch("setupcompany?page=1");
+		const { data: roles, fetch: fetchRoles } = useFetch();
+
+		const loading = ref(false);
+
+		onBeforeMount(async () => {
+			loading.value = true;
+			await fetchCompanies(`${endpoints.setupCompany}?page=1`);
+			await fetchRoles(endpoints.setupRole);
+			loading.value = false;
+
+			console.log(roles.value);
+		});
+
+		const convertRoleToValidArray = computed(() => {
+			if (!loading.value && roles.value) {
+				return roles.value.data.map((role) => {
+					return {
+						value: role.id,
+						label: role.name,
+					};
+				});
+			}
+		});
 
 		const search = ref("");
 		const disabledSaveChanges = ref(false);
@@ -219,13 +234,14 @@ export default {
 
 		const { item, error: errorData, load } = getItem(
 			route.params.id,
-			"payrolluser"
+			endpoints.setupUser
 		);
 
 		const companiesArray = ref([100]);
 
 		const pushToCompaniesArray = async () => {
 			await load();
+			console.log(item.value);
 			companiesArray.value = [];
 			if (!errorData.value) {
 				item?.value?.setup_companies.forEach((item) => {
@@ -238,7 +254,7 @@ export default {
 			if (companiesArray.value.length < 1) {
 				disabledSaveChanges.value = true;
 			}
-			console.log(companiesArray.value.length);
+			// console.log(companiesArray.value.length);
 		});
 
 		onMounted(() => {
@@ -249,14 +265,14 @@ export default {
 			const data = {
 				full_name: item.value.full_name,
 				login_id: item.value.login_id.toLowerCase(),
-				login_type: item.value.login_type,
+				role_id: item.value.role_id,
 				employee_id: item.value.employee_id,
 				active: 1,
 				password: "password",
 				companies: companiesArray.value,
 			};
 
-			await update(`payrolluser/${route.params.id}`, data);
+			await update(`${endpoints.setupUser}/${route.params.id}`, data);
 			if (!error.value) {
 				displayAlert("info", "User Updated");
 			} else {
@@ -277,7 +293,7 @@ export default {
 			handleSubmit,
 
 			error,
-			loading,
+			saving,
 			response,
 
 			item,
@@ -287,13 +303,15 @@ export default {
 			search,
 			matchCompanies,
 
-			isPendingCompany,
+			loading,
 			companiesArray,
 
 			disabledSaveChanges,
 			disableSaveChanges,
 
 			alert,
+
+			convertRoleToValidArray,
 		};
 	},
 };
