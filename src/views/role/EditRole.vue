@@ -149,7 +149,7 @@
 						type="submit"
 						class="btn btn-custom-success"
 						v-if="!saving"
-						value="Save"
+						value="Save Changes"
 					/>
 					<button
 						class="btn btn-custom-success"

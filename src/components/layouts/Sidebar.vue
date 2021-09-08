@@ -242,15 +242,15 @@ export default {
 			1
 		)}${user_name_array[user_name_array.length - 1].substr(0, 1)}`;
 
-		onMounted(() => {
-			const activeLink = document.querySelector(
-				".router-link-exact-active"
-			);
+		// onMounted(() => {
+		// 	const activeLink = document.querySelector(
+		// 		".router-link-exact-active"
+		// 	);
 
-			activeLink.parentElement.parentElement.parentElement.classList.add(
-				"menu-open"
-			);
-		});
+		// 	activeLink.parentElement.parentElement.parentElement.classList.add(
+		// 		"menu-open"
+		// 	);
+		// });
 
 		return {
 			user,

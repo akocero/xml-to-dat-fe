@@ -13,12 +13,12 @@
 				<div
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
-					<h4 class="h4 mb-0 text-primary">Role List</h4>
+					<h4 class="h4 mb-0 text-primary">Payroll Parameter List</h4>
 					<router-link
 						:to="{ name: 'create-payroll-parameter' }"
 						class="btn btn-custom-primary"
 						v-if="userCan('setup:role:store')"
-						>New Role</router-link
+						>New Payroll Parameter</router-link
 					>
 				</div>
 			</div>
@@ -48,7 +48,7 @@
 						<table class="table">
 							<thead>
 								<tr class="text-secondary">
-									<th class="text-center">Role Code</th>
+									<th class="text-center">Code</th>
 									<th class="text-center">Description</th>
 									<th width="12%">Actions</th>
 								</tr>
@@ -56,7 +56,7 @@
 							<tbody v-if="!isPending && data?.data?.length">
 								<tr v-for="item in data.data" :key="item.id">
 									<td class="text-center">
-										{{ item.name }}
+										{{ item.code }}
 									</td>
 									<th class="text-center">
 										{{ item.description }}
@@ -135,7 +135,7 @@ export default {
 
 		const fetchAll = async () => {
 			search.value = "";
-			await fetch(endpoints.setupRole);
+			await fetch(endpoints.setupPayrollParameter);
 			convertAbilitiesToArray();
 		};
 
@@ -152,7 +152,9 @@ export default {
 		};
 
 		const HandleSearch = async () => {
-			await fetch(`${endpoints.setupRole}?search=${search.value}`);
+			await fetch(
+				`${endpoints.setupPayrollParameter}?search=${search.value}`
+			);
 			convertAbilitiesToArray();
 		};
 		const handleCloseModal = () => {
