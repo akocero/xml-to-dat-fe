@@ -56,7 +56,7 @@
 									:to="{ name: 'dashboard' }"
 									class="nav-link"
 								>
-									<i class="far fa-circle nav-icon"></i>
+									<i class="nav-icon far pr-2">&#9679;</i>
 									<p>Dashboard</p>
 								</router-link>
 							</li>

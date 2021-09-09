@@ -1,5 +1,5 @@
 <template>
-	<table class="table table-bordered" v-if="table.length">
+	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>Range in Minutes</th>
@@ -7,7 +7,7 @@
 				<th width="6%">Action</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody v-if="table.length">
 			<tr v-for="item in table" :key="item.id">
 				<td>
 					<input
@@ -39,27 +39,31 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="100" class="text-center">
+				<td colspan="100">
 					<button
 						type="button"
-						class="btn btn-success"
+						class="btn btn-primary"
 						@click="$emit('handleAddInTable', type)"
 					>
-						Add New
+						<i v-html="iPlus"></i>
+					</button>
+				</td>
+			</tr>
+		</tbody>
+		<tbody v-if="!table.length">
+			<tr>
+				<td colspan="100">
+					<button
+						type="button"
+						class="btn btn-primary"
+						@click="$emit('handleAddInTable', type)"
+					>
+						<i v-html="iPlus"></i>
 					</button>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-
-	<button
-		v-else
-		type="button"
-		class="btn btn-success"
-		@click="$emit('handleAddInTable', type)"
-	>
-		Add New
-	</button>
 </template>
 
 <script>
@@ -70,6 +74,11 @@ export default {
 	computed: {
 		iTrash: function() {
 			return feather.icons["trash"].toSvg({
+				width: 16,
+			});
+		},
+		iPlus: function() {
+			return feather.icons["plus"].toSvg({
 				width: 16,
 			});
 		},

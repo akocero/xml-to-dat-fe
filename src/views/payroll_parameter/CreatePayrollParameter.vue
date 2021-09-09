@@ -29,6 +29,14 @@
 								tooltip: null,
 							},
 							{
+								id: 'overtime-setup',
+								label: 'Overtime',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
 								id: 'working',
 								label: 'Working',
 								error: workingTabHasError,
@@ -46,48 +54,43 @@
 							},
 							{
 								id: 'night-diff',
-								label: 'Night Differencial',
+								label: 'Night Differential',
 								error: nightDiffTabHasError,
 								active: false,
 								disabled: false,
-								tooltip:
-									'Please save your information for Main, Communication, and Contribution tabs to enable Bank Tab',
+								tooltip: null,
 							},
 							{
 								id: 'undertime',
-								label: 'Undertime Table',
+								label: 'Undertime Limit',
 								error: null,
 								active: false,
 								disabled: false,
-								tooltip:
-									'Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab',
+								tooltip: null,
 							},
 							{
 								id: 'overtime',
-								label: 'Overtime Table',
+								label: 'Overtime Limit',
 								error: null,
 								active: false,
 								disabled: false,
-								tooltip:
-									'Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab',
+								tooltip: null,
 							},
 							{
 								id: 'late',
-								label: 'Late Table',
+								label: 'Late Limit',
 								error: null,
 								active: false,
 								disabled: false,
-								tooltip:
-									'Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab',
+								tooltip: null,
 							},
 							{
 								id: 'excess',
-								label: 'Excess Table',
+								label: 'Excess Limit',
 								error: null,
 								active: false,
 								disabled: false,
-								tooltip:
-									'Please save your information for Main, Communication, and Contribution tabs to enable Signatory Tab',
+								tooltip: null,
 							},
 						]"
 					/>
@@ -130,6 +133,130 @@
 									placeholder="Ex. Driver, Guard"
 									:required="false"
 								/>
+							</div>
+						</div>
+						<hr class="mb-4" />
+						<div class="row">
+							<BaseRowHeading
+								heading="Computation Limit"
+								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+							/>
+							<div class="row col-md-8">
+								<div class="form-group col-3">
+									<BaseSelectField
+										id="input_undertime_limit"
+										label="Undertime Limit"
+										v-model="undertime_limit"
+										:error="error"
+										:errorField="
+											error?.errors?.undertime_limit ||
+												null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-3">
+									<BaseSelectField
+										id="input_late_limit"
+										label="Late Limit"
+										v-model="late_limit"
+										:error="error"
+										:errorField="
+											error?.errors?.late_limit || null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-3">
+									<BaseSelectField
+										id="input_overtime_limit"
+										label="Overtime Limit"
+										v-model="overtime_limit"
+										:error="error"
+										:errorField="
+											error?.errors?.overtime_limit ||
+												null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-3">
+									<BaseSelectField
+										id="input_excess_limit"
+										label="Excess Limit"
+										v-model="excess_limit"
+										:error="error"
+										:errorField="
+											error?.errors?.excess_limit || null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div
+						class="tab-pane fade"
+						id="pills-overtime-setup"
+						role="tabpanel"
+						aria-labelledby="pills-overtime-setup-tab"
+					>
+						<div class="row">
+							<BaseRowHeading
+								heading="Overtime Setup"
+								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+								colspan="col-md-12"
+							/>
+							<div class="col-md-12">
+								<div class="row">
+									<PayrollParameterOTTable
+										:table="overtime_setup"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -208,7 +335,7 @@
 								heading="Logs Status Setup"
 								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
 							/>
-							<div class="form-group col-4">
+							<div class="form-group col-3">
 								<BaseSelectField
 									id="input_log_status"
 									label="Log Status"
@@ -228,7 +355,110 @@
 										},
 									]"
 									:required="false"
+									:emptyOption="false"
 								/>
+							</div>
+						</div>
+						<hr class="mb-4" />
+						<div class="row">
+							<BaseRowHeading
+								heading="Additional Setup"
+								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+							/>
+							<div class="col-md-8 row">
+								<div class="form-group col-4">
+									<BaseSelectField
+										id="input_ot_minus_ut"
+										label="UT to Deduct from OT(Total)"
+										v-model="ot_minus_ut"
+										:error="error"
+										:errorField="
+											error?.errors?.ot_minus_ut || null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-5">
+									<BaseSelectField
+										id="input_minimun_hours"
+										label="Must work Minimun expected hours before"
+										v-model="minimun_hours"
+										:error="error"
+										:errorField="
+											error?.errors?.minimun_hours || null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-3">
+									<BaseSelectField
+										id="input_in_out"
+										label="In Out Not Visible"
+										v-model="in_out"
+										:error="error"
+										:errorField="
+											error?.errors?.in_out || null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
+								<div class="form-group col-4">
+									<BaseSelectField
+										id="input_halfday_saturday"
+										label="Compute Half Day for Saturday Absences"
+										v-model="halfday_saturday"
+										:error="error"
+										:errorField="
+											error?.errors?.halfday_saturday ||
+												null
+										"
+										:options="[
+											{
+												value: 0,
+												label: 'Disabled',
+											},
+											{
+												value: 1,
+												label: 'Enabled',
+											},
+										]"
+										:required="false"
+										:emptyOption="false"
+									/>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -363,6 +593,63 @@
 								</div>
 							</div>
 						</div>
+						<hr class="mb-4" />
+						<div class="row">
+							<BaseRowHeading
+								heading="Additional Setup"
+								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+							/>
+							<div class="form-group col-4">
+								<BaseSelectField
+									id="input_preceding_legal_holiday_payment"
+									label='Non - Payment on Legal Holiday for LWOP on the Working Day "PRECEDING" that Legay Holiday'
+									v-model="preceding_legal_holiday_payment"
+									:error="error"
+									:errorField="
+										error?.errors
+											?.preceding_legal_holiday_payment ||
+											null
+									"
+									:options="[
+										{
+											value: 0,
+											label: 'Disabled',
+										},
+										{
+											value: 1,
+											label: 'Enabled',
+										},
+									]"
+									:required="false"
+									:emptyOption="false"
+								/>
+							</div>
+							<div class="form-group col-4">
+								<BaseSelectField
+									id="input_after_legal_holiday_payment"
+									label='Non - Payment on Legal Holiday for LWOP on the Working Day   "AFTER" that Legay Holiday'
+									v-model="after_legal_holiday_payment"
+									:error="error"
+									:errorField="
+										error?.errors
+											?.after_legal_holiday_payment ||
+											null
+									"
+									:options="[
+										{
+											value: 0,
+											label: 'Disabled',
+										},
+										{
+											value: 1,
+											label: 'Enabled',
+										},
+									]"
+									:required="false"
+									:emptyOption="false"
+								/>
+							</div>
+						</div>
 					</div>
 					<div
 						class="tab-pane fade"
@@ -406,6 +693,37 @@
 										type="time"
 									/>
 								</div>
+							</div>
+						</div>
+						<hr class="mb-4" />
+						<div class="row">
+							<BaseRowHeading
+								heading="Additional Setup"
+								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+							/>
+							<div class="form-group col-3">
+								<BaseSelectField
+									id="input_night_diff_minus_break"
+									label="Deduct Break from Night Diff"
+									v-model="night_diff_minus_break"
+									:error="error"
+									:errorField="
+										error?.errors?.night_diff_minus_break ||
+											null
+									"
+									:options="[
+										{
+											value: 0,
+											label: 'Disabled',
+										},
+										{
+											value: 1,
+											label: 'Enabled',
+										},
+									]"
+									:required="false"
+									:emptyOption="false"
+								/>
 							</div>
 						</div>
 					</div>
@@ -537,6 +855,7 @@ import feather from "feather-icons";
 import { ref, computed } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import PayrollParameterTable from "./PayrollParameterTable.vue";
+import PayrollParameterOTTable from "./PayrollParameterOTTable.vue";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import BaseNavigationTab from "@/components/BaseNavigationTab";
@@ -560,6 +879,7 @@ export default {
 		BaseNavigationTab,
 		BaseSelectField,
 		PayrollParameterTable,
+		PayrollParameterOTTable,
 	},
 	computed: {
 		chevronRight: function() {
@@ -574,22 +894,109 @@ export default {
 		const router = useRouter();
 		const code = ref("");
 		const description = ref("");
+		const undertime_limit = ref(0);
+		const overtime_limit = ref(0);
+		const late_limit = ref(0);
+		const excess_limit = ref(0);
+
 		const no_working_days_in_year = ref("");
 		const no_working_hours_in_day = ref("");
 		const no_periods_in_month = ref("");
-		const log_status = ref("");
+		const log_status = ref(0);
+		const ot_minus_ut = ref(0);
+		const minimun_hours = ref(0);
+		const halfday_saturday = ref(0);
+		const in_out = ref(0);
+
 		const contructual_withhold_percent = ref("");
 		const gross_based = ref("");
 		const withhold_start_month = ref("");
 		const withhold_start_period = ref("");
 		const end_of_year_bonus = ref("");
+		const preceding_legal_holiday_payment = ref(0);
+		const after_legal_holiday_payment = ref(0);
+
 		const night_diff_start = ref("");
 		const night_diff_end = ref("");
+		const night_diff_minus_break = ref(0);
+
 		const undertime_table = ref([]);
 		const late_table = ref([]);
 		const overtime_table = ref([]);
 		const excess_table = ref([]);
-		const roleAdded = ref(false);
+		const overtime_setup = ref([
+			{
+				dayStatus: "Regular",
+				nightDiff: 0.1,
+				overtime: 1.25,
+				nightDiff2: 1.375,
+				excess: 0,
+				nightDiffExcess: 0,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Restday",
+				nightDiff: 0.13,
+				overtime: 1.3,
+				nightDiff2: 1.43,
+				excess: 1.69,
+				nightDiffExcess: 1.86,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Special Holiday",
+				nightDiff: 1.13,
+				overtime: 1.3,
+				nightDiff2: 1.43,
+				excess: 1.69,
+				nightDiffExcess: 1.86,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Special Holiday Restday",
+				nightDiff: 0.15,
+				overtime: 1.5,
+				nightDiff2: 1.65,
+				excess: 1.95,
+				nightDiffExcess: 2.14,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Legal Holiday",
+				nightDiff: 0.2,
+				overtime: 1,
+				nightDiff2: 1.2,
+				excess: 2.6,
+				nightDiffExcess: 2.86,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Legal Holiday Restday",
+				nightDiff: 0.26,
+				overtime: 1.6,
+				nightDiff2: 1.86,
+				excess: 3.38,
+				nightDiffExcess: 3.72,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+			{
+				dayStatus: "Company Holiday",
+				nightDiff: 0.13,
+				overtime: 1.3,
+				nightDiff2: 1.43,
+				excess: 1.69,
+				nightDiffExcess: 1.86,
+				maxOTNumber: 0,
+				maxOTNumberEnabled: false,
+			},
+		]);
+		const payrollParameterAdded = ref(false);
 
 		const validateAndAddDataIn = (data, tempData) => {
 			let err = false;
@@ -611,18 +1018,16 @@ export default {
 				range: "",
 				value: "",
 			};
-			if (type === "undertime") {
+			type === "undertime" &&
 				validateAndAddDataIn(undertime_table.value, tempData);
-			}
-			if (type === "overtime") {
+
+			type === "overtime" &&
 				validateAndAddDataIn(overtime_table.value, tempData);
-			}
-			if (type === "late") {
-				validateAndAddDataIn(late_table.value, tempData);
-			}
-			if (type === "excess") {
+
+			type === "late" && validateAndAddDataIn(late_table.value, tempData);
+
+			type === "excess" &&
 				validateAndAddDataIn(excess_table.value, tempData);
-			}
 		};
 
 		const handleDeleteInTable = ({ type, id }) => {
@@ -658,22 +1063,39 @@ export default {
 			const data = {
 				code: code.value,
 				description: description.value,
+				undertime_limit: undertime_limit.value,
+				late_limit: late_limit.value,
+				overtime_limit: overtime_limit.value,
+				excess_limit: excess_limit.value,
+
 				no_working_days_in_year: no_working_days_in_year.value,
 				no_working_hours_in_day: no_working_hours_in_day.value,
 				no_periods_in_month: no_periods_in_month.value,
 				log_status: log_status.value,
+				ot_minus_ut: ot_minus_ut.value,
+				minimun_hours: minimun_hours.value,
+				halfday_saturday: halfday_saturday.value,
+				in_out: in_out.value,
+
 				contructual_withhold_percent:
 					contructual_withhold_percent.value,
 				gross_based: gross_based.value,
 				withhold_start_month: withhold_start_month.value,
 				withhold_start_period: withhold_start_period.value,
 				end_of_year_bonus: end_of_year_bonus.value,
+				preceding_legal_holiday_payment:
+					preceding_legal_holiday_payment.value,
+				after_legal_holiday_payment: after_legal_holiday_payment.value,
+
 				night_diff_start: night_diff_start.value,
 				night_diff_end: night_diff_end.value,
+				night_diff_minus_break: night_diff_minus_break.value,
+
 				undertime_table: undertime_table.value,
 				late_table: late_table.value,
 				overtime_table: overtime_table.value,
 				excess_table: excess_table.value,
+				overtime_setup: overtime_setup.value,
 			};
 
 			console.log(data);
@@ -681,11 +1103,13 @@ export default {
 			await create(endpoints.setupPayrollParameter, data);
 
 			if (!error.value) {
-				console.log("user created");
-				roleAdded.value = true;
+				console.log("Payroll Params created");
+				payrollParameterAdded.value = true;
 				router.push({
-					name: "role",
-					params: { roleAdded: roleAdded.value },
+					name: "payroll-parameter",
+					params: {
+						payrollParameterAdded: payrollParameterAdded.value,
+					},
 				});
 				// displayAlert("success", "User Added");
 			} else {
@@ -695,7 +1119,7 @@ export default {
 		};
 
 		onBeforeRouteLeave((to, from) => {
-			if (!roleAdded.value) {
+			if (!payrollParameterAdded.value) {
 				const answer = window.confirm(
 					"Do you really want to leave? you have unsaved changes!"
 				);
@@ -732,21 +1156,37 @@ export default {
 
 			code,
 			description,
+			undertime_limit,
+			overtime_limit,
+			late_limit,
+			excess_limit,
+
 			no_working_days_in_year,
 			no_working_hours_in_day,
 			no_periods_in_month,
 			log_status,
+			ot_minus_ut,
+			minimun_hours,
+			halfday_saturday,
+			in_out,
+
 			contructual_withhold_percent,
 			gross_based,
 			withhold_start_month,
 			withhold_start_period,
 			end_of_year_bonus,
+			preceding_legal_holiday_payment,
+			after_legal_holiday_payment,
+
 			night_diff_start,
 			night_diff_end,
+			night_diff_minus_break,
+
 			undertime_table,
 			overtime_table,
 			late_table,
 			excess_table,
+			overtime_setup,
 
 			error,
 			loading,
