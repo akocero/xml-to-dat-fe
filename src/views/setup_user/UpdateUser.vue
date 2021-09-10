@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -190,7 +182,7 @@ export default {
 			fetch: fetchCompanies,
 		} = useFetch();
 
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 		const {
 			response,
 			error,
@@ -274,9 +266,9 @@ export default {
 
 			await update(`${endpoints.setupUser}/${route.params.id}`, data);
 			if (!error.value) {
-				displayAlert("info", "User Updated");
+				pushAlert("info", "User Updated");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 				// console.log("error: ", error.value);
 			}
 		};
@@ -308,8 +300,6 @@ export default {
 
 			disabledSaveChanges,
 			disableSaveChanges,
-
-			alert,
 
 			convertRoleToValidArray,
 		};

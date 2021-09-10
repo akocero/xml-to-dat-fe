@@ -43,3 +43,22 @@
 		transform: translateX(0);
 	}
 }
+
+.list-enter-active {
+	animation: wobble 0.8s ease;
+}
+.list-leave-active {
+	transition: all 1s ease;
+}
+
+.list-enter-from {
+	opacity: 1;
+	transform: translateY(0);
+}
+.list-leave-to {
+	opacity: 0;
+	transform: translateY(30px);
+}
+.list-move {
+	transition: transform 0.4s ease;
+}

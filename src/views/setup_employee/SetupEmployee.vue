@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<div class="row">
 		<ModalCostCenter
 			v-if="showCostCenter"
@@ -513,7 +505,7 @@ export default {
 			fetch: employeeClassFetch,
 		} = useFetch();
 		const { response, create, update, error, unknownError } = useData();
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 
 		const value = ref("");
 		const description = ref("");
@@ -586,7 +578,6 @@ export default {
 		};
 
 		const handleCreate = async () => {
-			alert.value = null;
 			error.value = null;
 			const newEmpployeeDropdown = {
 				type: dropdownType.value,
@@ -602,13 +593,12 @@ export default {
 				$("#employeeSetupModal").modal("hide");
 				data.value.data = [response.value, ...data.value.data]; // append reponse from api to table related to it
 
-				displayAlert("success", dropdownType.value + " added");
+				pushAlert("success", dropdownType.value + " added");
 				resetForm();
 			}
 		};
 
 		const handleUpdate = async () => {
-			alert.value = null;
 			error.value = null;
 			const newEmpployeeDropdown = {
 				type: dropdownType.value,
@@ -627,7 +617,7 @@ export default {
 					response.value
 				);
 				$("#employeeSetupModal").modal("hide");
-				displayAlert("info", dropdownType.value + " updated");
+				pushAlert("info", dropdownType.value + " updated");
 				resetForm();
 			}
 		};
@@ -644,7 +634,7 @@ export default {
 				...costCenterData.value.data,
 			];
 			showCostCenter.value = false;
-			displayAlert("success", "cost center added");
+			pushAlert("success", "cost center added");
 		};
 
 		const costCenterUpdated = (eventData) => {
@@ -654,13 +644,13 @@ export default {
 			);
 			showCostCenter.value = false;
 			$("#cost-center-modal").modal("hide");
-			displayAlert("info", "cost center updated");
+			pushAlert("info", "cost center updated");
 		};
 
 		const showCostCenterModal = (id) => {
 			console.log(id);
 			showCostCenter.value = true;
-			alert.value = null;
+
 			forEditCostCenterItem.value = null;
 			// 0 means nothing to edit then go for adding data
 			if (id !== 0) {
@@ -688,7 +678,7 @@ export default {
 				...employeeClassData.value.data,
 			];
 			showEmployeeClass.value = false;
-			displayAlert("success", "employee class added");
+			pushAlert("success", "employee class added");
 		};
 
 		const employeeClassUpdated = (eventData) => {
@@ -698,13 +688,13 @@ export default {
 			);
 			showEmployeeClass.value = false;
 			$("#employee-class-modal").modal("hide");
-			displayAlert("info", "employee class updated");
+			pushAlert("info", "employee class updated");
 		};
 
 		const showEmployeeClassModal = (id) => {
 			console.log(id);
 			showEmployeeClass.value = true;
-			alert.value = null;
+
 			forEditEmployeeClassItem.value = null;
 			// 0 means nothing to edit then go for adding data
 			if (id !== 0) {
@@ -740,7 +730,6 @@ export default {
 			forEditData,
 			resetForm,
 
-			alert,
 			loading,
 
 			showCostCenter,

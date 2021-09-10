@@ -1,16 +1,24 @@
 <template>
+	<transition name="alert">
+		<Alert
+			v-if="userAdded"
+			:status="'success'"
+			:message="'User Added'"
+			@closeModal="handleCloseModal"
+		/>
+	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body pt-4">
 			<div class="row mb-4">
 				<div
 					class="col-md-12 d-flex justify-content-between align-items-center"
 				>
-					<h4 class="h4 mb-0 text-primary">User List</h4>
+					<h4 class="h4 mb-0 text-primary">Payroll Parameter List</h4>
 					<router-link
-						:to="{ name: 'create-user' }"
+						:to="{ name: 'create-payroll-parameter' }"
 						class="btn btn-custom-primary"
-						v-if="userCan('setup:user:store')"
-						>New User</router-link
+						v-if="userCan('setup:role:store')"
+						>New Payroll Parameter</router-link
 					>
 				</div>
 			</div>
@@ -19,7 +27,7 @@
 				<input
 					type="text"
 					v-model="search"
-					placeholder="Type User Code, Full Name, Email / Login ID"
+					placeholder="Type Role Code, Description"
 					class="input-custom-search"
 					required
 				/>
@@ -41,50 +49,26 @@
 							<thead>
 								<tr class="text-secondary">
 									<th class="text-center">Code</th>
-									<th>Name</th>
-									<th>Email</th>
-									<th class="text-center">Role</th>
+									<th class="text-center">Description</th>
 									<th width="12%">Actions</th>
 								</tr>
 							</thead>
 							<tbody v-if="!isPending && data?.data?.length">
 								<tr v-for="item in data.data" :key="item.id">
 									<td class="text-center">
-										{{ item.employee_id }}
+										{{ item.code }}
 									</td>
-									<td>{{ item.full_name }}</td>
-									<td>{{ item.login_id }}</td>
-									<td class="text-center" v-if="item.role">
-										<Badge
-											v-if="
-												item?.role.name?.toLowerCase() ===
-													'admin'
-											"
-											:type="item?.role.name"
-											:badge="'success'"
-										/>
-										<Badge
-											v-else-if="
-												item?.role.name?.toLowerCase() ===
-													'manager'
-											"
-											:type="item?.role.name"
-											:badge="'warning'"
-										/>
-										<Badge
-											v-else
-											:type="item?.role.name"
-											:badge="''"
-										/>
-									</td>
+									<th class="text-center">
+										{{ item.description }}
+									</th>
 									<td>
 										<router-link
 											:to="{
-												name: 'view-user',
+												name: 'view-role',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('setup:user:show')"
+											v-if="userCan('setup:role:show')"
 										>
 											<i
 												class="far fa-eye text-secondary"
@@ -93,11 +77,11 @@
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
 										<router-link
 											:to="{
-												name: 'update-user',
+												name: 'edit-payroll-parameter',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
-											v-if="userCan('setup:user:update')"
+											v-if="userCan('setup:role:update')"
 										>
 											<i
 												class="far fa-edit text-secondary"
@@ -129,36 +113,44 @@
 import { ref, onBeforeMount } from "vue";
 // import { router-link } from "vue-router"
 import useFetch from "@/composables/useFetch";
-import useAbility from "@/composables/useAbility";
 import Spinner from "@/components/Spinner.vue";
 import Badge from "@/components/Badge.vue";
 import Pagination from "@/components/Pagination.vue";
 import Alert from "@/components/Alert.vue";
+
+import useAbility from "@/composables/useAbility";
 import endpoints from "@/utils/endpoints";
+
 export default {
-	name: "User",
+	name: "RoleList",
+	props: ["userAdded"],
 	components: { Spinner, Pagination, Badge, Alert },
 	setup(props) {
-		const { data, error, fetch, isPending } = useFetch();
 		const { userCan } = useAbility();
+		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
+
 		onBeforeMount(() => {
 			fetchAll();
 		});
 
 		const fetchAll = async () => {
 			search.value = "";
-			await fetch(endpoints.setupUser);
-
-			console.log(data.value);
+			await fetch(endpoints.setupPayrollParameter);
 		};
 
 		const paginate = async (url) => {
 			await fetch(url);
 		};
 
-		const HandleSearch = () => {
-			fetch(`${endpoints.setupUser}?search=${search.value}`);
+		const HandleSearch = async () => {
+			await fetch(
+				`${endpoints.setupPayrollParameter}?search=${search.value}`
+			);
+		};
+
+		const handleCloseModal = () => {
+			props.userAdded = false;
 		};
 
 		return {
@@ -169,6 +161,8 @@ export default {
 			HandleSearch,
 			search,
 			isPending,
+			handleCloseModal,
+
 			userCan,
 		};
 	},

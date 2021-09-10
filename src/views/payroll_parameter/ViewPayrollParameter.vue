@@ -1,4 +1,13 @@
 <template>
+	<transition name="alert">
+		<Alert
+			v-if="alert"
+			:status="alert.status"
+			:message="alert.message"
+			@closeModal="alert = false"
+		/>
+	</transition>
+
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -134,22 +143,6 @@
 						</div>
 					</div>
 				</div>
-				<hr />
-				<div class="row col-12">
-					<input
-						type="submit"
-						class="btn btn-custom-success"
-						v-if="!saving"
-						value="Save Changes"
-					/>
-					<button
-						class="btn btn-custom-success"
-						v-if="saving"
-						disabled
-					>
-						Saving ...
-					</button>
-				</div>
 			</form>
 		</div>
 	</div>
@@ -174,7 +167,7 @@ import { useStore } from "vuex";
 import endpoints from "@/utils/endpoints";
 
 export default {
-	name: "EditRole",
+	name: "ViewRole",
 	components: {
 		Alert,
 		Spinner,
@@ -198,7 +191,7 @@ export default {
 			loading: saving,
 			unknownError,
 		} = useData();
-		const { pushAlert } = useAlert();
+		const { alert, displayAlert } = useAlert();
 		const route = useRoute();
 		const { item, load } = getItem(route.params.id, endpoints.setupRole);
 		const router = useRouter();
@@ -215,6 +208,23 @@ export default {
 			loading.value = false;
 
 			console.log(item.value.abilities);
+
+			setTimeout(() => {
+				const tags = [
+					"input",
+					"select",
+					"textarea",
+					"button",
+					"checkbox",
+				];
+				tags.forEach((tagName) => {
+					var inputs = document.getElementsByTagName(tagName);
+					console.log(inputs[0]);
+					for (var i = 0; i < inputs.length; i++) {
+						inputs[i].disabled = true;
+					}
+				});
+			}, 100);
 		});
 		const handleSubmit = async () => {
 			const data = {
@@ -234,9 +244,9 @@ export default {
 					name: "role",
 					params: { roleAdded: roleAdded.value },
 				});
-				pushAlert("info", "User Updated");
+				// displayAlert("success", "User Added");
 			} else {
-				pushAlert("error", "Invalid Inputs");
+				displayAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
@@ -275,7 +285,7 @@ export default {
 			error,
 			saving,
 			response,
-
+			alert,
 			abilitiesArray,
 			convertToArray,
 			pushToAbilities,

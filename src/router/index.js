@@ -46,23 +46,23 @@ const routes = [
 				component: () => import("@/views/Dashboard"),
 			},
 			{
-				path: "user",
+				path: "setup/user",
 				name: "user",
 				component: () => import("@/views/setup_user/User.vue"),
 				props: true,
 			},
 			{
-				path: "user/create",
+				path: "setup/user/create",
 				name: "create-user",
 				component: () => import("@/views/setup_user/CreateUser.vue"),
 			},
 			{
-				path: "user/update/:id",
+				path: "setup/user/update/:id",
 				name: "update-user",
 				component: () => import("@/views/setup_user/UpdateUser.vue"),
 			},
 			{
-				path: "user/view/:id",
+				path: "setup/user/view/:id",
 				name: "view-user",
 				component: () => import("@/views/setup_user/ViewUser.vue"),
 			},
@@ -120,12 +120,12 @@ const routes = [
 					import("@/views/employee_management/ViewEmployee.vue"),
 			},
 			{
-				path: "role",
+				path: "setup/role",
 				name: "role",
 				component: () => import("@/views/role/RoleList.vue"),
 			},
 			{
-				path: "role/create",
+				path: "setup/role/create",
 				name: "create-role",
 				component: () => import("@/views/role/CreateRole.vue"),
 				beforeEnter: (to, from, next) => {
@@ -133,7 +133,7 @@ const routes = [
 				},
 			},
 			{
-				path: "role/edit/:id",
+				path: "setup/role/edit/:id",
 				name: "edit-role",
 				component: () => import("@/views/role/EditRole.vue"),
 				beforeEnter: (to, from, next) => {
@@ -141,12 +141,44 @@ const routes = [
 				},
 			},
 			{
-				path: "role/view/:id",
+				path: "setup/role/view/:id",
 				name: "view-role",
 				component: () => import("@/views/role/ViewRole.vue"),
 				beforeEnter: (to, from, next) => {
 					userCan("setup:role:show", next);
 				},
+			},
+			{
+				path: "setup/payroll-parameter",
+				name: "payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/PayrollParameterList.vue"
+					),
+			},
+			{
+				path: "setup/payroll-parameter/create",
+				name: "create-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/CreatePayrollParameter.vue"
+					),
+			},
+			{
+				path: "setup/payroll-parameter/edit/:id",
+				name: "edit-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/EditPayrollParameter.vue"
+					),
+			},
+			{
+				path: "setup/payroll-parameter/view/:id",
+				name: "view-payroll-parameter",
+				component: () =>
+					import(
+						"@/views/payroll_parameter/ViewPayrollParameter.vue"
+					),
 			},
 		],
 	},

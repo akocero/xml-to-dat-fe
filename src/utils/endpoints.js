@@ -9,6 +9,7 @@ const endpoints = {
 	setupEmployeeCostCenter: "setup/employee/cost_center",
 	setupEmployeeEmployeeClass: "setup/employee/employee_class",
 	setupRole: "setup/role",
+	setupPayrollParameter: "setup/payroll_parameter",
 	employee: "employee",
 	employeeImageProfile: "employee/image/profile",
 	employeeImageSignatory: "employee/image/signatory",

@@ -11,6 +11,7 @@
 		@change="$emit('update:modelValue', $event.target.value)"
 	>
 		<option value="" v-if="emptyOption">Choose</option>
+
 		<option
 			:value="option.value"
 			v-for="option in options"

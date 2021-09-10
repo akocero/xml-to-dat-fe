@@ -1,42 +1,80 @@
 <template>
-  <div :class="'alert alert-'+ alertType" class="alert-dismissible fade show" role="alert">
-    <strong>{{status.charAt(0).toUpperCase() + status.slice(1)}}! </strong> {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close" @click="closeModal">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+	<div
+		:class="'alert alert-' + alertType"
+		class="alert-dismissible fade show"
+		role="alert"
+	>
+		<strong v-if="!customStatus" class="text-capitalize"
+			>{{ status }}!
+		</strong>
+		<strong v-else class="text-capitalize">{{ customStatus }}! </strong>
+		{{ message }}
+		<button
+			type="button"
+			class="close"
+			data-dismiss="alert"
+			aria-label="Close"
+			@click="popAlert(id)"
+		>
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
 </template>
 
 <script>
-import {ref } from 'vue'
+import { onBeforeUnmount, ref } from "vue";
+import useAlert from "@/composables/useAlert";
+
 export default {
-    name: "Alert",
-    props: ["message", "status"],
-    emits: ["closeModal"],
-    setup(props, { emit }) {
+	name: "Alert",
+	props: {
+		status: {
+			type: String,
+		},
+		message: {
+			type: String,
+		},
+		id: {
+			type: String,
+		},
+		customStatus: {
+			type: String,
+			default: null,
+		},
+	},
+	setup(props) {
+		const { popAlert } = useAlert();
 
-      const alertType = ref('');
+		const alertType = ref("");
 
-      if(props.status === 'error'){
-        alertType.value = 'danger'
-      }else if(props.status === 'success'){
-        alertType.value = 'success'
-      }else if(props.status === 'warning'){
-        alertType.value = 'warning'
-      }else {
-        alertType.value = 'info'
-      }
-      
+		if (props.status === "error") {
+			alertType.value = "danger";
+		} else if (props.status === "success") {
+			alertType.value = "success";
+		} else if (props.status === "warning") {
+			alertType.value = "warning";
+		} else {
+			alertType.value = "info";
+		}
 
-      const closeModal = () => {
-        emit('closeModal');
-      }
+		let timeOut = null;
 
-      return { closeModal, alertType }
-    },
-}
+		timeOut = setTimeout(() => {
+			popAlert(props.id);
+		}, 7000);
+
+		onBeforeUnmount(() => {
+			clearTimeout(timeOut);
+		});
+
+		return { alertType, popAlert };
+	},
+};
 </script>
 
 <style>
-
+/* .alert {
+	min-width: 16rem !important;
+	margin: 0 auto;
+} */
 </style>

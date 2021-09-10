@@ -39,7 +39,7 @@
 					<li class="nav-header ml-2">ADMINISTRATOR</li>
 
 					<li class="nav-item">
-						<a href="#" class="nav-link active">
+						<a href="#" class="nav-link">
 							<!-- <i class="nav-icon fas fa-chart-pie"></i> -->
 							<i
 								v-html="home"
@@ -54,9 +54,9 @@
 							<li class="nav-item">
 								<router-link
 									:to="{ name: 'dashboard' }"
-									class="nav-link active"
+									class="nav-link"
 								>
-									<i class="far fa-circle nav-icon"></i>
+									<i class="nav-icon far pr-2">&#9679;</i>
 									<p>Dashboard</p>
 								</router-link>
 							</li>
@@ -134,6 +134,21 @@
 									<i class="nav-icon far pr-2">&#9679;</i>
 									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Role</p>
+								</router-link>
+							</li>
+						</ul>
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('setup:role:list')"
+						>
+							<li class="nav-item">
+								<router-link
+									:to="{ name: 'payroll-parameter' }"
+									class="nav-link"
+								>
+									<i class="nav-icon far pr-2">&#9679;</i>
+									<!-- <i class="far fa-circle nav-icon"></i> -->
+									<p>Payroll Parameter</p>
 								</router-link>
 							</li>
 						</ul>
@@ -226,6 +241,16 @@ export default {
 			0,
 			1
 		)}${user_name_array[user_name_array.length - 1].substr(0, 1)}`;
+
+		// onMounted(() => {
+		// 	const activeLink = document.querySelector(
+		// 		".router-link-exact-active"
+		// 	);
+
+		// 	activeLink.parentElement.parentElement.parentElement.classList.add(
+		// 		"menu-open"
+		// 	);
+		// });
 
 		return {
 			user,

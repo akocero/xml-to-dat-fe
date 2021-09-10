@@ -45,33 +45,30 @@ export default {
 		};
 	},
 	methods: {
-		updateContentheader() {
+		updateActiveRoute() {
 			let tempActiveRoute = this.$route.name;
 
 			if (tempActiveRoute.includes("-")) {
-				let arr = tempActiveRoute.split("-");
-				this.activeRoute =
-					arr[0].charAt(0).toUpperCase() +
-					arr[0].slice(1) +
-					" " +
-					arr[1].charAt(0).toUpperCase() +
-					arr[1].slice(1);
+				this.activeRoute = tempActiveRoute.replace(/-/g, " ");
 			} else {
-				this.activeRoute =
-					tempActiveRoute.charAt(0).toUpperCase() +
-					tempActiveRoute.slice(1);
+				this.activeRoute = tempActiveRoute;
 			}
 
-			tempActiveRoute.includes("company")
-				? (this.activeNav = "Setup")
-				: (this.activeNav = "Dashboard");
+			if (tempActiveRoute.includes("setup")) {
+				console.log(tempActiveRoute);
+			}
+			this.activeNav = this.$route.path
+				.replace(/\//g, " / ")
+				.substring(8);
 		},
 	},
-	updated() {
-		this.updateContentheader();
+	watch: {
+		$route(to, from) {
+			this.updateActiveRoute();
+		},
 	},
 	mounted() {
-		this.updateContentheader();
+		this.updateActiveRoute();
 	},
 };
 </script>
