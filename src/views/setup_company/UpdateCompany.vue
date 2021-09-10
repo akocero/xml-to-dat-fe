@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<CreateBank
 		v-if="item && creatingBank"
 		:companyID="item.id"
@@ -989,7 +981,7 @@ export default {
 			onFileSelected,
 			deleteImage,
 		} = useImage();
-		const { displayAlert, alert } = useAlert();
+		const { pushAlert } = useAlert();
 
 		const creatingBank = ref(false);
 		const updatingBank = ref(false);
@@ -1010,10 +1002,7 @@ export default {
 				item.value.setup_company_banks.length === 0 ||
 				item.value.setup_company_signatories.length === 0
 			) {
-				displayAlert(
-					"warning",
-					"Please add company banks or signatories"
-				);
+				pushAlert("warning", "Please add company banks or signatories");
 			}
 		});
 
@@ -1066,9 +1055,9 @@ export default {
 					imageUrl.value = null;
 				}
 
-				displayAlert("info", "Company Updated");
+				pushAlert("info", "Company Updated");
 			} else {
-				displayAlert("error", error.value.message);
+				pushAlert("error", error.value.message);
 			}
 		};
 
@@ -1114,7 +1103,7 @@ export default {
 				...item.value.setup_company_banks,
 			];
 			console.log(newBank);
-			displayAlert("success", "Bank Added");
+			pushAlert("success", "Bank Added");
 		};
 
 		const bankUpdated = (updatedBank) => {
@@ -1123,7 +1112,7 @@ export default {
 				(bank) => bank.id !== updatedBank.id
 			);
 			item.value.setup_company_banks = [updatedBank, ...newbanks];
-			displayAlert("info", "Bank Updated");
+			pushAlert("info", "Bank Updated");
 		};
 
 		const signatoryAdded = (newSignatory) => {
@@ -1132,7 +1121,7 @@ export default {
 				newSignatory,
 				...item.value.setup_company_signatories,
 			];
-			displayAlert("success", "Signatory Added");
+			pushAlert("success", "Signatory Added");
 		};
 
 		const signatoryUpdated = (updatedSignatory) => {
@@ -1144,7 +1133,7 @@ export default {
 				updatedSignatory,
 				...newSignatories,
 			];
-			displayAlert("info", "Signatory Updated");
+			pushAlert("info", "Signatory Updated");
 		};
 
 		// computed error handling
@@ -1181,9 +1170,9 @@ export default {
 				);
 				if (res.status === 204) {
 					item.value.image_path = null;
-					displayAlert("success", "Image Deleted");
+					pushAlert("success", "Image Deleted");
 				} else {
-					displayAlert("error", "Error Deleting Image");
+					pushAlert("error", "Error Deleting Image");
 				}
 			}
 		};
@@ -1197,8 +1186,6 @@ export default {
 		});
 
 		return {
-			alert,
-
 			handleSubmit,
 			error,
 			loading,

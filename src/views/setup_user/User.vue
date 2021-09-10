@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="userAdded"
-			:status="'success'"
-			:message="'User Added'"
-			@closeModal="handleCloseModal"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body pt-4">
 			<div class="row mb-4">
@@ -145,7 +137,6 @@ import Alert from "@/components/Alert.vue";
 import endpoints from "@/utils/endpoints";
 export default {
 	name: "User",
-	props: ["userAdded"],
 	components: { Spinner, Pagination, Badge, Alert },
 	setup(props) {
 		const { data, error, fetch, isPending } = useFetch();
@@ -169,9 +160,6 @@ export default {
 		const HandleSearch = () => {
 			fetch(`${endpoints.setupUser}?search=${search.value}`);
 		};
-		const handleCloseModal = () => {
-			props.userAdded = false;
-		};
 
 		return {
 			data,
@@ -181,7 +169,6 @@ export default {
 			HandleSearch,
 			search,
 			isPending,
-			handleCloseModal,
 			userCan,
 		};
 	},

@@ -1226,7 +1226,6 @@ export default {
 			error,
 			loading,
 			response,
-			alerts,
 
 			handleAddInTable,
 			handleDeleteInTable,

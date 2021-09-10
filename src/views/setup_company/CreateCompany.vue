@@ -1,13 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = null"
-		/>
-	</transition>
-
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -645,7 +636,7 @@ export default {
 	setup() {
 		const router = useRouter();
 		const { response, error, create, loading, unknownError } = useData();
-		const { alert, displayAlert } = useAlert();
+		const {  pushAlert } = useAlert();
 		const { image: image_path, selectedFile, onFileSelected } = useImage();
 
 		const companyAdded = ref(false);
@@ -726,7 +717,7 @@ export default {
 					params: { id: response.value.id },
 				});
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 			}
 		};
 
@@ -767,8 +758,6 @@ export default {
 		});
 
 		return {
-			alert,
-
 			code,
 			email,
 			name,

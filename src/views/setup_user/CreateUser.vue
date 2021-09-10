@@ -1,13 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
-
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader heading="New User" routeName="user" mode="create" />
@@ -193,7 +184,7 @@ export default {
 			loading: saving,
 			unknownError,
 		} = useData();
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 		const router = useRouter();
 		const loading = ref(false);
 
@@ -249,13 +240,14 @@ export default {
 			if (!error.value) {
 				console.log("user created");
 				userAdded.value = true;
+				pushAlert("success", "User Created");
 				router.push({
 					name: "user",
 					params: { userAdded: userAdded.value },
 				});
-				// displayAlert("success", "User Added");
+				// pushAlert("success", "User Added");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
@@ -288,7 +280,6 @@ export default {
 			matchCompanies,
 
 			search,
-			alert,
 
 			convertRoleToValidArray,
 		};

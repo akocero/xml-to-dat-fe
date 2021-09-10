@@ -1,13 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
-
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -207,7 +198,7 @@ export default {
 			loading: saving,
 			unknownError,
 		} = useData();
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 		const route = useRoute();
 		const { item, load } = getItem(route.params.id, endpoints.setupRole);
 		const router = useRouter();
@@ -243,9 +234,9 @@ export default {
 					name: "role",
 					params: { roleAdded: roleAdded.value },
 				});
-				// displayAlert("success", "User Added");
+				pushAlert("info", "User Updated");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
@@ -284,7 +275,7 @@ export default {
 			error,
 			saving,
 			response,
-			alert,
+
 			abilitiesArray,
 			convertToArray,
 			pushToAbilities,

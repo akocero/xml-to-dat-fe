@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -1027,7 +1019,7 @@ export default {
 			route.params.id,
 			endpoints.employee
 		);
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 
 		onBeforeMount(async () => {
 			await load();
@@ -1046,7 +1038,6 @@ export default {
 		const signatory_image_path = ref(null);
 
 		const addAddress = () => {
-			alert.value = null;
 
 			const tempAddress = {
 				id: uuidv4(),
@@ -1069,7 +1060,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out city and country in address list before adding one"
 				  )
@@ -1077,7 +1068,6 @@ export default {
 		};
 
 		const addDependent = () => {
-			alert.value = null;
 			const tempDependent = {
 				id: uuidv4(),
 				full_name: "",
@@ -1094,7 +1084,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out full name in dependent list before adding one"
 				  )
@@ -1102,7 +1092,6 @@ export default {
 		};
 
 		const addRelative = () => {
-			alert.value = null;
 			const tempRelative = {
 				id: uuidv4(),
 				relationship: "",
@@ -1120,7 +1109,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out relationship and name in relative list before adding one"
 				  )
@@ -1137,7 +1126,7 @@ export default {
 					(dependent) => dependent.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 dependent");
+				pushAlert("info", "Employee need atleast 1 dependent");
 			}
 		};
 
@@ -1151,7 +1140,7 @@ export default {
 					(address) => address.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 address");
+				pushAlert("info", "Employee need atleast 1 address");
 			}
 		};
 
@@ -1165,7 +1154,7 @@ export default {
 					(relative) => relative.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 relative");
+				pushAlert("info", "Employee need atleast 1 relative");
 			}
 		};
 
@@ -1245,9 +1234,9 @@ export default {
 					signatory_image_path.value = null;
 				}
 
-				displayAlert("info", "Employee Updated");
+				pushAlert("info", "Employee Updated");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 			}
 		};
 
@@ -1327,8 +1316,6 @@ export default {
 			error,
 			loading,
 			response,
-
-			alert,
 
 			commTabHasError,
 			mainTabHasError,

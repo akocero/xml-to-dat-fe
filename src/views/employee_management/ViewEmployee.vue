@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -736,7 +728,7 @@ export default {
 			route.params.id,
 			endpoints.employee
 		);
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 
 		onBeforeMount(async () => {
 			await load();
@@ -759,7 +751,7 @@ export default {
 			}, 500);
 
 			if (route.query.q) {
-				displayAlert("success", route.query.q);
+				pushAlert("success", route.query.q);
 				router.replace({ query: null });
 			}
 		});
@@ -770,8 +762,6 @@ export default {
 			error,
 			loading,
 			response,
-
-			alert,
 		};
 	},
 };

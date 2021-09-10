@@ -4,7 +4,7 @@
     <router-link to="/about">About</router-link>
   </div> -->
 	<div class="wrapper">
-		<AlertList v-if="alerts.length" :alerts="alerts" />
+		<AlertList :alerts="alerts" />
 		<router-view />
 	</div>
 </template>

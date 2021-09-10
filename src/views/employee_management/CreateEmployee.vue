@@ -1,12 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -959,7 +951,7 @@ export default {
 	setup() {
 		const router = useRouter();
 		const { error, response, loading, create, unknownError } = useData();
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 
 		const first_name = ref("");
 		const employee_id = ref("");
@@ -1023,7 +1015,6 @@ export default {
 		]);
 
 		const addAddress = () => {
-			alert.value = null;
 			console.log(addresses.value);
 			const tempAddress = {
 				id: uuidv4(),
@@ -1046,7 +1037,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out city and country in address list before adding one"
 				  )
@@ -1054,7 +1045,6 @@ export default {
 		};
 
 		const addRelative = () => {
-			alert.value = null;
 			const tempRelative = {
 				id: uuidv4(),
 				relationship: "",
@@ -1072,7 +1062,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out relationship and name in relative list before adding one"
 				  )
@@ -1080,7 +1070,6 @@ export default {
 		};
 
 		const addDependent = () => {
-			alert.value = null;
 			const tempDependent = {
 				id: uuidv4(),
 				full_name: "",
@@ -1097,7 +1086,7 @@ export default {
 			});
 
 			err
-				? displayAlert(
+				? pushAlert(
 						"info",
 						"Please fill out full name in dependent list before adding one"
 				  )
@@ -1114,7 +1103,7 @@ export default {
 					(address) => address.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 address");
+				pushAlert("info", "Employee need atleast 1 address");
 			}
 		};
 
@@ -1128,7 +1117,7 @@ export default {
 					(dependent) => dependent.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 dependent");
+				pushAlert("info", "Employee need atleast 1 dependent");
 			}
 		};
 
@@ -1142,7 +1131,7 @@ export default {
 					(relative) => relative.id !== id
 				);
 			} else {
-				displayAlert("info", "Employee need atleast 1 relative");
+				pushAlert("info", "Employee need atleast 1 relative");
 			}
 		};
 
@@ -1199,7 +1188,7 @@ export default {
 			await create(endpoints.employee, form_data);
 
 			if (!error.value) {
-				// displayAlert("success", "Employee Added");
+				// pushAlert("success", "Employee Added");
 				employeeAdded.value = true;
 				router.push({
 					name: "edit-employee",
@@ -1207,7 +1196,7 @@ export default {
 					query: { q: "employee added" },
 				});
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 			}
 		};
 
@@ -1290,7 +1279,6 @@ export default {
 			error,
 			loading,
 			response,
-			alert,
 
 			contactTabHasError,
 			employeeTabHasError,
