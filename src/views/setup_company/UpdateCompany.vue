@@ -1002,7 +1002,7 @@ export default {
 				item.value.setup_company_banks.length === 0 ||
 				item.value.setup_company_signatories.length === 0
 			) {
-				pushAlert("warning", "Please add company banks or signatories");
+				pushAlert("warning", "Please add company banks or signatories", "Pending Action");
 			}
 		});
 

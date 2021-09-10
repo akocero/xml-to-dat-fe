@@ -57,7 +57,9 @@ export default {
 			if (tempActiveRoute.includes("setup")) {
 				console.log(tempActiveRoute);
 			}
-			this.activeNav = this.$route.path.replace(/\//g, " / ");
+			this.activeNav = this.$route.path
+				.replace(/\//g, " / ")
+				.substring(8);
 		},
 	},
 	watch: {

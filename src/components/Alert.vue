@@ -4,9 +4,10 @@
 		class="alert-dismissible fade show"
 		role="alert"
 	>
-		<strong
-			>{{ status.charAt(0).toUpperCase() + status.slice(1) }}!
+		<strong v-if="!customStatus" class="text-capitalize"
+			>{{ status }}!
 		</strong>
+		<strong v-else class="text-capitalize">{{ customStatus }}! </strong>
 		{{ message }}
 		<button
 			type="button"
@@ -26,7 +27,21 @@ import useAlert from "@/composables/useAlert";
 
 export default {
 	name: "Alert",
-	props: ["message", "status", "id"],
+	props: {
+		status: {
+			type: String,
+		},
+		message: {
+			type: String,
+		},
+		id: {
+			type: String,
+		},
+		customStatus: {
+			type: String,
+			default: null,
+		},
+	},
 	setup(props) {
 		const { popAlert } = useAlert();
 

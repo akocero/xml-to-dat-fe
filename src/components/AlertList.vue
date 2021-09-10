@@ -6,6 +6,7 @@
 				:key="alert.id"
 				:status="alert.status"
 				:message="alert.message"
+				:customStatus="alert.customStatus"
 				:id="alert.id"
 			/>
 		</transition-group>
