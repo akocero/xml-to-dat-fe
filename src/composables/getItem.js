@@ -20,7 +20,7 @@ const getItem = (id, url) => {
 		}
 	};
 
-	return { item, error, load };
+	return { item, error, load, loading };
 };
 
 export default getItem;

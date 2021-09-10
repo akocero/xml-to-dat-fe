@@ -996,9 +996,10 @@ export default {
 				maxOTNumberEnabled: false,
 			},
 		]);
+
 		const payrollParameterAdded = ref(false);
 
-		const validateAndAddDataIn = (data, tempData) => {
+		const validateAndAddDataIn = (data, tempData = null) => {
 			let err = false;
 			data.forEach((item) => {
 				if (item.range == 0 || item.value == 0) {
@@ -1007,9 +1008,15 @@ export default {
 				console.log(item.range, item.value);
 			});
 			console.log(err);
-			err
-				? displayAlert("info", "Please fill out range and value")
-				: data.push(tempData);
+			if (err) {
+				return false;
+			} else {
+				if (tempData) {
+					data.push(tempData);
+				}
+			}
+
+			return true;
 		};
 
 		const handleAddInTable = (type) => {
@@ -1019,15 +1026,20 @@ export default {
 				value: "",
 			};
 			type === "undertime" &&
-				validateAndAddDataIn(undertime_table.value, tempData);
+				!validateAndAddDataIn(undertime_table.value, tempData) &&
+				displayAlert("info", "Please fill out range and value");
 
 			type === "overtime" &&
-				validateAndAddDataIn(overtime_table.value, tempData);
+				!validateAndAddDataIn(overtime_table.value, tempData) &&
+				displayAlert("info", "Please fill out range and value");
 
-			type === "late" && validateAndAddDataIn(late_table.value, tempData);
+			type === "late" &&
+				!validateAndAddDataIn(late_table.value, tempData) &&
+				displayAlert("info", "Please fill out range and value");
 
 			type === "excess" &&
-				validateAndAddDataIn(excess_table.value, tempData);
+				!validateAndAddDataIn(excess_table.value, tempData) &&
+				displayAlert("info", "Please fill out range and value");
 		};
 
 		const handleDeleteInTable = ({ type, id }) => {
@@ -1060,6 +1072,34 @@ export default {
 		};
 
 		const handleSubmit = async () => {
+			if (!validateAndAddDataIn(late_table.value)) {
+				displayAlert(
+					"info",
+					"Please fill out range and value in late limit tab"
+				);
+				return false;
+			}
+			if (!validateAndAddDataIn(overtime_table.value)) {
+				displayAlert(
+					"info",
+					"Please fill out range and value in overtime limit tab"
+				);
+				return false;
+			}
+			if (!validateAndAddDataIn(undertime_table.value)) {
+				displayAlert(
+					"info",
+					"Please fill out range and value in undertime limit tab"
+				);
+				return false;
+			}
+			if (!validateAndAddDataIn(excess_table.value)) {
+				displayAlert(
+					"info",
+					"Please fill out range and value in excess limit tab"
+				);
+				return false;
+			}
 			const data = {
 				code: code.value,
 				description: description.value,

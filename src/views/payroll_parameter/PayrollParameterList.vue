@@ -77,7 +77,7 @@
 										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
 										<router-link
 											:to="{
-												name: 'edit-role',
+												name: 'edit-payroll-parameter',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
@@ -129,6 +129,7 @@ export default {
 		const { userCan } = useAbility();
 		const { data, error, fetch, isPending } = useFetch();
 		const search = ref("");
+
 		onBeforeMount(() => {
 			fetchAll();
 		});
@@ -136,27 +137,18 @@ export default {
 		const fetchAll = async () => {
 			search.value = "";
 			await fetch(endpoints.setupPayrollParameter);
-			convertAbilitiesToArray();
 		};
 
 		const paginate = async (url) => {
 			await fetch(url);
-			convertAbilitiesToArray();
-		};
-
-		const convertAbilitiesToArray = () => {
-			data.value.data.forEach((item) => {
-				item.abilities = JSON.parse(item.abilities);
-				// console.log(item);
-			});
 		};
 
 		const HandleSearch = async () => {
 			await fetch(
 				`${endpoints.setupPayrollParameter}?search=${search.value}`
 			);
-			convertAbilitiesToArray();
 		};
+
 		const handleCloseModal = () => {
 			props.userAdded = false;
 		};
