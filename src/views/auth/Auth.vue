@@ -28,15 +28,6 @@
 				<p>
 					Welcome! Use your company email to sign in to your account.
 				</p>
-
-				<transition name="alert">
-					<Alert
-						v-if="error"
-						:status="'error'"
-						:message="'Username or password is incorrect'"
-						@closeModal="handleCloseModal"
-					/>
-				</transition>
 				<div class="form-group pt-2">
 					<label for="">Email address</label>
 					<div style="position: relative;">
@@ -126,6 +117,7 @@
 <script>
 import { ref, computed } from "vue";
 import useLogin from "@/composables/useLogin";
+import useAlert from "@/composables/useAlert";
 import Alert from "@/components/Alert";
 import SelectCompany from "./SelectCompany";
 import { useStore } from "vuex";
@@ -162,7 +154,7 @@ export default {
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
 		const user = computed(() => store.getters.getUser);
-
+		const { pushAlert } = useAlert();
 		const handleSubmit = async () => {
 			error.value = null;
 
@@ -174,11 +166,13 @@ export default {
 			await login("auth", data);
 			if (error.value) {
 				console.log(error.value);
+				pushAlert("error", "Email or Password is Incorrect!");
 			} else {
 				// user.value = response.value
 				// console.log(response.value.login_id)
 				store.commit("setUser", response.value.user);
 				store.commit("setToken", response.value.token);
+				pushAlert("success", "Choose a Company");
 				//   router.push({path: '/app/dashboard'} )
 				// window.location = "http://localhost:8080/app/dashboard";
 			}

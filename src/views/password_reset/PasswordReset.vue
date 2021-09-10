@@ -11,12 +11,6 @@
 			<!-- /.login-logo -->
 			<div class="card">
 				<div class="card-body login-card-body">
-					<Alert
-						v-if="alert"
-						:status="alert.status"
-						:message="alert.message"
-						@closeModal="alert = false"
-					/>
 					<Spinner v-if="loading" />
 					<EnterEmail
 						v-if="!emailValidated && !otpValidated && !loading"
@@ -62,7 +56,7 @@ export default {
 		Spinner,
 	},
 	setup() {
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 		const emailValidated = ref(false);
 		const otpValidated = ref(false);
 		const user_id = ref(null);
@@ -79,11 +73,11 @@ export default {
 			if (res && !error.value) {
 				user_email.value = res.login_id;
 				console.log(res);
-				displayAlert("success", "OTP Sent - Please check your email.");
+				pushAlert("success", "OTP Sent - Please check your email.");
 				emailValidated.value = true;
 			} else {
 				console.log(error.value);
-				displayAlert(
+				pushAlert(
 					"error",
 					"Failed sending OTP please check your email."
 				);
@@ -97,10 +91,10 @@ export default {
 				login_id: user_email.value,
 			});
 			if (res && !error.value) {
-				displayAlert("success", "OTP Sent - Please check your email.");
+				pushAlert("success", "OTP Sent - Please check your email.");
 			} else {
 				console.log(error.value);
-				displayAlert(
+				pushAlert(
 					"error",
 					"Failed sending OTP please check your email."
 				);
@@ -120,12 +114,12 @@ export default {
 				if (res && !error.value) {
 					user_id.value = res.id;
 					otpValidated.value = true;
-					displayAlert(
+					pushAlert(
 						"success",
 						"OTP Verified - Please change your password."
 					);
 				} else {
-					displayAlert("error", "Invalid OTP");
+					pushAlert("error", "Invalid OTP");
 				}
 				loading.value = false;
 			}
@@ -140,7 +134,7 @@ export default {
 				);
 
 				if (res && !error.value) {
-					displayAlert(
+					pushAlert(
 						"success",
 						"Password successfully changed - Redirecting"
 					);
@@ -148,7 +142,7 @@ export default {
 						router.push({ name: "auth" });
 					}, 3000);
 				} else {
-					displayAlert("error", "Failed changing password");
+					pushAlert("error", "Failed changing password");
 				}
 				loading.value = false;
 			}
@@ -161,7 +155,7 @@ export default {
 			handleSendOTP,
 			handleSendNewPassword,
 			handleResendOTP,
-			alert,
+
 			loading,
 			error,
 		};
