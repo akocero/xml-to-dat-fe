@@ -1,12 +1,7 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
+	<!-- <transition name="alert"> -->
+	<!-- <AlertList v-if="alerts.length" :alerts="alerts" /> -->
+	<!-- </transition> -->
 
 	<div class="card boiler shadow-md">
 		<div class="card-body">
@@ -856,7 +851,7 @@ import { ref, computed } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import PayrollParameterTable from "./PayrollParameterTable.vue";
 import PayrollParameterOTTable from "./PayrollParameterOTTable.vue";
-import Alert from "@/components/Alert";
+import AlertList from "@/components/AlertList";
 import Spinner from "@/components/Spinner";
 import BaseNavigationTab from "@/components/BaseNavigationTab";
 import BaseRowHeading from "@/components/BaseRowHeading";
@@ -870,7 +865,7 @@ import endpoints from "@/utils/endpoints";
 export default {
 	name: "CreatePayrollParameter",
 	components: {
-		Alert,
+		AlertList,
 		Spinner,
 		BaseInputField,
 		ThePageHeader,
@@ -890,7 +885,7 @@ export default {
 	},
 	setup() {
 		const { response, error, create, loading, unknownError } = useData();
-		const { alert, displayAlert } = useAlert();
+		const { alerts, pushAlert } = useAlert();
 		const router = useRouter();
 		const code = ref("");
 		const description = ref("");
@@ -1027,19 +1022,19 @@ export default {
 			};
 			type === "undertime" &&
 				!validateAndAddDataIn(undertime_table.value, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "overtime" &&
 				!validateAndAddDataIn(overtime_table.value, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "late" &&
 				!validateAndAddDataIn(late_table.value, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "excess" &&
 				!validateAndAddDataIn(excess_table.value, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 		};
 
 		const handleDeleteInTable = ({ type, id }) => {
@@ -1073,28 +1068,28 @@ export default {
 
 		const handleSubmit = async () => {
 			if (!validateAndAddDataIn(late_table.value)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range and value in late limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(overtime_table.value)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range and value in overtime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(undertime_table.value)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range and value in undertime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(excess_table.value)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range and value in excess limit tab"
 				);
@@ -1151,9 +1146,9 @@ export default {
 						payrollParameterAdded: payrollParameterAdded.value,
 					},
 				});
-				// displayAlert("success", "User Added");
+				// pushAlert("success", "User Added");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
@@ -1231,7 +1226,7 @@ export default {
 			error,
 			loading,
 			response,
-			alert,
+			alerts,
 
 			handleAddInTable,
 			handleDeleteInTable,

@@ -1,20 +1,23 @@
-import { ref } from 'vue'
+import { ref } from "vue";
+import { v4 as uuidv4 } from "uuid";
+
+const alerts = ref([]);
 
 export default function useAlert() {
-   const alert = ref(null)
-   
-   const displayAlert = (status, message) => {
-			const alertDelay = 5000;
-
-			alert.value = {
-				status,
-				message,
-			};
-			window.scrollTo(0, 0);
-			setTimeout(() => {
-				alert.value = null;
-			}, alertDelay);
+	const pushAlert = (status, message) => {
+		const newAlert = {
+			status,
+			message,
+			id: uuidv4(),
 		};
+		alerts.value.unshift(newAlert);
+		window.scrollTo(0, 0);
+	};
 
-   return { alert, displayAlert }
+	const popAlert = (id) => {
+		alerts.value = alerts.value.filter((alert) => alert.id != id);
+		console.log(id);
+	};
+
+	return { alerts, pushAlert, popAlert };
 }

@@ -1000,28 +1000,28 @@ export default {
 			if (!validateAndAddDataIn(item.value.late_table)) {
 				displayAlert(
 					"info",
-					"Please fill out range and value in late limit tab"
+					"Please fill out range or value in late limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.overtime_table)) {
 				displayAlert(
 					"info",
-					"Please fill out range and value in overtime limit tab"
+					"Please fill out range or value in overtime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.undertime_table)) {
 				displayAlert(
 					"info",
-					"Please fill out range and value in undertime limit tab"
+					"Please fill out range or value in undertime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.excess_table)) {
 				displayAlert(
 					"info",
-					"Please fill out range and value in excess limit tab"
+					"Please fill out range or value in excess limit tab"
 				);
 				return false;
 			}
