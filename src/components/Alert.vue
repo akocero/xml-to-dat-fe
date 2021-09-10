@@ -46,7 +46,7 @@ export default {
 
 		timeOut = setTimeout(() => {
 			popAlert(props.id);
-		}, 5000);
+		}, 7000);
 
 		onBeforeUnmount(() => {
 			clearTimeout(timeOut);

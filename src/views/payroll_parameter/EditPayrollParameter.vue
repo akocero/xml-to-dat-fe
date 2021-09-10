@@ -943,19 +943,19 @@ export default {
 			};
 			type === "undertime" &&
 				!validateAndAddDataIn(item.value.undertime_table, tempData) &&
-				pushAlert("info", "Please fill out range and value");
+				pushAlert("warning", "Please fill out range and value");
 
 			type === "overtime" &&
 				!validateAndAddDataIn(item.value.overtime_table, tempData) &&
-				pushAlert("info", "Please fill out range and value");
+				pushAlert("warning", "Please fill out range and value");
 
 			type === "late" &&
 				!validateAndAddDataIn(item.value.late_table, tempData) &&
-				pushAlert("info", "Please fill out range and value");
+				pushAlert("warning", "Please fill out range and value");
 
 			type === "excess" &&
 				!validateAndAddDataIn(item.value.excess_table, tempData) &&
-				pushAlert("info", "Please fill out range and value");
+				pushAlert("warning", "Please fill out range and value");
 		};
 
 		const handleDeleteInTable = ({ type, id }) => {
@@ -990,28 +990,28 @@ export default {
 		const handleSubmit = async () => {
 			if (!validateAndAddDataIn(item.value.late_table)) {
 				pushAlert(
-					"info",
+					"warning",
 					"Please fill out range or value in late limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.overtime_table)) {
 				pushAlert(
-					"info",
+					"warning",
 					"Please fill out range or value in overtime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.undertime_table)) {
 				pushAlert(
-					"info",
+					"warning",
 					"Please fill out range or value in undertime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.excess_table)) {
 				pushAlert(
-					"info",
+					"warning",
 					"Please fill out range or value in excess limit tab"
 				);
 				return false;
