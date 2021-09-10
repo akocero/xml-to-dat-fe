@@ -1,13 +1,4 @@
 <template>
-	<transition name="alert">
-		<Alert
-			v-if="alert"
-			:status="alert.status"
-			:message="alert.message"
-			@closeModal="alert = false"
-		/>
-	</transition>
-
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -919,7 +910,7 @@ export default {
 			console.log(item.value.overtime_setup);
 		});
 
-		const { alert, displayAlert } = useAlert();
+		const { pushAlert } = useAlert();
 		const router = useRouter();
 
 		const payrollParameterAdded = ref(false);
@@ -952,19 +943,19 @@ export default {
 			};
 			type === "undertime" &&
 				!validateAndAddDataIn(item.value.undertime_table, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "overtime" &&
 				!validateAndAddDataIn(item.value.overtime_table, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "late" &&
 				!validateAndAddDataIn(item.value.late_table, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 
 			type === "excess" &&
 				!validateAndAddDataIn(item.value.excess_table, tempData) &&
-				displayAlert("info", "Please fill out range and value");
+				pushAlert("info", "Please fill out range and value");
 		};
 
 		const handleDeleteInTable = ({ type, id }) => {
@@ -998,28 +989,28 @@ export default {
 
 		const handleSubmit = async () => {
 			if (!validateAndAddDataIn(item.value.late_table)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range or value in late limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.overtime_table)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range or value in overtime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.undertime_table)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range or value in undertime limit tab"
 				);
 				return false;
 			}
 			if (!validateAndAddDataIn(item.value.excess_table)) {
-				displayAlert(
+				pushAlert(
 					"info",
 					"Please fill out range or value in excess limit tab"
 				);
@@ -1080,9 +1071,9 @@ export default {
 						payrollParameterAdded: payrollParameterAdded.value,
 					},
 				});
-				// displayAlert("success", "User Added");
+				pushAlert("info", "Payroll Parameter Updated");
 			} else {
-				displayAlert("error", "Invalid Inputs");
+				pushAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
 			}
 		};
@@ -1128,7 +1119,6 @@ export default {
 			error,
 			saving,
 			response,
-			alert,
 
 			handleAddInTable,
 			handleDeleteInTable,

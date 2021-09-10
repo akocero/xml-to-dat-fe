@@ -1146,7 +1146,7 @@ export default {
 						payrollParameterAdded: payrollParameterAdded.value,
 					},
 				});
-				// pushAlert("success", "User Added");
+				pushAlert("success", "Payroll Parameter Added");
 			} else {
 				pushAlert("error", "Invalid Inputs");
 				console.log("error: ", error.value);
