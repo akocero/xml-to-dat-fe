@@ -9,6 +9,11 @@
 		@updateAddress="updateAddress($event)"
 		:data="forEditAddress"
 	/>
+	<EmployeeDependentModal
+		@addDependent="addDependent($event)"
+		@updateDependent="updateDependent($event)"
+		:data="forEditDependent"
+	/>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -909,28 +914,39 @@
 										<hr />
 									</div>
 
-									<div class="row pb-2 col-12">
+									<div class="row col-12">
 										<div
-											class="col-12 d-flex justify-content-between align-items-center pb-1"
+											class="col-12 d-flex justify-content-between align-items-center"
 										>
 											<h5 class="h5 mb-0">
 												Dependent List
 											</h5>
 											<button
 												type="button"
-												class="btn btn-sm btn-custom-primary"
-												@click="addDependent"
+												class="btn btn-sm btn-primary"
+												data-toggle="modal"
+												data-target="#employee-dependent-modal"
+												data-backdrop="static"
+												data-keyboard="false"
+												@click="forEditDependent = ''"
 											>
-												Add Dependent
+												<i v-html="iPlus"></i>
 											</button>
 										</div>
 
-										<EmployeeDependentList
-											:dependents="item.dependents"
-											@deleteDependent="
-												deleteDependent($event)
-											"
-										/>
+										<div class="col-12">
+											<EmployeeDependentTable
+												:dependents="item.dependents"
+												@deleteDependent="
+													deleteDependent($event)
+												"
+												@forEditDependent="
+													forEditDependent = {
+														...$event,
+													}
+												"
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -1025,10 +1041,12 @@ import feather from "feather-icons";
 import axios from "@/axios/axios-instance";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
 import EmployeeRelativeModal from "./EmployeeRelativeModal.vue";
+import EmployeeDependentModal from "./EmployeeDependentModal.vue";
 import EmployeeAddressModal from "./EmployeeAddressModal.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import EmployeeRelativeTable from "./EmployeeRelativeTable.vue";
 import EmployeeAddressTable from "./EmployeeAddressTable.vue";
+import EmployeeDependentTable from "./EmployeeDependentTable.vue";
 import BaseNavigationTab from "@/components/BaseNavigationTab";
 import Alert from "@/components/Alert";
 import BaseSelectField from "@/components/BaseSelectField";
@@ -1053,7 +1071,9 @@ export default {
 		BaseSelectField,
 		EmployeeRelativeTable,
 		EmployeeAddressTable,
+		EmployeeDependentTable,
 		EmployeeAddressModal,
+		EmployeeDependentModal,
 	},
 	computed: {
 		iEdit: function() {
@@ -1105,12 +1125,7 @@ export default {
 
 		const forEditRelative = ref("");
 		const forEditAddress = ref("");
-
-		const addAddress = (data) => {
-			item.value.addresses.push(data);
-			$("#employee-address-modal").modal("hide");
-			pushAlert("success", "Address Added");
-		};
+		const forEditDependent = ref("");
 
 		const updateAddress = (data) => {
 			item.value.addresses = item.value.addresses.map((address) => {
@@ -1122,36 +1137,6 @@ export default {
 			});
 			$("#employee-address-modal").modal("hide");
 			pushAlert("info", "Address Updated");
-		};
-
-		const addDependent = () => {
-			const tempDependent = {
-				id: uuidv4(),
-				full_name: "",
-				birthdate: "",
-				include: "included",
-				active: "active",
-			};
-
-			let err = false;
-			item.value.dependents.forEach((dependent) => {
-				if (!dependent.full_name) {
-					err = true;
-				}
-			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out full name in dependent list before adding one"
-				  )
-				: item.value.dependents.push(tempDependent);
-		};
-
-		const addRelative = (data) => {
-			item.value.relatives.push(data);
-			$("#employee-relative-modal").modal("hide");
-			pushAlert("success", "Relative Added");
 		};
 
 		const updateRelative = (data) => {
@@ -1166,17 +1151,46 @@ export default {
 			pushAlert("info", "Relative Updated");
 		};
 
+		const updateDependent = (data) => {
+			item.value.dependents = item.value.dependents.map((depedent) => {
+				let tempDependent = depedent;
+				if (depedent.id === data.id) {
+					tempDependent = data;
+				}
+				return tempDependent;
+			});
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("info", "Dependent Updated");
+		};
+
+		const addAddress = (data) => {
+			item.value.addresses.push(data);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("success", "Address Added");
+		};
+
+		const addDependent = (data) => {
+			item.value.dependents.push(data);
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("success", "dependent Added");
+		};
+
+		const addRelative = (data) => {
+			item.value.relatives.push(data);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("success", "Relative Added");
+		};
+
 		const deleteDependent = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the dependent?") &&
-				item.value.dependents.length !== 1
-			) {
-				item.value.dependents = item.value.dependents.filter(
-					(dependent) => dependent.id !== id
-				);
+			if (item.value.dependents.length > 1) {
+				if (confirm("Are you sure you want to delete the dependent?")) {
+					item.value.dependents = item.value.dependents.filter(
+						(dependent) => dependent.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 dependent");
+				pushAlert("warning", "Employee need atleast one dependent");
 			}
 		};
 
@@ -1383,6 +1397,9 @@ export default {
 
 			forEditAddress,
 			updateAddress,
+
+			updateDependent,
+			forEditDependent,
 		};
 	},
 };

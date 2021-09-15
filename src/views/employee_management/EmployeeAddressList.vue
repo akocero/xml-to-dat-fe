@@ -89,7 +89,7 @@
 				class="form-control"
 				id=""
 				aria-describedby="emailHelp"
-				placeholder="Ex. Barangay East - wala na akong maisip"
+				placeholder="Ex. Barangay East"
 				v-model="address.brgy"
 			/>
 		</div>

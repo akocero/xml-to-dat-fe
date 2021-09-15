@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="modal fade"
-		id="employee-relative-modal"
+		id="employee-dependent-modal"
 		tabindex="-1"
 		role="dialog"
 		aria-hidden="true"
@@ -10,10 +10,10 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" v-if="!data">
-						New Relative
+						New Dependent
 					</h5>
 					<h5 class="modal-title" v-if="data">
-						{{ data.name }}
+						{{ data.full_name }}
 					</h5>
 					<button
 						type="button"
@@ -28,90 +28,82 @@
 					<div class="modal-body">
 						<div class="row" v-if="!data">
 							<div class="form-group col-md-6">
+								<label for="">Status</label>
+								<select
+									class="form-control"
+									v-model="dependent.active"
+								>
+									<option value="1">Active</option>
+									<option value="0">Inactive</option>
+								</select>
+							</div>
+							<div class="form-group col-md-6">
 								<label for="">Full Name</label>
 								<input
 									type="text"
 									class="form-control"
 									required
-									v-model="relative.name"
+									v-model="dependent.full_name"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Relationship</label>
+								<label for="">Birth Date</label>
 								<input
 									type="text"
 									class="form-control"
-									required
-									v-model="relative.relationship"
-								/>
-							</div>
-							<div class="form-group col-md-6">
-								<label for="">Contact No</label>
-								<input
-									type="text"
-									class="form-control"
-									v-model="relative.contact_no"
+									v-model="dependent.birth_date"
 								/>
 							</div>
 
 							<div class="form-group col-md-6">
-								<label for="">Occupation</label>
-								<input
-									type="text"
+								<label for="">Included</label>
+								<select
 									class="form-control"
-									v-model="relative.occupation"
-								/>
-							</div>
-							<div class="form-group col-md-12">
-								<label for="">Address</label>
-								<textarea
-									class="form-control"
-									v-model="relative.address"
-								></textarea>
+									v-model="dependent.included"
+								>
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
 							</div>
 						</div>
 						<div class="row" v-if="data">
 							<div class="form-group col-md-6">
+								<label for="">Status</label>
+								<select
+									class="form-control"
+									v-model="data.active"
+								>
+									<option value="1">Active</option>
+									<option value="0">Inactive</option>
+								</select>
+							</div>
+							<div class="form-group col-md-6">
 								<label for="">Full Name</label>
 								<input
 									type="text"
 									class="form-control"
 									required
-									v-model="data.name"
+									v-model="data.full_name"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Relationship</label>
+								<label for="">Birth Date</label>
 								<input
 									type="text"
 									class="form-control"
-									required
-									v-model="data.relationship"
-								/>
-							</div>
-							<div class="form-group col-md-6">
-								<label for="">Contact No</label>
-								<input
-									type="text"
-									class="form-control"
-									v-model="data.contact_no"
+									v-model="data.birth_date"
 								/>
 							</div>
 
 							<div class="form-group col-md-6">
-								<label for="">Occupation</label>
-								<input
-									type="text"
+								<label for="">Included</label>
+								<select
 									class="form-control"
-									v-model="data.occupation"
-								/>
-							</div>
-							<div class="form-group col-md-12">
-								<label for="">Address</label>
-								<textarea
-									class="form-control"
-									v-model="data.address"
-								></textarea>
+									v-model="data.included"
+								>
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -133,35 +125,33 @@
 import { ref } from "@vue/reactivity";
 import { v4 as uuidv4 } from "uuid";
 export default {
-	name: "EmployeeRelativeModal",
+	name: "EmployeeDependentModal",
 	components: {},
 	props: ["data"],
-	emits: ["addRelative", "updateRelative"],
+	emits: ["addDependent", "updateDependent"],
 	setup(props, { emit }) {
-		const relative = ref({
+		const dependent = ref({
 			id: uuidv4(),
-			relationship: "",
-			name: "",
-			address: "",
-			contact_no: "",
-			occupation: "",
+			active: 1,
+			full_name: "",
+			birth_date: "",
+			included: 1,
 		});
 
 		const handleSubmit = () => {
 			if (!props.data) {
-				emit("addRelative", relative.value);
-				relative.value = {
-					relationship: "",
-					name: "",
-					address: "",
-					contact_no: "",
-					occupation: "",
+				emit("addDependent", dependent.value);
+				dependent.value = {
+					active: 1,
+					full_name: "",
+					birth_date: "",
+					included: 1,
 				};
 			} else {
-				emit("updateRelative", props.data);
+				emit("updateDependent", props.data);
 			}
 		};
-		return { relative, handleSubmit };
+		return { dependent, handleSubmit };
 	},
 };
 </script>

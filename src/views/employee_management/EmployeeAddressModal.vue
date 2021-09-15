@@ -13,7 +13,7 @@
 						New Address
 					</h5>
 					<h5 class="modal-title" v-if="data">
-						{{ data.name }}
+						Edit Address
 					</h5>
 					<button
 						type="button"
@@ -44,6 +44,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. No. 3 Luzon Street, Pilipinas Subdivision"
 									required
 									v-model="address.street"
 								/>
@@ -53,6 +54,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Manila"
 									v-model="address.city"
 								/>
 							</div>
@@ -63,6 +65,7 @@
 									type="text"
 									class="form-control"
 									v-model="address.country"
+									placeholder="Ex. Philippines"
 								/>
 							</div>
 							<div class="form-group col-md-6">
@@ -70,6 +73,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Bldg. 1 Unit No. 2"
 									v-model="address.bldg"
 								/>
 							</div>
@@ -78,6 +82,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 1111"
 									v-model="address.geocode"
 								/>
 							</div>
@@ -86,15 +91,17 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 2222"
 									v-model="address.zipcode"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Region</label>
+								<label for="">Province</label>
 								<input
 									type="text"
 									class="form-control"
-									v-model="address.region"
+									placeholder="Ex. Bulacan"
+									v-model="address.province"
 								/>
 							</div>
 							<div class="form-group col-md-6">
@@ -102,6 +109,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Barangay East"
 									v-model="address.brgy"
 								/>
 							</div>
@@ -124,6 +132,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. No. 3 Luzon Street, Pilipinas Subdivision"
 									required
 									v-model="data.street"
 								/>
@@ -133,6 +142,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Manila"
 									v-model="data.city"
 								/>
 							</div>
@@ -143,6 +153,7 @@
 									type="text"
 									class="form-control"
 									v-model="data.country"
+									placeholder="Ex. Philippines"
 								/>
 							</div>
 							<div class="form-group col-md-6">
@@ -150,6 +161,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Bldg. 1 Unit No. 2"
 									v-model="data.bldg"
 								/>
 							</div>
@@ -158,23 +170,26 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 1111"
 									v-model="data.geocode"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Zip code</label>
+								<label for="">Zip Code</label>
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 2222"
 									v-model="data.zipcode"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Region</label>
+								<label for="">Province</label>
 								<input
 									type="text"
 									class="form-control"
-									v-model="data.region"
+									placeholder="Ex. Bulacan"
+									v-model="data.province"
 								/>
 							</div>
 							<div class="form-group col-md-6">
@@ -182,6 +197,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Barangay East"
 									v-model="data.brgy"
 								/>
 							</div>
@@ -210,17 +226,16 @@ export default {
 	props: ["data"],
 	emits: ["addAddress", "updateAddress"],
 	setup(props, { emit }) {
-		console.log(props.data);
 		const address = ref({
 			id: uuidv4(),
-			type: "",
+			type: "current",
 			street: "",
 			city: "",
 			country: "",
 			bldg: "",
 			geocode: "",
 			zipcode: "",
-			region: "",
+			province: "",
 			brgy: "",
 		});
 
@@ -228,14 +243,14 @@ export default {
 			if (!props.data) {
 				emit("addAddress", address.value);
 				address.value = {
-					type: "",
+					type: "current",
 					street: "",
 					city: "",
 					country: "",
 					bldg: "",
 					geocode: "",
 					zipcode: "",
-					region: "",
+					province: "",
 					brgy: "",
 				};
 			} else {
