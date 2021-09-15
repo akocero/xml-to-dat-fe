@@ -32,10 +32,9 @@
 								<select
 									class="form-control"
 									v-model="address.type"
+									required
 								>
-									<option value="current" selected
-										>Current</option
-									>
+									<option value="current">Current</option>
 									<option value="permanent">Permanent</option>
 								</select>
 							</div>
@@ -45,7 +44,6 @@
 									type="text"
 									class="form-control"
 									placeholder="Ex. No. 3 Luzon Street, Pilipinas Subdivision"
-									required
 									v-model="address.street"
 								/>
 							</div>
@@ -54,6 +52,7 @@
 								<input
 									type="text"
 									class="form-control"
+									required
 									placeholder="Ex. Manila"
 									v-model="address.city"
 								/>
@@ -64,6 +63,7 @@
 								<input
 									type="text"
 									class="form-control"
+									required
 									v-model="address.country"
 									placeholder="Ex. Philippines"
 								/>
@@ -120,6 +120,7 @@
 								<select
 									class="form-control"
 									v-model="data.type"
+									required
 								>
 									<option value="current" selected
 										>Current</option
@@ -133,7 +134,6 @@
 									type="text"
 									class="form-control"
 									placeholder="Ex. No. 3 Luzon Street, Pilipinas Subdivision"
-									required
 									v-model="data.street"
 								/>
 							</div>
@@ -142,6 +142,7 @@
 								<input
 									type="text"
 									class="form-control"
+									required
 									placeholder="Ex. Manila"
 									v-model="data.city"
 								/>
@@ -152,6 +153,7 @@
 								<input
 									type="text"
 									class="form-control"
+									required
 									v-model="data.country"
 									placeholder="Ex. Philippines"
 								/>

@@ -32,6 +32,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Juan Dela Cruz"
 									required
 									v-model="relative.name"
 								/>
@@ -41,15 +42,17 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Father"
 									required
 									v-model="relative.relationship"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Contact No</label>
+								<label for="">Contact No.</label>
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 09293921349"
 									v-model="relative.contact_no"
 								/>
 							</div>
@@ -59,6 +62,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. IT"
 									v-model="relative.occupation"
 								/>
 							</div>
@@ -76,6 +80,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Juan Dela Cruz"
 									required
 									v-model="data.name"
 								/>
@@ -85,15 +90,17 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Juan Dela Cruz"
 									required
 									v-model="data.relationship"
 								/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="">Contact No</label>
+								<label for="">Contact No.</label>
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. 09293921349"
 									v-model="data.contact_no"
 								/>
 							</div>
@@ -103,6 +110,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. IT"
 									v-model="data.occupation"
 								/>
 							</div>

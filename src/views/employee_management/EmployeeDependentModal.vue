@@ -32,6 +32,7 @@
 								<select
 									class="form-control"
 									v-model="dependent.active"
+									required
 								>
 									<option value="1">Active</option>
 									<option value="0">Inactive</option>
@@ -42,6 +43,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Juan Dela Cruz"
 									required
 									v-model="dependent.full_name"
 								/>
@@ -49,7 +51,7 @@
 							<div class="form-group col-md-6">
 								<label for="">Birth Date</label>
 								<input
-									type="text"
+									type="date"
 									class="form-control"
 									v-model="dependent.birth_date"
 								/>
@@ -60,6 +62,7 @@
 								<select
 									class="form-control"
 									v-model="dependent.included"
+									required
 								>
 									<option value="1">Yes</option>
 									<option value="0">No</option>
@@ -72,6 +75,7 @@
 								<select
 									class="form-control"
 									v-model="data.active"
+									required
 								>
 									<option value="1">Active</option>
 									<option value="0">Inactive</option>
@@ -82,6 +86,7 @@
 								<input
 									type="text"
 									class="form-control"
+									placeholder="Ex. Juan Dela Cruz"
 									required
 									v-model="data.full_name"
 								/>
@@ -89,7 +94,7 @@
 							<div class="form-group col-md-6">
 								<label for="">Birth Date</label>
 								<input
-									type="text"
+									type="date"
 									class="form-control"
 									v-model="data.birth_date"
 								/>
@@ -100,6 +105,7 @@
 								<select
 									class="form-control"
 									v-model="data.included"
+									required
 								>
 									<option value="1">Yes</option>
 									<option value="0">No</option>
