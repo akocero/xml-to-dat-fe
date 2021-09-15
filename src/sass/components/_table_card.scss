@@ -1,0 +1,30 @@
+.table-card {
+	padding: 0;
+	margin: 1rem 0;
+	list-style-type: none;
+	width: 100%;
+	box-sizing: border-box;
+	&-item {
+		box-sizing: border-box;
+		display: flex;
+		border: 1px solid rgba(0, 0, 0, 0.062);
+		padding: 0.3rem 1rem;
+		margin-bottom: 0.5rem;
+		& > * {
+			flex: 1 1 0px;
+		}
+
+		label {
+			margin-bottom: 0;
+			font-size: 0.9rem;
+		}
+	}
+
+	// &-cell {
+	// 	flex: 2 2 0px;
+	// }
+
+	// &-cell-action {
+	// 	flex: 1 1 0px;
+	// }
+}

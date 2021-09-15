@@ -676,10 +676,10 @@
 										</button>
 									</div>
 
-									<EmployeeRelativeList
+									<!-- <EmployeeRelativeList
 										:relatives="relatives"
 										@deleteRelative="deleteRelative($event)"
-									/>
+									/> -->
 								</div>
 								<hr />
 								<div class="row">
@@ -918,7 +918,7 @@ import { ref, computed } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
-import EmployeeRelativeList from "./EmployeeRelativeList.vue";
+// import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
@@ -932,7 +932,7 @@ export default {
 	components: {
 		Alert,
 		EmployeeAddressList,
-		EmployeeRelativeList,
+		// EmployeeRelativeList,
 		EmployeeDependentList,
 		ThePageHeader,
 	},

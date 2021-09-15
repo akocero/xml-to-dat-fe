@@ -12,6 +12,7 @@
 				<td>
 					<input
 						type="number"
+						min="0"
 						class="table_input"
 						v-model="item.range"
 					/>
@@ -19,6 +20,7 @@
 				<td>
 					<input
 						type="number"
+						min="0"
 						class="table_input"
 						v-model="item.value"
 					/>

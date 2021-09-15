@@ -1,4 +1,14 @@
 <template>
+	<EmployeeRelativeModal
+		@addRelative="addRelative($event)"
+		@updateRelative="updateRelative($event)"
+		:data="forEditRelative"
+	/>
+	<EmployeeAddressModal
+		@addAddress="addAddress($event)"
+		@updateAddress="updateAddress($event)"
+		:data="forEditAddress"
+	/>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -15,92 +25,50 @@
 
 			<div class="row">
 				<div class="col-12">
-					<ul
-						class="nav nav-pills mb-3"
-						id="pills-tab"
-						role="tablist"
-					>
-						<li class="nav-item">
-							<a
-								class="nav-link active"
-								id="pills-main-tab"
-								data-toggle="pill"
-								href="#pills-main"
-								role="tab"
-								aria-controls="pills-main"
-								aria-selected="true"
-								>Employee Info
-								{{ mainTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-comm-tab"
-								data-toggle="pill"
-								href="#pills-comm"
-								role="tab"
-								aria-controls="pills-comm"
-								aria-selected="false"
-							>
-								Contact Info
-								{{ commTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-contri-tab"
-								data-toggle="pill"
-								href="#pills-contri"
-								role="tab"
-								aria-controls="pills-contri"
-								aria-selected="false"
-							>
-								Other Info
-								{{ connTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-banks-tab"
-								data-toggle="pill"
-								href="#pills-banks"
-								role="tab"
-								aria-controls="pills-banks"
-								aria-selected="false"
-								>HR Setup</a
-							>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-signatory-tab"
-								data-toggle="pill"
-								href="#pills-signatory"
-								role="tab"
-								aria-controls="pills-signatory"
-								aria-selected="false"
-								>Payroll Setup</a
-							>
-						</li>
-					</ul>
+					<BaseNavigationTab
+						:properties="[
+							{
+								id: 'employee',
+								label: 'Employee Info',
+								error: employeeTabHasError,
+								active: true,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'contact',
+								label: 'Contact Info',
+								error: contactTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'other',
+								label: 'Other Info',
+								error: otherTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'payroll-setup',
+								label: 'Payroll Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'hr-setup',
+								label: 'HR Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+						]"
+					/>
 					<form
 						@submit.prevent="handleSubmit"
 						id="form_create_user"
@@ -109,9 +77,9 @@
 						<div class="tab-content pt-3" id="pills-tabContent">
 							<div
 								class="tab-pane fade show active"
-								id="pills-main"
+								id="pills-employee"
 								role="tabpanel"
-								aria-labelledby="pills-main-tab"
+								aria-labelledby="pills-employee-tab"
 							>
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
@@ -565,9 +533,9 @@
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-comm"
+								id="pills-contact"
 								role="tabpanel"
-								aria-labelledby="pills-comm-tab"
+								aria-labelledby="pills-contact-tab"
 							>
 								<div class="row">
 									<div class="col-4">
@@ -678,43 +646,64 @@
 									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Address List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addAddress"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-address-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditAddress = ''"
 										>
-											Add Address
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-									<EmployeeAddressList
-										:addresses="item.addresses"
-										@deleteAddress="deleteAddress($event)"
-									/>
+									<div class="col-md-12">
+										<EmployeeAddressTable
+											:addresses="item.addresses"
+											@deleteAddress="
+												deleteAddress($event)
+											"
+											@forEditAddress="
+												forEditAddress = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Relative List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addRelative"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-relative-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditRelative = ''"
 										>
-											Add Relative
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-
-									<EmployeeRelativeList
-										:relatives="item.relatives"
-										@deleteRelative="deleteRelative($event)"
-									/>
+									<div class="col-12">
+										<EmployeeRelativeTable
+											:relatives="item.relatives"
+											@deleteRelative="
+												deleteRelative($event)
+											"
+											@forEditRelative="
+												forEditRelative = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
 								<div class="row">
@@ -734,9 +723,9 @@
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-contri"
+								id="pills-other"
 								role="tabpanel"
-								aria-labelledby="pills-contri-tab"
+								aria-labelledby="pills-other-tab"
 							>
 								<div class="row">
 									<div class="col-md-4">
@@ -945,6 +934,63 @@
 									</div>
 								</div>
 							</div>
+							<div
+								class="tab-pane fade"
+								id="pills-payroll-setup"
+								role="tabpanel"
+								aria-labelledby="pills-payroll-setup-tab"
+							>
+								<div class="row pb-3">
+									<div class="col-4">
+										<h5 class="h5">Payroll Parameter</h5>
+										<label for="">
+											You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com
+										</label>
+									</div>
+
+									<div class="row col-8">
+										<div class="form-group col-5">
+											<BaseSelectField
+												id="input_halfday_saturday"
+												label="Payroll Parameter"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+											/>
+										</div>
+										<div
+											class="col-md-5 d-flex align-items-center"
+										>
+											<button
+												class="btn btn-default mt-3"
+											>
+												<i v-html="iEdit"></i>
+												<!-- <i
+												class="far fa-eye text-secondary"
+											></i> -->
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<hr />
 						<div class="row col-12">
@@ -978,9 +1024,14 @@ import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import axios from "@/axios/axios-instance";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
-import EmployeeRelativeList from "./EmployeeRelativeList.vue";
+import EmployeeRelativeModal from "./EmployeeRelativeModal.vue";
+import EmployeeAddressModal from "./EmployeeAddressModal.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
+import EmployeeRelativeTable from "./EmployeeRelativeTable.vue";
+import EmployeeAddressTable from "./EmployeeAddressTable.vue";
+import BaseNavigationTab from "@/components/BaseNavigationTab";
 import Alert from "@/components/Alert";
+import BaseSelectField from "@/components/BaseSelectField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import Spinner from "@/components/Spinner";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
@@ -995,18 +1046,33 @@ export default {
 		Alert,
 		Spinner,
 		EmployeeAddressList,
-		EmployeeRelativeList,
+		EmployeeRelativeModal,
 		EmployeeDependentList,
 		ThePageHeader,
+		BaseNavigationTab,
+		BaseSelectField,
+		EmployeeRelativeTable,
+		EmployeeAddressTable,
+		EmployeeAddressModal,
 	},
 	computed: {
-		chevronRight: function() {
-			return feather.icons["chevron-right"].toSvg({
+		iEdit: function() {
+			return feather.icons["edit"].toSvg({
 				width: 18,
 			});
 		},
-		alertTriangle: function() {
-			return feather.icons["alert-circle"].toSvg({
+		iPlus: function() {
+			return feather.icons["plus"].toSvg({
+				width: 18,
+			});
+		},
+		iView: function() {
+			return feather.icons["eye"].toSvg({
+				width: 18,
+			});
+		},
+		iTrash: function() {
+			return feather.icons["trash"].toSvg({
 				width: 18,
 			});
 		},
@@ -1037,34 +1103,25 @@ export default {
 		const selectedSignatureFile = ref(null);
 		const signatory_image_path = ref(null);
 
-		const addAddress = () => {
+		const forEditRelative = ref("");
+		const forEditAddress = ref("");
 
-			const tempAddress = {
-				id: uuidv4(),
-				type: "",
-				street: "",
-				city: "",
-				country: "",
-				bldg: "",
-				geocode: "",
-				zipcode: "",
-				region: "",
-				brgy: "",
-			};
+		const addAddress = (data) => {
+			item.value.addresses.push(data);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("success", "Address Added");
+		};
 
-			let err = false;
-			item.value.addresses.forEach((address) => {
-				if (!address.city || !address.country) {
-					err = true;
+		const updateAddress = (data) => {
+			item.value.addresses = item.value.addresses.map((address) => {
+				let tempAddress = address;
+				if (address.id === data.id) {
+					tempAddress = data;
 				}
+				return tempAddress;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out city and country in address list before adding one"
-				  )
-				: item.value.addresses.push(tempAddress);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("info", "Address Updated");
 		};
 
 		const addDependent = () => {
@@ -1091,29 +1148,22 @@ export default {
 				: item.value.dependents.push(tempDependent);
 		};
 
-		const addRelative = () => {
-			const tempRelative = {
-				id: uuidv4(),
-				relationship: "",
-				name: "",
-				address: "",
-				contact_no: "",
-				occupation: "",
-			};
+		const addRelative = (data) => {
+			item.value.relatives.push(data);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("success", "Relative Added");
+		};
 
-			let err = false;
-			item.value.relatives.forEach((relative) => {
-				if (!relative.relationship || !relative.name) {
-					err = true;
+		const updateRelative = (data) => {
+			item.value.relatives = item.value.relatives.map((relative) => {
+				let tempRelative = relative;
+				if (relative.id === data.id) {
+					tempRelative = data;
 				}
+				return tempRelative;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out relationship and name in relative list before adding one"
-				  )
-				: item.value.relatives.push(tempRelative);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("info", "Relative Updated");
 		};
 
 		const deleteDependent = (id) => {
@@ -1132,29 +1182,27 @@ export default {
 
 		const deleteAddress = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the address?") &&
-				item.value.addresses.length !== 1
-			) {
-				item.value.addresses = item.value.addresses.filter(
-					(address) => address.id !== id
-				);
+			if (item.value.addresses.length > 1) {
+				if (confirm("Are you sure you want to delete the address?")) {
+					item.value.addresses = item.value.addresses.filter(
+						(address) => address.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 address");
+				pushAlert("warning", "Employee need atleast one address");
 			}
 		};
 
 		const deleteRelative = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the relative?") &&
-				item.value.relatives.length !== 1
-			) {
-				item.value.relatives = item.value.relatives.filter(
-					(relative) => relative.id !== id
-				);
+			if (item.value.relatives.length > 1) {
+				if (confirm("Are you sure you want to delete the relative?")) {
+					item.value.relatives = item.value.relatives.filter(
+						(relative) => relative.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 relative");
+				pushAlert("warning", "Employee need atleast one relative");
 			}
 		};
 
@@ -1240,14 +1288,14 @@ export default {
 			}
 		};
 
-		const commTabHasError = computed(() => {
+		const contactTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
 				(error.value && error.value.errors.mobile_no)
 			);
 		});
 
-		const mainTabHasError = computed(() => {
+		const employeeTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.employee_id) ||
 				(error.value && error.value.errors.first_name) ||
@@ -1256,7 +1304,7 @@ export default {
 			);
 		});
 
-		const connTabHasError = computed(() => {
+		const otherTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.height) ||
 				(error.value && error.value.errors.tin_no) ||
@@ -1317,9 +1365,9 @@ export default {
 			loading,
 			response,
 
-			commTabHasError,
-			mainTabHasError,
-			connTabHasError,
+			contactTabHasError,
+			employeeTabHasError,
+			otherTabHasError,
 
 			addAddress,
 			deleteAddress,
@@ -1329,6 +1377,12 @@ export default {
 
 			addDependent,
 			deleteDependent,
+
+			forEditRelative,
+			updateRelative,
+
+			forEditAddress,
+			updateAddress,
 		};
 	},
 };

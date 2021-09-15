@@ -12,7 +12,7 @@ export default function useAlert() {
 			customStatus,
 		};
 		alerts.value.unshift(newAlert);
-		window.scrollTo(0, 0);
+		// window.scrollTo(0, 0);
 	};
 
 	const popAlert = (id) => {
