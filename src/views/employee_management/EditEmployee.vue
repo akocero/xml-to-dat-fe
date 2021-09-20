@@ -1,4 +1,19 @@
 <template>
+	<EmployeeRelativeModal
+		@addRelative="addRelative($event)"
+		@updateRelative="updateRelative($event)"
+		:data="forEditRelative"
+	/>
+	<EmployeeAddressModal
+		@addAddress="addAddress($event)"
+		@updateAddress="updateAddress($event)"
+		:data="forEditAddress"
+	/>
+	<EmployeeDependentModal
+		@addDependent="addDependent($event)"
+		@updateDependent="updateDependent($event)"
+		:data="forEditDependent"
+	/>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -15,170 +30,98 @@
 
 			<div class="row">
 				<div class="col-12">
-					<ul
-						class="nav nav-pills mb-3"
-						id="pills-tab"
-						role="tablist"
-					>
-						<li class="nav-item">
-							<a
-								class="nav-link active"
-								id="pills-main-tab"
-								data-toggle="pill"
-								href="#pills-main"
-								role="tab"
-								aria-controls="pills-main"
-								aria-selected="true"
-								>Employee Info
-								{{ mainTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="mainTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-comm-tab"
-								data-toggle="pill"
-								href="#pills-comm"
-								role="tab"
-								aria-controls="pills-comm"
-								aria-selected="false"
-							>
-								Contact Info
-								{{ commTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="commTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-contri-tab"
-								data-toggle="pill"
-								href="#pills-contri"
-								role="tab"
-								aria-controls="pills-contri"
-								aria-selected="false"
-							>
-								Other Info
-								{{ connTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="connTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-banks-tab"
-								data-toggle="pill"
-								href="#pills-banks"
-								role="tab"
-								aria-controls="pills-banks"
-								aria-selected="false"
-								>HR Setup</a
-							>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-signatory-tab"
-								data-toggle="pill"
-								href="#pills-signatory"
-								role="tab"
-								aria-controls="pills-signatory"
-								aria-selected="false"
-								>Payroll Setup</a
-							>
-						</li>
-					</ul>
+					<BaseNavigationTab
+						:properties="[
+							{
+								id: 'employee',
+								label: 'Employee Info',
+								error: employeeTabHasError,
+								active: true,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'contact',
+								label: 'Contact Info',
+								error: contactTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'other',
+								label: 'Other Info',
+								error: otherTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'payroll-setup',
+								label: 'Payroll Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'hr-setup',
+								label: 'HR Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+						]"
+					/>
 					<form
 						@submit.prevent="handleSubmit"
-						id="form_create_user"
+						id="form_edit_employee"
 						v-if="item"
 					>
 						<div class="tab-content pt-3" id="pills-tabContent">
 							<div
 								class="tab-pane fade show active"
-								id="pills-main"
+								id="pills-employee"
 								role="tabpanel"
-								aria-labelledby="pills-main-tab"
+								aria-labelledby="pills-employee-tab"
 							>
-								<div class="row pr-3 pb-3">
-									<div class="col-md-4">
-										<h5 class="h5">Profile Image</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+								<div class="row pr-3">
+									<BaseRowHeading
+										heading="Profile Image"
+										para="This profile image is optional. The employee's image may be used for his/her ID, and other documents. Please upload a recent photo."
+									/>
 
 									<div class="col-md-2">
-										<img
-											v-if="
-												item.profile_image_path &&
-													!profile_image_path
-											"
-											:src="
-												'http://127.0.0.1:8000/storage/' +
-													item.profile_image_path
-											"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else-if="profile_image_path"
-											:src="profile_image_path"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else
-											src="../../assets/no-image.png"
-											alt=""
-											style="width: 90%"
+										<BaseImageField
+											:image_path="profile_image_path"
+											:database="item?.profile_image_path"
 										/>
 									</div>
 
 									<div class="form-group col-md-6">
-										<label for="">Upload Image</label>
-										<input
-											type="file"
-											class="d-block mt-2"
-											@change="onProfileFileSelected"
-										/>
-										<small
-											>The maximum file size allowed is
-											1000KB/1MB.</small
-										><br /><br />
-										<small
-											v-if="
-												error &&
-													error.errors
-														.profile_image_path
+										<BaseInputFileField
+											id="input_profile_image_path"
+											label="Upload Profile Image"
+											@fileSelected="
+												onProfileFileSelected($event)
 											"
-											id="emailHelp"
-											class="form-text text-danger"
-										>
-											{{
-												error.errors
-													.profile_image_path[0]
-											}}
-										</small>
+											:error="error"
+											:errorField="
+												error?.errors
+													?.profile_image_path || null
+											"
+											:required="false"
+										/>
+										<br />
 										<button
 											v-if="item.profile_image_path"
 											class="btn btn-sm btn-danger"
-											@click="deleteProfileImage(item.id)"
+											@click="
+												handleDeleteProfileImage(
+													item.id
+												)
+											"
 											type="button"
 										>
 											Delete Profile
@@ -189,543 +132,324 @@
 								<hr />
 
 								<div class="row pb-3">
-									<div class="col-4">
-										<h5 class="h5">Main Information</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Main Information"
+										para="Add employee's basic personal
+											information."
+									/>
 
 									<div class="row col-8">
 										<div class="row col-12">
 											<div class="form-group col-4">
-												<label>
-													Employee ID
-													<span
-														class="text-danger text-bold"
-														>*</span
-													>
-												</label>
-												<input
+												<BaseInputField
+													id="input_employee_id"
 													type="text"
-													class="form-control"
-													:class="[
-														error &&
-															error.errors
-																.employee_id &&
-															'is-invalid',
-													]"
-													id=""
-													aria-describedby="emailHelp"
-													placeholder="Ex. 1234567"
+													label="Employee ID"
 													v-model="item.employee_id"
-												/>
-												<small
-													v-if="
-														error &&
-															error.errors
-																.employee_id
+													:error="error"
+													:errorField="
+														error?.errors
+															?.employee_id ||
+															null
 													"
-													id="emailHelp"
-													class="form-text text-danger"
-												>
-													{{
-														error.errors
-															.employee_id[0]
-													}}
-												</small>
+													placeholder="Ex. 1234567"
+													:required="true"
+												/>
 											</div>
 										</div>
-
-										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-4">
-											<label for=""
-												>First Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_first_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.first_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Juan"
+												label="First Name"
 												v-model="item.first_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.first_name
+												:error="error"
+												:errorField="
+													error?.errors?.first_name ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.first_name[0] }}
-											</small>
+												placeholder="Ex. Juan"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-3">
-											<label
-												>Last Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_last_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.last_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Dela Cruz"
+												label="Last Name"
 												v-model="item.last_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.last_name
+												:error="error"
+												:errorField="
+													error?.errors?.last_name ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.last_name[0] }}
-											</small>
+												placeholder="Ex. Dela Cruz"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-3">
-											<label>Middle Name </label>
-											<input
+											<BaseInputField
+												id="input_maiden_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.maiden_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Santos"
+												label="Middle Name"
 												v-model="item.maiden_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.maiden_name
+												:error="error"
+												:errorField="
+													error?.errors
+														?.maiden_name || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.maiden_name[0]
-												}}
-											</small>
+												placeholder="Ex. Santos"
+												:required="false"
+											/>
 										</div>
 										<div class="form-group col-2">
-											<label>
-												Suffix
-											</label>
-											<input
+											<BaseInputField
+												id="input_extension_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.extension_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Jr."
+												label="Suffix"
 												v-model="item.extension_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.extension_name
+												:error="error"
+												:errorField="
+													error?.errors
+														?.extension_name || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.extension_name[0]
-												}}
-											</small>
+												placeholder="Ex. Jr"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-2">
-											<label for=""
-												>Gender
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<select
-												name=""
-												id="input_currency"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.gender &&
-														'is-invalid',
-												]"
+											<BaseSelectField
+												id="input_gender"
+												label="Gender"
 												v-model="item.gender"
-											>
-												<option value=""
-													>Choose ...</option
-												>
-												<option value="male"
-													>Male</option
-												>
-												<option value="female"
-													>Female</option
-												>
-												<option value="female"
-													>Others</option
-												>
-											</select>
-											<small
-												v-if="
-													error && error.errors.gender
+												:error="error"
+												:errorField="
+													error?.errors?.gender ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.gender[0] }}
-											</small>
+												:options="[
+													{
+														value: 'male',
+														label: 'Male',
+													},
+													{
+														value: 'female',
+														label: 'Female',
+													},
+													{
+														value: 'others',
+														label: 'Others',
+													},
+												]"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-3">
-											<label
-												>Birthdate
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_birthdate"
 												type="date"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.birthdate &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 02-8123-4567 "
+												label="Birthdate"
 												v-model="item.birthdate"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.birthdate
+												:error="error"
+												:errorField="
+													error?.errors?.birthdate ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.birthdate[0] }}
-											</small>
+												placeholder="Ex. Jr"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-4">
-											<label
-												>Birthplace<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_birthplace"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.birthplace &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Manila"
+												label="Birth Place"
 												v-model="item.birthplace"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.birthplace
+												:error="error"
+												:errorField="
+													error?.errors?.birthplace ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.birthplace[0] }}
-											</small>
+												placeholder="Ex. Manila"
+												:required="true"
+											/>
 										</div>
-
 										<div class="form-group col-3">
-											<label
-												>Citizenship<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_citizenship"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.citizenship &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Filipino"
+												label="Citizenship"
 												v-model="item.citizenship"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.citizenship
+												:error="error"
+												:errorField="
+													error?.errors
+														?.citizenship || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.citizenship[0]
-												}}
-											</small>
+												placeholder="Ex. Filipino"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-4">
-											<label for=""
-												>Civil Status
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<select
-												name=""
-												id="input_currency"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.civil_status &&
-														'is-invalid',
-												]"
+											<BaseSelectField
+												id="input_civil_status"
+												label="Civil Status"
 												v-model="item.civil_status"
-											>
-												<option value=""
-													>Choose ...</option
-												>
-												<option value="signle"
-													>Single</option
-												>
-												<option value="married"
-													>Married</option
-												>
-												<option value="widow"
-													>Widow</option
-												>
-											</select>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.civil_status
+												:error="error"
+												:errorField="
+													error?.errors
+														?.civil_status || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.civil_status[0]
-												}}
-											</small>
+												:options="[
+													{
+														value: 'single',
+														label: 'Single',
+													},
+													{
+														value: 'married',
+														label: 'Married',
+													},
+													{
+														value: 'widow',
+														label: 'Widow',
+													},
+												]"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-comm"
+								id="pills-contact"
 								role="tabpanel"
-								aria-labelledby="pills-comm-tab"
+								aria-labelledby="pills-contact-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Contact Info</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Contact Info"
+										para="Add employee's contact information."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Email
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_email"
 												type="email"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.email &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												label="Email"
 												v-model="item.email"
-											/>
-											<small
-												v-if="
-													error && error.errors.email
+												:error="error"
+												:errorField="
+													error?.errors?.email || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.email[0] }}
-											</small>
+												placeholder="Ex. johndoe@example.com"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-6">
-											<label for=""
-												>Tel No.
-												<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_tel_no"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.tel_no &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 1233334"
+												label="Tel No."
 												v-model="item.tel_no"
-											/>
-											<small
-												v-if="
-													error && error.errors.tel_no
+												:error="error"
+												:errorField="
+													error?.errors?.tel_no ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no[0] }}
-											</small>
+												placeholder="Ex. 1233334"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Mobile No.<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
-												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.mobile_no &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 09999252144"
+											<BaseInputField
+												id="input_mobile_no"
+												type="number"
+												label="Mobile No."
 												v-model="item.mobile_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.mobile_no
+												:error="error"
+												:errorField="
+													error?.errors?.mobile_no ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.mobile_no[0] }}
-											</small>
+												placeholder="Ex. 09999252144"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Address List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addAddress"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-address-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditAddress = ''"
 										>
-											Add Address
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-									<EmployeeAddressList
-										:addresses="item.addresses"
-										@deleteAddress="deleteAddress($event)"
-									/>
+									<div class="col-md-12">
+										<EmployeeAddressTable
+											:addresses="item.addresses"
+											@deleteAddress="
+												deleteAddress($event)
+											"
+											@forEditAddress="
+												forEditAddress = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Relative List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addRelative"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-relative-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditRelative = ''"
 										>
-											Add Relative
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-
-									<EmployeeRelativeList
-										:relatives="item.relatives"
-										@deleteRelative="deleteRelative($event)"
-									/>
+									<div class="col-12">
+										<EmployeeRelativeTable
+											:relatives="item.relatives"
+											@deleteRelative="
+												deleteRelative($event)
+											"
+											@forEditRelative="
+												forEditRelative = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Social Media</h5>
-										<label for="">
-											You can change your avatar here or
+									<BaseRowHeading
+										heading="Social Media"
+										para="You can change your avatar here or
 											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+											to gravatar.com"
+									/>
 
 									<div class="row col-8">
 										<!-- <div class="error">{{ error }}</div> -->
@@ -734,77 +458,50 @@
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-contri"
+								id="pills-other"
 								role="tabpanel"
-								aria-labelledby="pills-contri-tab"
+								aria-labelledby="pills-other-tab"
 							>
 								<div class="row">
-									<div class="col-md-4">
-										<h5 class="h5">Signature Image</h5>
-										<label for="">
-											You can change your avatar here or
+									<BaseRowHeading
+										heading="Signature Image"
+										para="You can change your avatar here or
 											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+											to gravatar.com"
+									/>
 
 									<div class="col-md-2">
-										<img
-											v-if="
-												item.signatory_image_path &&
-													!signatory_image_path
+										<BaseImageField
+											:image_path="signatory_image_path"
+											:database="
+												item?.signatory_image_path
 											"
-											:src="
-												'http://127.0.0.1:8000/storage/' +
-													item.signatory_image_path
-											"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else-if="signatory_image_path"
-											:src="signatory_image_path"
-											alt=""
-											style="width: 90%"
-										/>
-										<img
-											v-else
-											src="../../assets/no-image.png"
-											alt=""
-											style="width: 90%"
 										/>
 									</div>
 
 									<div class="form-group col-md-6">
-										<label for="">Upload Image</label>
-										<input
-											type="file"
-											class="d-block mt-2"
-											@change="onSignatureFileSelected"
-										/>
-										<small
-											>The maximum file size allowed is
-											200KB.</small
-										><br /><br />
-										<small
-											v-if="
-												error &&
-													error.errors
-														.signatory_image_path
+										<BaseInputFileField
+											id="input_signatory_image_path"
+											label="Upload Signature Image"
+											@fileSelected="
+												onSignatureFileSelected($event)
 											"
-											id="emailHelp"
-											class="form-text text-danger"
-										>
-											{{
-												error.errors
-													.signatory_image_path[0]
-											}}
-										</small>
+											:error="error"
+											:errorField="
+												error?.errors
+													?.signatory_image_path ||
+													null
+											"
+											:required="false"
+										/>
+										<br />
 										<button
 											v-if="item.signatory_image_path"
 											class="btn btn-sm btn-danger"
 											@click="
-												deleteSignatureImage(item.id)
+												handleDeleteSignatureImage(
+													item.id
+												)
 											"
 											type="button"
 										>
@@ -815,134 +512,259 @@
 									<div class="col-12 my-2">
 										<hr />
 									</div>
-									<div class="col-4">
-										<h5 class="h5">Biometrics</h5>
-										<label for="">
-											You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com
-										</label>
-									</div>
+
+									<BaseRowHeading
+										heading="Biometrics"
+										para="Update employee's additional vital
+											health information."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Height
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_height"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.height &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 183 cm"
+												label="Height"
 												v-model="item.height"
-											/>
-											<small
-												v-if="
-													error && error.errors.height
+												:error="error"
+												:errorField="
+													error?.errors?.height ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.height[0] }}
-											</small>
+												placeholder="Ex. 183 cm"
+												:required="false"
+											/>
 										</div>
 										<div class="form-group col-6">
-											<label>Weight</label>
-											<input
+											<BaseInputField
+												id="input_weight"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.weight &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex.  70 kilos"
+												label="Weight"
 												v-model="item.weight"
-											/>
-											<small
-												v-if="
-													error && error.errors.weight
+												:error="error"
+												:errorField="
+													error?.errors?.weight ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.weight[0] }}
-											</small>
+												placeholder="Ex. 70 kilos"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Blood Type
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_blood_type"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.blood_type &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. O+"
+												label="Blood Type"
 												v-model="item.blood_type"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.blood_type
+												:error="error"
+												:errorField="
+													error?.errors?.blood_type ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.blood_type[0] }}
-											</small>
+												placeholder="Ex. O+"
+												:required="false"
+											/>
 										</div>
 									</div>
 									<div class="col-12 my-2">
 										<hr />
 									</div>
 
-									<div class="row pb-2 col-12">
+									<div class="row col-12">
 										<div
-											class="col-12 d-flex justify-content-between align-items-center pb-1"
+											class="col-12 d-flex justify-content-between align-items-center"
 										>
 											<h5 class="h5 mb-0">
 												Dependent List
 											</h5>
 											<button
 												type="button"
-												class="btn btn-sm btn-custom-primary"
-												@click="addDependent"
+												class="btn btn-sm btn-primary"
+												data-toggle="modal"
+												data-target="#employee-dependent-modal"
+												data-backdrop="static"
+												data-keyboard="false"
+												@click="forEditDependent = ''"
 											>
-												Add Dependent
+												<i v-html="iPlus"></i>
 											</button>
 										</div>
 
-										<EmployeeDependentList
-											:dependents="item.dependents"
-											@deleteDependent="
-												deleteDependent($event)
-											"
-										/>
+										<div class="col-12">
+											<EmployeeDependentTable
+												:dependents="item.dependents"
+												@deleteDependent="
+													deleteDependent($event)
+												"
+												@forEditDependent="
+													forEditDependent = {
+														...$event,
+													}
+												"
+											/>
+										</div>
 									</div>
+								</div>
+							</div>
+							<div
+								class="tab-pane fade"
+								id="pills-payroll-setup"
+								role="tabpanel"
+								aria-labelledby="pills-payroll-setup-tab"
+							>
+								<div class="row pb-3">
+									<BaseRowHeading
+										heading="Payroll Parameter Information"
+										para="You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com"
+									/>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<BaseSelectWithButtonField
+												id="input_halfday_saturday"
+												label="Payroll Parameter"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+												:buttonEditProperties="{
+													name: 'nyaw',
+												}"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="input_halfday_saturday"
+												label="Payroll Frequency"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="input_halfday_saturday"
+												label="Productivity Type"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectWithButtonField
+												id="input_halfday_saturday"
+												label="Workhour Type"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+												:buttonEditProperties="{
+													name: 'nyaw',
+												}"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="input_halfday_saturday"
+												label="Day Off"
+												v-model="item.halfday_saturday"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.halfday_saturday ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'Disabled',
+													},
+													{
+														value: 1,
+														label: 'Enabled',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+											/>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="row pb-3">
+									<BaseRowHeading
+										heading="Payroll Parameter"
+										para="You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com"
+									/>
+
+									<div class="row col-8"></div>
 								</div>
 							</div>
 						</div>
@@ -974,17 +796,26 @@
 
 <script>
 import { ref, computed, onBeforeMount } from "vue";
-import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
-import axios from "@/axios/axios-instance";
-import EmployeeAddressList from "./EmployeeAddressList.vue";
-import EmployeeRelativeList from "./EmployeeRelativeList.vue";
-import EmployeeDependentList from "./EmployeeDependentList.vue";
+import EmployeeRelativeModal from "./EmployeeRelativeModal.vue";
+import EmployeeDependentModal from "./EmployeeDependentModal.vue";
+import EmployeeAddressModal from "./EmployeeAddressModal.vue";
+import EmployeeRelativeTable from "./EmployeeRelativeTable.vue";
+import EmployeeAddressTable from "./EmployeeAddressTable.vue";
+import EmployeeDependentTable from "./EmployeeDependentTable.vue";
+import BaseNavigationTab from "@/components/BaseNavigationTab";
 import Alert from "@/components/Alert";
+import BaseSelectField from "@/components/BaseSelectField";
+import BaseSelectWithButtonField from "@/components/BaseSelectWithButtonField";
+import BaseImageField from "@/components/BaseImageField";
+import BaseInputField from "@/components/BaseInputField";
+import BaseInputFileField from "@/components/BaseInputFileField";
+import BaseRowHeading from "@/components/BaseRowHeading";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import Spinner from "@/components/Spinner";
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import useData from "@/composables/useData";
+import useImage from "@/composables/useImage";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
 import endpoints from "@/utils/endpoints";
@@ -994,19 +825,39 @@ export default {
 	components: {
 		Alert,
 		Spinner,
-		EmployeeAddressList,
-		EmployeeRelativeList,
-		EmployeeDependentList,
 		ThePageHeader,
+		BaseNavigationTab,
+		BaseSelectField,
+		EmployeeRelativeTable,
+		EmployeeAddressTable,
+		EmployeeDependentTable,
+		EmployeeAddressModal,
+		EmployeeDependentModal,
+		EmployeeRelativeModal,
+		BaseRowHeading,
+		BaseInputField,
+		BaseImageField,
+		BaseInputFileField,
+		BaseSelectWithButtonField,
 	},
 	computed: {
-		chevronRight: function() {
-			return feather.icons["chevron-right"].toSvg({
+		iEdit: function() {
+			return feather.icons["edit"].toSvg({
 				width: 18,
 			});
 		},
-		alertTriangle: function() {
-			return feather.icons["alert-circle"].toSvg({
+		iPlus: function() {
+			return feather.icons["plus"].toSvg({
+				width: 18,
+			});
+		},
+		iView: function() {
+			return feather.icons["eye"].toSvg({
+				width: 18,
+			});
+		},
+		iTrash: function() {
+			return feather.icons["trash"].toSvg({
 				width: 18,
 			});
 		},
@@ -1021,6 +872,20 @@ export default {
 		);
 		const { pushAlert } = useAlert();
 
+		const {
+			image: profile_image_path,
+			selectedFile: selectedProfileFile,
+			onFileSelected: onProfileFileSelected,
+			deleteImage: deleteProfileImage,
+		} = useImage();
+
+		const {
+			image: signatory_image_path,
+			selectedFile: selectedSignatureFile,
+			onFileSelected: onSignatureFileSelected,
+			deleteImage: deleteSignatureImage,
+		} = useImage();
+
 		onBeforeMount(async () => {
 			await load();
 
@@ -1031,130 +896,100 @@ export default {
 			console.log(item.value);
 		});
 
-		const selectedProfileFile = ref(null);
-		const profile_image_path = ref(null);
+		const forEditRelative = ref("");
+		const forEditAddress = ref("");
+		const forEditDependent = ref("");
 
-		const selectedSignatureFile = ref(null);
-		const signatory_image_path = ref(null);
-
-		const addAddress = () => {
-
-			const tempAddress = {
-				id: uuidv4(),
-				type: "",
-				street: "",
-				city: "",
-				country: "",
-				bldg: "",
-				geocode: "",
-				zipcode: "",
-				region: "",
-				brgy: "",
-			};
-
-			let err = false;
-			item.value.addresses.forEach((address) => {
-				if (!address.city || !address.country) {
-					err = true;
+		const updateAddress = (data) => {
+			item.value.addresses = item.value.addresses.map((address) => {
+				let tempAddress = address;
+				if (address.id === data.id) {
+					tempAddress = data;
 				}
+				return tempAddress;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out city and country in address list before adding one"
-				  )
-				: item.value.addresses.push(tempAddress);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("info", "Address Updated");
 		};
 
-		const addDependent = () => {
-			const tempDependent = {
-				id: uuidv4(),
-				full_name: "",
-				birthdate: "",
-				include: "included",
-				active: "active",
-			};
-
-			let err = false;
-			item.value.dependents.forEach((dependent) => {
-				if (!dependent.full_name) {
-					err = true;
+		const updateRelative = (data) => {
+			item.value.relatives = item.value.relatives.map((relative) => {
+				let tempRelative = relative;
+				if (relative.id === data.id) {
+					tempRelative = data;
 				}
+				return tempRelative;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out full name in dependent list before adding one"
-				  )
-				: item.value.dependents.push(tempDependent);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("info", "Relative Updated");
 		};
 
-		const addRelative = () => {
-			const tempRelative = {
-				id: uuidv4(),
-				relationship: "",
-				name: "",
-				address: "",
-				contact_no: "",
-				occupation: "",
-			};
-
-			let err = false;
-			item.value.relatives.forEach((relative) => {
-				if (!relative.relationship || !relative.name) {
-					err = true;
+		const updateDependent = (data) => {
+			item.value.dependents = item.value.dependents.map((depedent) => {
+				let tempDependent = depedent;
+				if (depedent.id === data.id) {
+					tempDependent = data;
 				}
+				return tempDependent;
 			});
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("info", "Dependent Updated");
+		};
 
-			err
-				? pushAlert(
-						"info",
-						"Please fill out relationship and name in relative list before adding one"
-				  )
-				: item.value.relatives.push(tempRelative);
+		const addAddress = (data) => {
+			item.value.addresses.push(data);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("success", "Address Added");
+		};
+
+		const addDependent = (data) => {
+			item.value.dependents.push(data);
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("success", "dependent Added");
+		};
+
+		const addRelative = (data) => {
+			item.value.relatives.push(data);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("success", "Relative Added");
 		};
 
 		const deleteDependent = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the dependent?") &&
-				item.value.dependents.length !== 1
-			) {
-				item.value.dependents = item.value.dependents.filter(
-					(dependent) => dependent.id !== id
-				);
+			if (item.value.dependents.length > 1) {
+				if (confirm("Are you sure you want to delete the dependent?")) {
+					item.value.dependents = item.value.dependents.filter(
+						(dependent) => dependent.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 dependent");
+				pushAlert("warning", "Employee need atleast one dependent");
 			}
 		};
 
 		const deleteAddress = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the address?") &&
-				item.value.addresses.length !== 1
-			) {
-				item.value.addresses = item.value.addresses.filter(
-					(address) => address.id !== id
-				);
+			if (item.value.addresses.length > 1) {
+				if (confirm("Are you sure you want to delete the address?")) {
+					item.value.addresses = item.value.addresses.filter(
+						(address) => address.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 address");
+				pushAlert("warning", "Employee need atleast one address");
 			}
 		};
 
 		const deleteRelative = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the relative?") &&
-				item.value.relatives.length !== 1
-			) {
-				item.value.relatives = item.value.relatives.filter(
-					(relative) => relative.id !== id
-				);
+			if (item.value.relatives.length > 1) {
+				if (confirm("Are you sure you want to delete the relative?")) {
+					item.value.relatives = item.value.relatives.filter(
+						(relative) => relative.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 relative");
+				pushAlert("warning", "Employee need atleast one relative");
 			}
 		};
 
@@ -1240,14 +1075,14 @@ export default {
 			}
 		};
 
-		const commTabHasError = computed(() => {
+		const contactTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.email) ||
 				(error.value && error.value.errors.mobile_no)
 			);
 		});
 
-		const mainTabHasError = computed(() => {
+		const employeeTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.employee_id) ||
 				(error.value && error.value.errors.first_name) ||
@@ -1256,7 +1091,7 @@ export default {
 			);
 		});
 
-		const connTabHasError = computed(() => {
+		const otherTabHasError = computed(() => {
 			return (
 				(error.value && error.value.errors.height) ||
 				(error.value && error.value.errors.tin_no) ||
@@ -1266,41 +1101,39 @@ export default {
 			);
 		});
 
-		const onProfileFileSelected = (e) => {
-			selectedProfileFile.value = e.target.files[0];
-			profile_image_path.value = URL.createObjectURL(
-				selectedProfileFile.value
-			);
-		};
-
-		const onSignatureFileSelected = (e) => {
-			selectedSignatureFile.value = e.target.files[0];
-			signatory_image_path.value = URL.createObjectURL(
-				selectedSignatureFile.value
-			);
-		};
-
-		const deleteProfileImage = async (id) => {
+		const handleDeleteProfileImage = async (id) => {
 			if (confirm("Are you sure you want to delete this image?")) {
-				const res = await axios.delete(
+				const res = await deleteProfileImage(
 					`${endpoints.employeeImageProfile}/${id}`
 				);
-				item.value.profile_image_path = null;
+
+				if (res.status === 204) {
+					item.value.profile_image_path = null;
+					pushAlert("success", "Profile Image Deleted");
+				} else {
+					pushAlert("error", "Error Deleting Image");
+				}
 			}
 		};
 
-		const deleteSignatureImage = async (id) => {
+		const handleDeleteSignatureImage = async (id) => {
 			if (confirm("Are you sure you want to delete this image?")) {
-				const res = await axios.delete(
+				const res = await deleteSignatureImage(
 					`${endpoints.employeeImageSignatory}/${id}`
 				);
-				item.value.signatory_image_path = null;
+
+				if (res.status === 204) {
+					item.value.signatory_image_path = null;
+					pushAlert("success", "Signatory Image Deleted");
+				} else {
+					pushAlert("error", "Error Deleting Image");
+				}
 			}
 		};
 
 		return {
-			deleteProfileImage,
-			deleteSignatureImage,
+			handleDeleteProfileImage,
+			handleDeleteSignatureImage,
 
 			selectedProfileFile,
 			profile_image_path,
@@ -1317,18 +1150,25 @@ export default {
 			loading,
 			response,
 
-			commTabHasError,
-			mainTabHasError,
-			connTabHasError,
+			contactTabHasError,
+			employeeTabHasError,
+			otherTabHasError,
 
 			addAddress,
 			deleteAddress,
+			updateRelative,
 
 			addRelative,
 			deleteRelative,
+			updateAddress,
 
 			addDependent,
 			deleteDependent,
+			updateDependent,
+
+			forEditRelative,
+			forEditAddress,
+			forEditDependent,
 		};
 	},
 };

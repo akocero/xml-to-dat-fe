@@ -16,6 +16,7 @@
 			{{ err }}</span
 		>
 	</small>
+	<br />
 </template>
 
 <script>

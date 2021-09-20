@@ -505,9 +505,9 @@
 										<h5 class="h5 mb-0">Relative List</h5>
 									</div>
 
-									<EmployeeRelativeList
+									<!-- <EmployeeRelativeList
 										:relatives="item.relatives"
-									/>
+									/> -->
 								</div>
 								<hr />
 								<div class="row">
@@ -687,7 +687,7 @@ import { ref, computed, onBeforeMount } from "vue";
 import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
 import EmployeeAddressList from "./EmployeeAddressList.vue";
-import EmployeeRelativeList from "./EmployeeRelativeList.vue";
+// import EmployeeRelativeList from "./EmployeeRelativeList.vue";
 import EmployeeDependentList from "./EmployeeDependentList.vue";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
@@ -704,7 +704,7 @@ export default {
 		Alert,
 		Spinner,
 		EmployeeAddressList,
-		EmployeeRelativeList,
+		// EmployeeRelativeList,
 		EmployeeDependentList,
 		ThePageHeader,
 	},

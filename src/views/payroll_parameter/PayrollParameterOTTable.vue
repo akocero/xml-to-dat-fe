@@ -76,6 +76,7 @@
 					<td>
 						<input
 							type="number"
+							min="0"
 							v-if="editMode"
 							step=".000001"
 							class="table_input"
@@ -86,6 +87,7 @@
 					<td>
 						<input
 							type="number"
+							min="0"
 							v-if="editMode"
 							step=".000001"
 							class="table_input"
@@ -96,6 +98,7 @@
 					<td>
 						<input
 							type="number"
+							min="0"
 							v-if="editMode"
 							step=".000001"
 							class="table_input"
@@ -106,6 +109,7 @@
 					<td>
 						<input
 							type="number"
+							min="0"
 							v-if="editMode"
 							step=".000001"
 							class="table_input"
@@ -116,6 +120,7 @@
 					<td>
 						<input
 							type="number"
+							min="0"
 							v-if="editMode"
 							step=".000001"
 							class="table_input"
@@ -149,6 +154,7 @@
 					<td v-if="item.maxOTNumberEnabled">
 						<input
 							type="number"
+							min="0"
 							step=".000001"
 							class="table_input"
 							v-model="item.maxOTNumber"
