@@ -1,4 +1,19 @@
 <template>
+	<EmployeeRelativeModal
+		@addRelative="addRelative($event)"
+		@updateRelative="updateRelative($event)"
+		:data="forEditRelative"
+	/>
+	<EmployeeAddressModal
+		@addAddress="addAddress($event)"
+		@updateAddress="updateAddress($event)"
+		:data="forEditAddress"
+	/>
+	<EmployeeDependentModal
+		@addDependent="addDependent($event)"
+		@updateDependent="updateDependent($event)"
+		:data="forEditDependent"
+	/>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -9,99 +24,57 @@
 
 			<div class="row">
 				<div class="col-12">
-					<ul
-						class="nav nav-pills mb-3"
-						id="pills-tab"
-						role="tablist"
-					>
-						<li class="nav-item">
-							<a
-								class="nav-link active"
-								id="pills-main-tab"
-								data-toggle="pill"
-								href="#pills-main"
-								role="tab"
-								aria-controls="pills-main"
-								aria-selected="true"
-								>Employee Info
-								{{ employeeTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="employeeTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-comm-tab"
-								data-toggle="pill"
-								href="#pills-comm"
-								role="tab"
-								aria-controls="pills-comm"
-								aria-selected="false"
-							>
-								Contact Info
-								{{ contactTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="contactTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link"
-								id="pills-contri-tab"
-								data-toggle="pill"
-								href="#pills-contri"
-								role="tab"
-								aria-controls="pills-contri"
-								aria-selected="false"
-							>
-								Other Info
-								{{ otherInfoTabHasError && "&nbsp; &nbsp;" }}
-								<i
-									v-if="otherInfoTabHasError"
-									v-html="alertTriangle"
-									class="text-danger icon-error"
-								></i>
-							</a>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-banks-tab"
-								data-toggle="pill"
-								href="#pills-banks"
-								role="tab"
-								aria-controls="pills-banks"
-								aria-selected="false"
-								>HR Setup</a
-							>
-						</li>
-						<li class="nav-item">
-							<a
-								class="nav-link disabled"
-								id="pills-signatory-tab"
-								data-toggle="pill"
-								href="#pills-signatory"
-								role="tab"
-								aria-controls="pills-signatory"
-								aria-selected="false"
-								>Payroll Setup</a
-							>
-						</li>
-					</ul>
+					<BaseNavigationTab
+						:properties="[
+							{
+								id: 'employee',
+								label: 'Employee Info',
+								error: employeeTabHasError,
+								active: true,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'contact',
+								label: 'Contact Info',
+								error: contactTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'other',
+								label: 'Other Info',
+								error: otherTabHasError,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'payroll-setup',
+								label: 'Payroll Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+							{
+								id: 'hr-setup',
+								label: 'HR Setup',
+								error: null,
+								active: false,
+								disabled: false,
+								tooltip: null,
+							},
+						]"
+					/>
 					<form @submit.prevent="handleSubmit" id="form_create_user">
 						<div class="tab-content pt-3" id="pills-tabContent">
 							<div
 								class="tab-pane fade show active"
-								id="pills-main"
+								id="pills-employee"
 								role="tabpanel"
-								aria-labelledby="pills-main-tab"
+								aria-labelledby="pills-employee-tab"
 							>
 								<div class="row pr-3 pb-3">
 									<div class="col-md-4">
@@ -160,572 +133,339 @@
 								<hr />
 
 								<div class="row pb-3">
-									<div class="col-4">
-										<h5 class="h5">Main Information</h5>
-										<label for="" class="text-justify pr-4">
-											Add employee's basic personal
-											information.
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Main Information"
+										para="Add employee's basic personal
+											information."
+									/>
 
 									<div class="row col-8">
 										<div class="row col-12">
 											<div class="form-group col-4">
-												<label>
-													Employee ID
-													<span
-														class="text-danger text-bold"
-														>*</span
-													>
-												</label>
-												<input
+												<BaseInputField
+													id="input_employee_id"
 													type="text"
-													class="form-control"
-													:class="[
-														error &&
-															error.errors
-																.employee_id &&
-															'is-invalid',
-													]"
-													id=""
-													aria-describedby="emailHelp"
-													placeholder="Ex. 1234567"
+													label="Employee ID"
 													v-model="employee_id"
-												/>
-												<small
-													v-if="
-														error &&
-															error.errors
-																.employee_id
+													:error="error"
+													:errorField="
+														error?.errors
+															?.employee_id ||
+															null
 													"
-													id="emailHelp"
-													class="form-text text-danger"
-												>
-													{{
-														error.errors
-															.employee_id[0]
-													}}
-												</small>
+													placeholder="Ex. 1234567"
+													:required="true"
+												/>
 											</div>
 										</div>
-
-										<!-- <div class="error">{{ error }}</div> -->
 										<div class="form-group col-4">
-											<label for=""
-												>First Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_first_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.first_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Juan"
+												label="First Name"
 												v-model="first_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.first_name
+												:error="error"
+												:errorField="
+													error?.errors?.first_name ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.first_name[0] }}
-											</small>
+												placeholder="Ex. Juan"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-3">
-											<label
-												>Last Name
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_last_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.last_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Dela Cruz"
+												label="Last Name"
 												v-model="last_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.last_name
+												:error="error"
+												:errorField="
+													error?.errors?.last_name ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.last_name[0] }}
-											</small>
+												placeholder="Ex. Dela Cruz"
+												:required="true"
+											/>
 										</div>
 
 										<div class="form-group col-3">
-											<label>Middle Name </label>
-											<input
+											<BaseInputField
+												id="input_maiden_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.maiden_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Santos"
+												label="Middle Name"
 												v-model="maiden_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.maiden_name
+												:error="error"
+												:errorField="
+													error?.errors
+														?.maiden_name || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.maiden_name[0]
-												}}
-											</small>
+												placeholder="Ex. Santos"
+												:required="false"
+											/>
 										</div>
 										<div class="form-group col-2">
-											<label>
-												Suffix
-											</label>
-											<input
+											<BaseInputField
+												id="input_extension_name"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.extension_name &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Jr."
+												label="Suffix"
 												v-model="extension_name"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.extension_name
+												:error="error"
+												:errorField="
+													error?.errors
+														?.extension_name || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors
-														.extension_name[0]
-												}}
-											</small>
+												placeholder="Ex. Jr"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-2">
-											<label for=""
-												>Gender
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<select
-												name=""
-												id="input_currency"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.gender &&
-														'is-invalid',
-												]"
+											<BaseSelectField
+												id="input_gender"
+												label="Gender"
 												v-model="gender"
-											>
-												<option value=""
-													>Choose
-												</option>
-												<option value="male"
-													>Male</option
-												>
-												<option value="female"
-													>Female</option
-												>
-												<option value="female"
-													>Others</option
-												>
-											</select>
-											<small
-												v-if="
-													error && error.errors.gender
+												:error="error"
+												:errorField="
+													error?.errors?.gender ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.gender[0] }}
-											</small>
+												:options="[
+													{
+														value: 'male',
+														label: 'Male',
+													},
+													{
+														value: 'female',
+														label: 'Female',
+													},
+													{
+														value: 'others',
+														label: 'Others',
+													},
+												]"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-3">
-											<label
-												>Birthdate
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_birthdate"
 												type="date"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.birthdate &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
+												label="Birthdate"
 												v-model="birthdate"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.birthdate
+												:error="error"
+												:errorField="
+													error?.errors?.birthdate ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.birthdate[0] }}
-											</small>
+												placeholder="Ex. Jr"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-4">
-											<label
-												>Birthplace<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_birthplace"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.birthplace &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Manila"
+												label="Birth Place"
 												v-model="birthplace"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.birthplace
+												:error="error"
+												:errorField="
+													error?.errors?.birthplace ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.birthplace[0] }}
-											</small>
+												placeholder="Ex. Manila"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-3">
-											<label
-												>Citizenship<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_citizenship"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.citizenship &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. Filipino"
+												label="Citizenship"
 												v-model="citizenship"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.citizenship
+												:error="error"
+												:errorField="
+													error?.errors
+														?.citizenship || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.citizenship[0]
-												}}
-											</small>
+												placeholder="Ex. Filipino"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-4">
-											<label for=""
-												>Civil Status
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<select
-												name=""
-												id="input_currency"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.civil_status &&
-														'is-invalid',
-												]"
+											<BaseSelectField
+												id="input_civil_status"
+												label="Civil Status"
 												v-model="civil_status"
-											>
-												<option value=""
-													>Choose
-												</option>
-												<option value="signle"
-													>Single</option
-												>
-												<option value="married"
-													>Married</option
-												>
-												<option value="widow"
-													>Widow</option
-												>
-											</select>
-											<small
-												v-if="
-													error &&
-														error.errors
-															.civil_status
+												:error="error"
+												:errorField="
+													error?.errors
+														?.civil_status || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{
-													error.errors.civil_status[0]
-												}}
-											</small>
+												:options="[
+													{
+														value: 'single',
+														label: 'Single',
+													},
+													{
+														value: 'married',
+														label: 'Married',
+													},
+													{
+														value: 'widow',
+														label: 'Widow',
+													},
+												]"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-comm"
+								id="pills-contact"
 								role="tabpanel"
-								aria-labelledby="pills-comm-tab"
+								aria-labelledby="pills-contact-tab"
 							>
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Contact Info</h5>
-										<label for="" class="text-justify pr-4">
-											Add employee's contact information.
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Contact Info"
+										para="Add employee's contact information."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label
-												>Email
-												<span
-													class="text-danger text-bold"
-													>*</span
-												>
-											</label>
-											<input
+											<BaseInputField
+												id="input_email"
 												type="email"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.email &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. johndoe@example.com "
+												label="Email"
 												v-model="email"
-											/>
-											<small
-												v-if="
-													error && error.errors.email
+												:error="error"
+												:errorField="
+													error?.errors?.email || null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.email[0] }}
-											</small>
+												placeholder="Ex. johndoe@example.com"
+												:required="true"
+											/>
 										</div>
 										<div class="form-group col-6">
-											<label for=""
-												>Tel No.<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_tel_no"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.tel_no &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 1233334"
+												label="Tel No."
 												v-model="tel_no"
-											/>
-											<small
-												v-if="
-													error && error.errors.tel_no
+												:error="error"
+												:errorField="
+													error?.errors?.tel_no ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.tel_no[0] }}
-											</small>
+												placeholder="Ex. 1233334"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label
-												>Mobile No.<span
-													class="text-danger text-bold"
-													>*</span
-												></label
-											>
-											<input
+											<BaseInputField
+												id="input_mobile_no"
 												type="number"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.mobile_no &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 09999252144"
+												label="Mobile No."
 												v-model="mobile_no"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.mobile_no
+												:error="error"
+												:errorField="
+													error?.errors?.mobile_no ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.mobile_no[0] }}
-											</small>
+												placeholder="Ex. 09999252144"
+												:required="true"
+											/>
 										</div>
 									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Address List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addAddress"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-address-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditAddress = ''"
 										>
-											Add Address
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-									<EmployeeAddressList
-										:addresses="addresses"
-										@deleteAddress="deleteAddress($event)"
-									/>
+									<div class="col-md-12">
+										<EmployeeAddressTable
+											:addresses="addresses"
+											@deleteAddress="
+												deleteAddress($event)
+											"
+											@forEditAddress="
+												forEditAddress = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
-								<div class="row pb-2">
+								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between align-items-center pb-1"
+										class="col-12 d-flex justify-content-between align-items-center"
 									>
 										<h5 class="h5 mb-0">Relative List</h5>
 										<button
 											type="button"
-											class="btn btn-sm btn-custom-primary"
-											@click="addRelative"
+											class="btn btn-sm btn-primary"
+											data-toggle="modal"
+											data-target="#employee-relative-modal"
+											data-backdrop="static"
+											data-keyboard="false"
+											@click="forEditRelative = ''"
 										>
-											Add Relative
+											<i v-html="iPlus"></i>
 										</button>
 									</div>
-
-									<!-- <EmployeeRelativeList
-										:relatives="relatives"
-										@deleteRelative="deleteRelative($event)"
-									/> -->
+									<div class="col-12">
+										<EmployeeRelativeTable
+											:relatives="relatives"
+											@deleteRelative="
+												deleteRelative($event)
+											"
+											@forEditRelative="
+												forEditRelative = { ...$event }
+											"
+										/>
+									</div>
 								</div>
 								<hr />
 								<div class="row">
-									<div class="col-4">
-										<h5 class="h5">Social Media</h5>
-										<label for="" class="text-justify pr-4">
-											Include social media accounts of the
+									<BaseRowHeading
+										heading="Social Media"
+										para="Include social media accounts of the
 											employee to keep them engaged with
-											company activities and updates.
-										</label>
-									</div>
-
-									<div class="row col-8">
-										<!-- <div class="error">{{ error }}</div> -->
-									</div>
+											company activities and updates."
+									/>
+									<div class="row col-8"></div>
 								</div>
-								<!-- <hr class="my-3" />
-									<div class="row">
-										<div class="col-4">
-											<h5 class="h5">Previous Employer</h5>
-											<label for="" class="text-justify pr-4">
-												This Paragraph will explain what was
-												the fields does or what was the use
-												of it
-											</label>
-										</div>
-
-										<div class="row col-8">
-											
-										</div>
-									</div> -->
 							</div>
 							<div
 								class="tab-pane fade"
-								id="pills-contri"
+								id="pills-other"
 								role="tabpanel"
-								aria-labelledby="pills-contri-tab"
+								aria-labelledby="pills-other-tab"
 							>
 								<div class="row">
-									<div class="col-md-4">
-										<h5 class="h5">Signature Image</h5>
-										<label for="" class="text-justify pr-4">
-											Upload Employee Signature to be used
-											for Employee ID and other documents.
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Signature Image"
+										para="Upload Employee Signature to be used
+											for Employee ID and other documents."
+									/>
 
 									<div class="col-md-2">
 										<img
@@ -772,120 +512,97 @@
 										<hr />
 									</div>
 
-									<div class="col-4">
-										<h5 class="h5">Biometrics</h5>
-										<label for="" class="text-justify pr-4">
-											Update employee's additional vital
-											health information.
-										</label>
-									</div>
+									<BaseRowHeading
+										heading="Biometrics"
+										para="Update employee's additional vital
+											health information."
+									/>
 
 									<div class="row col-8">
 										<div class="form-group col-6">
-											<label>Height </label>
-											<input
+											<BaseInputField
+												id="input_height"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.height &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 183 cm"
+												label="Height"
 												v-model="height"
-											/>
-											<small
-												v-if="
-													error && error.errors.height
+												:error="error"
+												:errorField="
+													error?.errors?.height ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.height[0] }}
-											</small>
+												placeholder="Ex. 183 cm"
+												:required="false"
+											/>
 										</div>
 										<div class="form-group col-6">
-											<label>Weight</label>
-											<input
+											<BaseInputField
+												id="input_weight"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors.weight &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. 70 kilos"
+												label="Weight"
 												v-model="weight"
-											/>
-											<small
-												v-if="
-													error && error.errors.weight
+												:error="error"
+												:errorField="
+													error?.errors?.weight ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.weight[0] }}
-											</small>
+												placeholder="Ex. 70 kilos"
+												:required="false"
+											/>
 										</div>
 
 										<div class="form-group col-6">
-											<label>Blood Type </label>
-											<input
+											<BaseInputField
+												id="input_blood_type"
 												type="text"
-												class="form-control"
-												:class="[
-													error &&
-														error.errors
-															.blood_type &&
-														'is-invalid',
-												]"
-												id=""
-												aria-describedby="emailHelp"
-												placeholder="Ex. O+"
+												label="Blood Type"
 												v-model="blood_type"
-											/>
-											<small
-												v-if="
-													error &&
-														error.errors.blood_type
+												:error="error"
+												:errorField="
+													error?.errors?.blood_type ||
+														null
 												"
-												id="emailHelp"
-												class="form-text text-danger"
-											>
-												{{ error.errors.blood_type[0] }}
-											</small>
+												placeholder="Ex. O+"
+												:required="false"
+											/>
 										</div>
 									</div>
 									<div class="col-12 my-2">
 										<hr />
 									</div>
 
-									<div class="row pb-2 col-12">
+									<div class="row col-12">
 										<div
-											class="col-12 d-flex justify-content-between align-items-center pb-1"
+											class="col-12 d-flex justify-content-between align-items-center"
 										>
 											<h5 class="h5 mb-0">
 												Dependent List
 											</h5>
 											<button
 												type="button"
-												class="btn btn-sm btn-custom-primary"
-												@click="addDependent"
+												class="btn btn-sm btn-primary"
+												data-toggle="modal"
+												data-target="#employee-dependent-modal"
+												data-backdrop="static"
+												data-keyboard="false"
+												@click="forEditDependent = ''"
 											>
-												Add Dependent
+												<i v-html="iPlus"></i>
 											</button>
 										</div>
 
-										<EmployeeDependentList
-											:dependents="dependents"
-											@deleteDependent="
-												deleteDependent($event)
-											"
-										/>
+										<div class="col-12">
+											<EmployeeDependentTable
+												:dependents="dependents"
+												@deleteDependent="
+													deleteDependent($event)
+												"
+												@forEditDependent="
+													forEditDependent = {
+														...$event,
+													}
+												"
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -915,13 +632,19 @@
 
 <script>
 import { ref, computed } from "vue";
-import { v4 as uuidv4 } from "uuid";
 import feather from "feather-icons";
-import EmployeeAddressList from "./EmployeeAddressList.vue";
-// import EmployeeRelativeList from "./EmployeeRelativeList.vue";
-import EmployeeDependentList from "./EmployeeDependentList.vue";
+import EmployeeRelativeModal from "./EmployeeRelativeModal.vue";
+import EmployeeDependentModal from "./EmployeeDependentModal.vue";
+import EmployeeAddressModal from "./EmployeeAddressModal.vue";
+import EmployeeRelativeTable from "./EmployeeRelativeTable.vue";
+import EmployeeAddressTable from "./EmployeeAddressTable.vue";
+import EmployeeDependentTable from "./EmployeeDependentTable.vue";
 import Alert from "@/components/Alert";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
+import BaseNavigationTab from "@/components/BaseNavigationTab";
+import BaseRowHeading from "@/components/BaseRowHeading";
+import BaseSelectField from "@/components/BaseSelectField";
+import BaseInputField from "@/components/BaseInputField";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import useData from "@/composables/useData";
 import useAlert from "@/composables/useAlert";
@@ -931,10 +654,17 @@ export default {
 	name: "CreateCompany",
 	components: {
 		Alert,
-		EmployeeAddressList,
-		// EmployeeRelativeList,
-		EmployeeDependentList,
+		EmployeeRelativeTable,
+		EmployeeAddressTable,
+		EmployeeDependentTable,
+		EmployeeAddressModal,
+		EmployeeDependentModal,
+		EmployeeRelativeModal,
 		ThePageHeader,
+		BaseNavigationTab,
+		BaseInputField,
+		BaseSelectField,
+		BaseRowHeading,
 	},
 	computed: {
 		chevronRight: function() {
@@ -944,6 +674,11 @@ export default {
 		},
 		alertTriangle: function() {
 			return feather.icons["alert-circle"].toSvg({
+				width: 18,
+			});
+		},
+		iPlus: function() {
+			return feather.icons["plus"].toSvg({
 				width: 18,
 			});
 		},
@@ -969,6 +704,9 @@ export default {
 		const civil_status = ref("");
 		const extension_name = ref("");
 		const gender = ref("");
+		const addresses = ref([]);
+		const relatives = ref([]);
+		const dependents = ref([]);
 
 		const selectedFileProfile = ref(null);
 		const profile_image_path = ref(null);
@@ -978,160 +716,100 @@ export default {
 
 		const employeeAdded = ref(false);
 
-		const addresses = ref([
-			{
-				id: uuidv4(),
-				type: "",
-				street: "",
-				city: "",
-				country: "",
-				bldg: "",
-				geocode: "",
-				zipcode: "",
-				province: "",
-				brgy: "",
-			},
-		]);
+		const forEditRelative = ref("");
+		const forEditAddress = ref("");
+		const forEditDependent = ref("");
 
-		const dependents = ref([
-			{
-				id: uuidv4(),
-				full_name: "",
-				birthdate: "",
-				include: "yes",
-				active: "active",
-			},
-		]);
-
-		const relatives = ref([
-			{
-				id: uuidv4(),
-				relationship: "",
-				name: "",
-				address: "",
-				contact_no: "",
-				occupation: "",
-			},
-		]);
-
-		const addAddress = () => {
-			console.log(addresses.value);
-			const tempAddress = {
-				id: uuidv4(),
-				type: "",
-				street: "",
-				city: "",
-				country: "",
-				bldg: "",
-				geocode: "",
-				zipcode: "",
-				province: "",
-				brgy: "",
-			};
-
-			let err = false;
-			addresses.value.forEach((address) => {
-				if (!address.city || !address.country) {
-					err = true;
+		const updateAddress = (data) => {
+			addresses.value = addresses.value.map((address) => {
+				let tempAddress = address;
+				if (address.id === data.id) {
+					tempAddress = data;
 				}
+				return tempAddress;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out city and country in address list before adding one"
-				  )
-				: addresses.value.push(tempAddress);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("info", "Address Updated");
 		};
 
-		const addRelative = () => {
-			const tempRelative = {
-				id: uuidv4(),
-				relationship: "",
-				name: "",
-				address: "",
-				contact_no: "",
-				occupation: "",
-			};
-
-			let err = false;
-			relatives.value.forEach((relative) => {
-				if (!relative.relationship || !relative.name) {
-					err = true;
+		const updateRelative = (data) => {
+			relatives.value = relatives.value.map((relative) => {
+				let tempRelative = relative;
+				if (relative.id === data.id) {
+					tempRelative = data;
 				}
+				return tempRelative;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out relationship and name in relative list before adding one"
-				  )
-				: relatives.value.push(tempRelative);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("info", "Relative Updated");
 		};
 
-		const addDependent = () => {
-			const tempDependent = {
-				id: uuidv4(),
-				full_name: "",
-				birthdate: "",
-				include: "included",
-				active: "active",
-			};
-
-			let err = false;
-			dependents.value.forEach((dependent) => {
-				if (!dependent.full_name) {
-					err = true;
+		const updateDependent = (data) => {
+			dependents.value = dependents.value.map((depedent) => {
+				let tempDependent = depedent;
+				if (depedent.id === data.id) {
+					tempDependent = data;
 				}
+				return tempDependent;
 			});
-
-			err
-				? pushAlert(
-						"info",
-						"Please fill out full name in dependent list before adding one"
-				  )
-				: dependents.value.push(tempDependent);
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("info", "Dependent Updated");
 		};
 
-		const deleteAddress = (id) => {
-			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the address?") &&
-				addresses.value.length !== 1
-			) {
-				addresses.value = addresses.value.filter(
-					(address) => address.id !== id
-				);
-			} else {
-				pushAlert("info", "Employee need atleast 1 address");
-			}
+		const addAddress = (data) => {
+			addresses.value.push(data);
+			$("#employee-address-modal").modal("hide");
+			pushAlert("success", "Address Added");
+		};
+
+		const addDependent = (data) => {
+			dependents.value.push(data);
+			$("#employee-dependent-modal").modal("hide");
+			pushAlert("success", "dependent Added");
+		};
+
+		const addRelative = (data) => {
+			relatives.value.push(data);
+			$("#employee-relative-modal").modal("hide");
+			pushAlert("success", "Relative Added");
 		};
 
 		const deleteDependent = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the dependent?") &&
-				dependents.value.length !== 1
-			) {
-				dependents.value = dependents.value.filter(
-					(dependent) => dependent.id !== id
-				);
+			if (dependents.value.length > 1) {
+				if (confirm("Are you sure you want to delete the dependent?")) {
+					dependents.value = dependents.value.filter(
+						(dependent) => dependent.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 dependent");
+				pushAlert("warning", "Employee need atleast one dependent");
+			}
+		};
+
+		const deleteAddress = (id) => {
+			console.log("this id will be deleted: ", id);
+			if (addresses.value.length > 1) {
+				if (confirm("Are you sure you want to delete the address?")) {
+					addresses.value = addresses.value.filter(
+						(address) => address.id !== id
+					);
+				}
+			} else {
+				pushAlert("warning", "Employee need atleast one address");
 			}
 		};
 
 		const deleteRelative = (id) => {
 			console.log("this id will be deleted: ", id);
-			if (
-				confirm("Are you sure you want to delete the relative?") &&
-				relatives.value.length !== 1
-			) {
-				relatives.value = relatives.value.filter(
-					(relative) => relative.id !== id
-				);
+			if (relatives.value.length > 1) {
+				if (confirm("Are you sure you want to delete the relative?")) {
+					relatives.value = relatives.value.filter(
+						(relative) => relative.id !== id
+					);
+				}
 			} else {
-				pushAlert("info", "Employee need atleast 1 relative");
+				pushAlert("warning", "Employee need atleast one relative");
 			}
 		};
 
@@ -1221,7 +899,7 @@ export default {
 			);
 		});
 
-		const otherInfoTabHasError = computed(() => {
+		const otherTabHasError = computed(() => {
 			return error.value && error.value.errors.height;
 		});
 
@@ -1266,6 +944,9 @@ export default {
 			civil_status,
 			extension_name,
 			gender,
+			dependents,
+			relatives,
+			addresses,
 
 			selectedFileProfile,
 			profile_image_path,
@@ -1282,19 +963,23 @@ export default {
 
 			contactTabHasError,
 			employeeTabHasError,
-			otherInfoTabHasError,
-
-			dependents,
-			addDependent,
-			deleteDependent,
+			otherTabHasError,
 
 			addAddress,
-			addresses,
 			deleteAddress,
+			updateRelative,
 
 			addRelative,
-			relatives,
 			deleteRelative,
+			updateAddress,
+
+			addDependent,
+			deleteDependent,
+			updateDependent,
+
+			forEditRelative,
+			forEditAddress,
+			forEditDependent,
 		};
 	},
 };
