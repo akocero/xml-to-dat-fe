@@ -180,6 +180,11 @@ const routes = [
 						"@/views/payroll_parameter/ViewPayrollParameter.vue"
 					),
 			},
+			{
+				path: "setup/scheduler",
+				name: "scheduler",
+				component: () => import("@/views/scheduler/ScheduleList.vue"),
+			},
 		],
 	},
 ];
