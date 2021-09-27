@@ -169,6 +169,20 @@
 							</p>
 						</router-link>
 					</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'schedule-management' }"
+							class="nav-link"
+						>
+							<i
+								v-html="iCalendar"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								Schedule Management
+							</p>
+						</router-link>
+					</li>
 				</ul>
 			</nav>
 			<!-- /.sidebar-menu -->
@@ -226,6 +240,11 @@ export default {
 		},
 		users: function() {
 			return feather.icons["users"].toSvg({
+				width: 20,
+			});
+		},
+		iCalendar: function() {
+			return feather.icons["calendar"].toSvg({
 				width: 20,
 			});
 		},

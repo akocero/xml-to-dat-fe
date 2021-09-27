@@ -29,12 +29,32 @@
 					<div class="modal-body">
 						<div class="row">
 							<BaseRowHeading
-								heading="Date Range"
-								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
+								heading="Year"
+								para="Lorem ipsum dolor, sit amet consectetur."
 							/>
 							<div class="col-8">
 								<div class="row">
-									<div class="form-group col-6">
+									<div class="form-group col-4">
+										<label for="">Year</label>
+										<select
+											name=""
+											id=""
+											class="form-control"
+											v-model="selected_year"
+										>
+											<option value="" selected
+												>Choose</option
+											>
+											<option
+												:value="year"
+												v-for="year in years_array"
+												:key="year"
+												>{{ year }}</option
+											>
+										</select>
+									</div>
+
+									<!-- <div class="form-group col-6">
 										<label for="">From</label>
 										<input
 											type="date"
@@ -50,14 +70,14 @@
 											v-model="endDate"
 											class="form-control"
 										/>
-									</div>
+									</div> -->
 								</div>
 							</div>
 						</div>
 						<hr />
 						<div class="row">
 							<BaseRowHeading
-								heading="Time Log"
+								heading="Schedule Shift"
 								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
 							/>
 							<div class="col-8">
@@ -222,115 +242,6 @@
 								</div>
 							</div>
 						</div>
-						<hr />
-						<div class="row">
-							<BaseRowHeading
-								heading="None Working Day"
-								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
-							/>
-							<div class="col-8">
-								<div class="row pt-2 pl-2">
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Monday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Tuesday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Wednesday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Thursday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Friday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Saturday
-										</label>
-									</div>
-									<div class="form-check col-4">
-										<input
-											class="form-check-input"
-											type="checkbox"
-											value=""
-											id="defaultCheck1"
-										/>
-										<label
-											class="form-check-label"
-											for="defaultCheck1"
-										>
-											Sunday
-										</label>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					<div class="modal-footer">
 						<button
@@ -347,12 +258,6 @@
 	</div>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
-			<!-- <ThePageHeader
-				heading="New Payroll Parameter"
-				routeName="payroll-parameter"
-				mode="create"
-			/> -->
-
 			<div class="row">
 				<div>
 					<button
@@ -361,7 +266,7 @@
 						data-toggle="modal"
 						data-target="#scheduleModal"
 					>
-						Open Schedule Setup
+						Open Schedule Setup {{ date_array }}
 					</button>
 				</div>
 				<div class="col-md-12">
@@ -369,8 +274,8 @@
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th width="15%">Date</th>
-								<th width="12%">Schedule Type</th>
+								<th width="10%">Date</th>
+								<th width="10%">Schedule Type</th>
 								<th width="18%">Shift Begings At</th>
 								<th width="18%">Must Be Completed By</th>
 								<th width="10%">Break Time</th>
@@ -379,21 +284,32 @@
 						<tbody v-for="item in schedule" :key="item.date">
 							<tr>
 								<td>
-									<!-- <input
+									<input
 										type="date"
 										v-model="item.date"
 										class="table_input"
 										disabled
 										style="display: none;"
-									/> -->
+									/>
 									{{ item.dateString }}
 								</td>
 								<td>
-									<input
-										type="text"
+									<select
+										name=""
+										id=""
 										v-model="item.schedule_type"
 										class="table_input"
-									/>
+									>
+										<option value="day_shift" selected
+											>Day Shift</option
+										>
+										<option value="night_shift"
+											>Night Shift</option
+										>
+										<option value="rest_day"
+											>Rest Day</option
+										>
+									</select>
 								</td>
 								<td>
 									<input
@@ -431,6 +347,7 @@ import { ref } from "@vue/reactivity";
 import moment from "moment";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseRowHeading from "@/components/BaseRowHeading";
+import { onBeforeMount } from "@vue/runtime-core";
 
 export default {
 	components: {
@@ -447,10 +364,25 @@ export default {
 		const timeBreak = ref(0);
 		const night_shift = ref(0);
 		const schedule = ref([]);
+		const years_array = ref([]);
+		const selected_year = ref("");
+		const date_array = ref([]);
+		onBeforeMount(() => {
+			generateYears();
+		});
+
+		const generateYears = () => {
+			let currentYear = new Date().getFullYear();
+			for (let i = 0; i < 10; i++) {
+				years_array.value.push(currentYear);
+				currentYear += 1;
+			}
+		};
+
 		const createCalendar = () => {
-			schedule.value = [];
-			var current = new Date(startDate.value);
-			var end = new Date(endDate.value);
+			// schedule.value = [];
+			let current = new Date(selected_year.value + "-01-01");
+			const end = new Date(selected_year.value + "-12-31");
 
 			while (current <= end) {
 				const date =
@@ -465,16 +397,16 @@ export default {
 				const schedule_type = "";
 				const temp_time_in = time_in.value;
 				const temp_time_out = time_out.value;
-				const break_time = timeBreak.value;
+				const break_time = timeBreak.value + "h";
 
 				if (night_shift.value) {
-					schedule_type = "NIGHT SHIFT";
+					schedule_type = "night_shift";
 				} else {
-					schedule_type = "DAY SHIFT";
+					schedule_type = "day_shift";
 				}
 
 				if (restday.value.includes(dayWord)) {
-					schedule_type = "REST DAY";
+					schedule_type = "rest_day";
 					temp_time_out = "";
 					temp_time_in = "";
 				}
@@ -504,6 +436,8 @@ export default {
 			none_working_day,
 			timeBreak,
 			night_shift,
+			years_array,
+			selected_year,
 		};
 	},
 };

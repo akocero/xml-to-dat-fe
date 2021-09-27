@@ -3,7 +3,7 @@
 		<div
 			class="col-md-12 d-flex justify-content-between align-items-center"
 		>
-			<h4 class="h4 mb-0 text-primary">{{ heading }}</h4>
+			<h4 class="h4 mb-0 text-primary">{{ heading }} Entry</h4>
 			<router-link
 				role="button"
 				class="btn btn-primary"
