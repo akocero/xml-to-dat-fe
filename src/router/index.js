@@ -181,9 +181,10 @@ const routes = [
 					),
 			},
 			{
-				path: "setup/scheduler",
-				name: "scheduler",
-				component: () => import("@/views/scheduler/ScheduleList.vue"),
+				path: "setup/schedule-management",
+				name: "schedule-management",
+				component: () =>
+					import("@/views/schedule_management/ScheduleList.vue"),
 			},
 		],
 	},
