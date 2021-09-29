@@ -186,6 +186,18 @@ const routes = [
 				component: () =>
 					import("@/views/schedule_management/ScheduleList.vue"),
 			},
+			{
+				path: "setup/shift",
+				name: "shift",
+				component: () =>
+					import("@/views/setup_schedule_shift/ShiftList.vue"),
+			},
+			{
+				path: "setup/shift/create",
+				name: "create-shift",
+				component: () =>
+					import("@/views/setup_schedule_shift/CreateShift.vue"),
+			},
 		],
 	},
 ];
