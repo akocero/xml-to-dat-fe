@@ -83,10 +83,15 @@ label {
 	padding: 0 0 0 0.5rem !important;
 	margin-top: -2px;
 }
-
+// .router-link-active {
+// 	background-color: rgba(255, 255, 255, 0.9) !important;
+// 	color: #343a40 !important;
+// }
 .router-link-exact-active {
-	background-color: rgba(255, 255, 255, 0.9) !important;
-	color: #343a40 !important;
+	// background-color: rgba(255, 255, 255, 0.9) !important;
+	// color: #343a40 !important;
+	background-color: #244dbb;
+	color: white !important;
 }
 
 .table_input {

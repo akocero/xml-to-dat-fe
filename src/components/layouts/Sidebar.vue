@@ -152,6 +152,21 @@
 								</router-link>
 							</li>
 						</ul>
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('setup:role:list')"
+						>
+							<li class="nav-item">
+								<router-link
+									:to="{ name: 'shift' }"
+									class="nav-link"
+								>
+									<i class="nav-icon far pr-2">&#9679;</i>
+									<!-- <i class="far fa-circle nav-icon"></i> -->
+									<p>Schedule Shift</p>
+								</router-link>
+							</li>
+						</ul>
 					</li>
 
 					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
@@ -192,7 +207,7 @@
 </template>
 <script>
 import feather from "feather-icons";
-import { computed, onMounted, ref } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import useAbility from "@/composables/useAbility";
 export default {
@@ -261,14 +276,13 @@ export default {
 			1
 		)}${user_name_array[user_name_array.length - 1].substr(0, 1)}`;
 
-		// onMounted(() => {
-		// 	const activeLink = document.querySelector(
-		// 		".router-link-exact-active"
-		// 	);
-
-		// 	activeLink.parentElement.parentElement.parentElement.classList.add(
-		// 		"menu-open"
-		// 	);
+		// onBeforeMount(() => {
+		// 	setTimeout(() => {
+		// 		const links = document.querySelectorAll(".nav-link");
+		// 		links.forEach((element) => {
+		// 			console.log(element);
+		// 		});
+		// 	}, 2000);
 		// });
 
 		return {

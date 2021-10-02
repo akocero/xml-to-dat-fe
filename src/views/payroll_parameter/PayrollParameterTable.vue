@@ -44,7 +44,7 @@
 				<td colspan="100">
 					<button
 						type="button"
-						class="btn btn-primary"
+						class="btn btn-primary btn-sm"
 						@click="$emit('handleAddInTable', type)"
 					>
 						<i v-html="iPlus"></i>
@@ -57,7 +57,7 @@
 				<td colspan="100">
 					<button
 						type="button"
-						class="btn btn-primary"
+						class="btn btn-primary btn-sm"
 						@click="$emit('handleAddInTable', type)"
 					>
 						<i v-html="iPlus"></i>

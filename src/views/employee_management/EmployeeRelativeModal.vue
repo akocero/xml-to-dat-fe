@@ -90,7 +90,7 @@
 								<input
 									type="text"
 									class="form-control"
-									placeholder="Ex. Juan Dela Cruz"
+									placeholder="Ex. Mother"
 									required
 									v-model="data.relationship"
 								/>
