@@ -25,7 +25,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<form>
+				<form @submit.prevent="createCalendar">
 					<div class="modal-body">
 						<div class="row">
 							<BaseRowHeading
@@ -41,6 +41,7 @@
 											id=""
 											class="form-control"
 											v-model="selected_year"
+											required
 										>
 											<option value="" selected
 												>Choose</option
@@ -54,23 +55,28 @@
 										</select>
 									</div>
 
-									<!-- <div class="form-group col-6">
-										<label for="">From</label>
-										<input
-											type="date"
-											v-model="startDate"
+									<div class="form-group col-4">
+										<label for="">Premade Shift</label>
+										<select
+											name=""
+											id=""
 											class="form-control"
-										/>
+											v-model="selected_shift"
+											@change="populateShift"
+										>
+											<option
+												value="custom_shift"
+												selected
+												>Custom Shift</option
+											>
+											<option
+												v-for="shift in shifts"
+												:value="shift.id"
+												:key="shift.id"
+												>{{ shift.code }}</option
+											>
+										</select>
 									</div>
-
-									<div class="form-group col-6">
-										<label for="">To</label>
-										<input
-											type="date"
-											v-model="endDate"
-											class="form-control"
-										/>
-									</div> -->
 								</div>
 							</div>
 						</div>
@@ -88,6 +94,7 @@
 											type="time"
 											v-model="time_in"
 											class="form-control"
+											:disabled="!custom_shift"
 										/>
 									</div>
 
@@ -97,6 +104,7 @@
 											type="time"
 											v-model="time_out"
 											class="form-control"
+											:disabled="!custom_shift"
 										/>
 									</div>
 
@@ -106,6 +114,7 @@
 											type="number"
 											v-model="timeBreak"
 											class="form-control"
+											:disabled="!custom_shift"
 										/>
 									</div>
 
@@ -116,8 +125,9 @@
 											id=""
 											v-model="night_shift"
 											class="form-control"
+											:disabled="!custom_shift"
 										>
-											<option value="" selected
+											<option value="0" selected
 												>No</option
 											>
 											<option value="1">Yes</option>
@@ -244,11 +254,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button
-							type="button"
-							class="btn btn-primary"
-							@click="createCalendar"
-						>
+						<button class="btn btn-primary">
 							Generate
 						</button>
 					</div>
@@ -266,7 +272,15 @@
 						data-toggle="modal"
 						data-target="#scheduleModal"
 					>
-						Open Schedule Setup {{ date_array }}
+						Open Schedule Setup
+					</button>
+					<button
+						type="button"
+						class="btn btn-primary"
+						data-toggle="modal"
+						data-target="#scheduleModal"
+					>
+						Edit
 					</button>
 				</div>
 				<div class="col-md-12">
@@ -345,9 +359,11 @@
 <script>
 import { ref } from "@vue/reactivity";
 import moment from "moment";
+import useFetch from "@/composables/useFetch";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseRowHeading from "@/components/BaseRowHeading";
 import { onBeforeMount } from "@vue/runtime-core";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	components: {
@@ -360,15 +376,24 @@ export default {
 		const time_in = ref("");
 		const time_out = ref("");
 		const restday = ref([]);
-		const none_working_day = ref([]);
 		const timeBreak = ref(0);
 		const night_shift = ref(0);
 		const schedule = ref([]);
 		const years_array = ref([]);
+		const selected_shift = ref("custom_shift");
 		const selected_year = ref("");
 		const date_array = ref([]);
-		onBeforeMount(() => {
+		const custom_shift = ref(true);
+		const {
+			data: shifts,
+			fetch: loadShifts,
+		} = useFetch();
+
+		onBeforeMount(async () => {
 			generateYears();
+			await loadShifts(`${endpoints.setupShift}?paginate=none`);
+
+			console.log(shifts.value);
 		});
 
 		const generateYears = () => {
@@ -380,7 +405,7 @@ export default {
 		};
 
 		const createCalendar = () => {
-			// schedule.value = [];
+			schedule.value = [];
 			let current = new Date(selected_year.value + "-01-01");
 			const end = new Date(selected_year.value + "-12-31");
 
@@ -425,6 +450,29 @@ export default {
 			}
 		};
 
+		const populateShift = (e) => {
+			let found;
+			if (e.target.value != "custom_shift") {
+				if (shifts.value) {
+					found = shifts.value.find(
+						(shift) => shift.id == e.target.value
+					);
+				}
+				time_in.value = found.time_logs[0].in;
+				time_out.value = found.time_logs[0].out;
+				night_shift.value = found.night_shift;
+				timeBreak.value = found.break_time;
+				console.log(found);
+				custom_shift.value = false;
+			} else {
+				custom_shift.value = true;
+				time_in.value = "";
+				time_out.value = "";
+				night_shift.value = "";
+				timeBreak.value = "";
+			}
+		};
+
 		return {
 			startDate,
 			endDate,
@@ -433,11 +481,15 @@ export default {
 			restday,
 			time_in,
 			time_out,
-			none_working_day,
 			timeBreak,
 			night_shift,
 			years_array,
 			selected_year,
+			selected_shift,
+			shifts,
+
+			populateShift,
+			custom_shift,
 		};
 	},
 };

@@ -769,6 +769,322 @@
 									<div class="row col-8"></div>
 								</div>
 							</div>
+							<div
+								class="tab-pane fade"
+								id="pills-hr-setup"
+								role="tabpanel"
+								aria-labelledby="pills-hr-setup-tab"
+							>
+								<div class="row">
+									<BaseRowHeading
+										heading="HR Setup Fields"
+										para="You can change your avatar here or
+											remove the current avatar to revert
+											to gravatar.com"
+									/>
+									<div class="col-8">
+										<div class="row">
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+											<div class="form-group col-6">
+												<BaseSelectField
+													id="input_gender"
+													label="Gender"
+													v-model="item.gender"
+													:error="error"
+													:errorField="
+														error?.errors?.gender ||
+															null
+													"
+													:options="[
+														{
+															value: 'male',
+															label: 'Male',
+														},
+														{
+															value: 'female',
+															label: 'Female',
+														},
+														{
+															value: 'others',
+															label: 'Others',
+														},
+													]"
+													:required="true"
+												/>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<hr />
 						<div class="row col-12">
