@@ -31,6 +31,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_bank_code"
@@ -46,6 +47,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_bank_name"
@@ -61,6 +63,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_bank_branch_code"
@@ -72,6 +75,7 @@
 						<div class="form-group col-md-8">
 							<label for="">Description </label>
 							<textarea
+								disabled
 								name=""
 								id="input_bank_description"
 								class="form-control"
@@ -144,7 +148,6 @@
 
 <script>
 import getItem from "@/composables/getItem.js";
-import useViewMode from "@/composables/useViewMode.js";
 import Spinner from "@/components/Spinner";
 import { onBeforeMount, onUnmounted } from "vue";
 import feather from "feather-icons";
@@ -179,12 +182,9 @@ export default {
 			props.bank_id,
 			endpoints.setupCompanyBank
 		);
-		const { disableThisFields } = useViewMode();
 
 		onBeforeMount(async () => {
 			await load();
-
-			disableThisFields(["input", "select", "textarea"]);
 		});
 
 		$(function() {
