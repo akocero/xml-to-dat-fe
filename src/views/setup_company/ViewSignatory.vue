@@ -26,12 +26,17 @@
 				<div class="modal-body">
 					<div class="row" v-if="signatory_id && item">
 						<div class="form-group col-7">
-							<BaseInputField
+							<label>
+								Signatory Code
+								<span class="text-danger text-bold">*</span>
+							</label>
+							<input
+								disabled
+								type="text"
+								class="form-control"
 								id="input_signatory_code"
-								label="Signatory Code"
-								v-model="item.code"
 								placeholder="Ex. Signatory 1"
-								:required="true"
+								v-model="item.code"
 							/>
 						</div>
 						<div class="form-group col-5">
@@ -41,7 +46,11 @@
 									>*</span
 								></label
 							>
-							<select class="form-control" v-model="item.active">
+							<select
+								class="form-control"
+								v-model="item.active"
+								disabled
+							>
 								<option value="1">Active</option>
 								<option value="0">Inactive</option>
 							</select>
@@ -52,6 +61,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_signatory_prepared_by"
@@ -67,6 +77,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<input
+								disabled
 								name=""
 								id="input_signatory_p_position"
 								class="form-control"
@@ -79,6 +90,7 @@
 								Checked by:
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_signatory_checked_by"
@@ -91,6 +103,7 @@
 						<div class="form-group col-md-5">
 							<label for="">Position </label>
 							<input
+								disabled
 								name=""
 								id="input_signatory_c_position"
 								class="form-control"
@@ -103,6 +116,7 @@
 								Approved by:
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_signatory_approved_by"
@@ -114,6 +128,7 @@
 						<div class="form-group col-md-5">
 							<label for="">Position </label>
 							<input
+								disabled
 								name=""
 								id="input_signatory_a_position"
 								class="form-control"
@@ -126,6 +141,7 @@
 								Noted by:
 							</label>
 							<input
+								disabled
 								type="text"
 								class="form-control"
 								id="input_signatory_noted_by"
@@ -138,6 +154,7 @@
 						<div class="form-group col-md-5">
 							<label for="">Position </label>
 							<input
+								disabled
 								name=""
 								id="input_signatory_n_position"
 								class="form-control"
@@ -151,6 +168,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<textarea
+								disabled
 								name=""
 								id="input_signatory_pjr"
 								class="form-control"
@@ -164,6 +182,7 @@
 								<span class="text-danger text-bold">*</span>
 							</label>
 							<textarea
+								disabled
 								name=""
 								id="input_signatory_ojr"
 								class="form-control"
@@ -202,7 +221,7 @@ export default {
 
 		onBeforeMount(async () => {
 			await load();
-			disableThisFields(["input", "select", "textarea"]);
+			// disableThisFields(["input", "select", "textarea"]);
 		});
 
 		onUnmounted(() => {
