@@ -1,4 +1,15 @@
 <template>
+	<ViewBank
+		v-if="item && viewingBank"
+		:bank_id="update_bank_id"
+		@hideEditBank="viewingBank = false"
+	/>
+
+	<ViewSignatory
+		v-if="item && viewingSignatory"
+		:signatory_id="update_signatory_id"
+		@hideEditSignatory="viewingSignatory = false"
+	/>
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
@@ -633,59 +644,27 @@
 								aria-labelledby="pills-banks-tab"
 							>
 								<div class="row">
-									<div
-										class="col-12 d-flex justify-content-between mb-3 align-items-center"
-									>
+									<div class="col-12">
 										<h4 class="tab-pane-title">
 											Bank List
 										</h4>
 									</div>
 
 									<div class="col-md-12">
-										<div
-											class="list"
+										<CompanyBankTable
 											v-if="
 												item.setup_company_banks.length
 											"
-										>
-											<div
-												class="list-item"
-												v-for="bank in item.setup_company_banks"
-												:key="bank.id"
-											>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>BANK CODE</label
-													>
-													<h4 class="list-value">
-														{{ bank.bank_code }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>ACCOUNT NAME</label
-													>
-													<h4 class="list-value">
-														{{ bank.name }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>DESCRIPTION</label
-													>
-													<h4 class="list-value">
-														{{ bank.description }}
-													</h4>
-												</div>
-											</div>
-										</div>
-										<div v-else>
+											:banks="item.setup_company_banks"
+											@handleShowBankModal="
+												showBankModal(
+													$event.action,
+													$event.id
+												)
+											"
+											:viewMode="true"
+										/>
+										<div v-else class="mt-2">
 											No bank available!
 										</div>
 									</div>
@@ -699,107 +678,30 @@
 								aria-labelledby="pills-signatories-tab"
 							>
 								<div class="row">
-									<div
-										class="col-12 d-flex justify-content-between mb-3 align-items-center"
-									>
+									<div class="col-12">
 										<h4 class="tab-pane-title">
 											Signatory List
 										</h4>
 									</div>
 
 									<div class="col-md-12">
-										<div
-											class="list"
+										<CompanySignatoryTable
 											v-if="
 												item.setup_company_signatories
 													.length
 											"
-										>
-											<div
-												class="list-item signatory"
-												v-for="signatory in item.setup_company_signatories"
-												:key="signatory.id"
-											>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>CODE</label
-													>
-													<h4 class="list-value">
-														{{ signatory.code }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>PREPARED BY:</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.prepared_by
-														}}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>POSITION</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.p_position
-														}}
-													</h4>
-												</div>
-
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>STATUS</label
-													>
-													<h4 class="list-value">
-														<span
-															class="custom-badge custom-badge-success"
-															v-if="
-																signatory.active ==
-																	1
-															"
-															>Active</span
-														>
-														<span
-															class="custom-badge custom-badge-danger"
-															v-else
-															>Inactive</span
-														>
-													</h4>
-												</div>
-												<!-- <div class="list-actions">
-													<button
-														type="button"
-														class="btn btn-sm btn-light"
-														data-toggle="modal"
-														data-target="#update-signatory-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showSignatoryModal(
-																'update',
-																signatory.id
-															)
-														"
-													>
-														<i
-															class="far fa-edit"
-														></i>
-													</button>
-												</div> -->
-											</div>
-										</div>
-										<div v-else>
+											:signatories="
+												item.setup_company_signatories
+											"
+											@handleShowSignatoryModal="
+												showSignatoryModal(
+													$event.action,
+													$event.id
+												)
+											"
+											:viewMode="true"
+										/>
+										<div v-else class="mt-2">
 											No Signatory available!
 										</div>
 									</div>
@@ -818,9 +720,10 @@
 
 <script>
 // import axios from 'axios';
-import { onMounted } from "vue";
+import { onBeforeMount, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import getItem from "@/composables/getItem";
+import useViewMode from "@/composables/useViewMode";
 
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import Spinner from "@/components/Spinner.vue";
@@ -828,12 +731,19 @@ import Spinner from "@/components/Spinner.vue";
 import feather from "feather-icons";
 
 import endpoints from "@/utils/endpoints";
-
+import ViewBank from "./ViewBank";
+import ViewSignatory from "./ViewSignatory";
+import CompanySignatoryTable from "./CompanySignatoryTable.vue";
+import CompanyBankTable from "./CompanyBankTable.vue";
 export default {
 	name: "UpdateCompany",
 	components: {
 		Spinner,
 		ThePageHeader,
+		CompanySignatoryTable,
+		CompanyBankTable,
+		ViewBank,
+		ViewSignatory,
 	},
 	computed: {
 		chevronRight: function() {
@@ -853,25 +763,35 @@ export default {
 			route.params.id,
 			endpoints.setupCompany
 		);
+		const { disableThisFields } = useViewMode();
+		const viewingBank = ref(false);
+		const update_bank_id = ref(null);
+		const viewingSignatory = ref(false);
+		const update_signatory_id = ref(null);
 
-		load();
-
-		onMounted(() => {
-			setTimeout(() => {
-				const tags = ["input", "select", "textarea", "button"];
-				tags.forEach((tagName) => {
-					var inputs = document.getElementsByTagName(tagName);
-					console.log(inputs[0]);
-					for (var i = 0; i < inputs.length; i++) {
-						inputs[i].disabled = true;
-						inputs[i].classList.add("disabled");
-					}
-				});
-			}, 1000);
+		onBeforeMount(async () => {
+			await load();
+			disableThisFields(["input", "select", "textarea"]);
 		});
+
+		const showBankModal = (type, value = null) => {
+			viewingBank.value = true;
+			update_bank_id.value = value;
+		};
+
+		const showSignatoryModal = (type, value = null) => {
+			viewingSignatory.value = true;
+			update_signatory_id.value = value;
+		};
 
 		return {
 			item,
+			showBankModal,
+			showSignatoryModal,
+			viewingBank,
+			viewingSignatory,
+			update_bank_id,
+			update_signatory_id,
 		};
 	},
 };

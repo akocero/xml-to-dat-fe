@@ -238,34 +238,6 @@
 				</div>
 
 				<Spinner v-if="!bank_id && !item" />
-
-				<!-- <div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-custom-success"
-						@click="handleUpdate"
-						v-if="!isPending && !addingDetail"
-					>
-						Save Changes
-					</button>
-					<button
-						type="button"
-						class="btn btn-custom-success"
-						@click="handleUpdate"
-						v-else-if="addingDetail && !isPending"
-						disabled
-					>
-						Save Changes
-					</button>
-					<button
-						v-else
-						type="button"
-						class="btn btn-custom-success"
-						disabled
-					>
-						Saving...
-					</button>
-				</div> -->
 			</div>
 		</div>
 	</div>
@@ -274,8 +246,9 @@
 <script>
 import axios from "@/axios/axios-instance";
 import getItem from "@/composables/getItem.js";
+import useViewMode from "@/composables/useViewMode.js";
 import Spinner from "@/components/Spinner";
-import { onUnmounted, ref } from "vue";
+import { onBeforeMount, onUnmounted, ref } from "vue";
 import feather from "feather-icons";
 import $ from "jquery";
 import endpoints from "@/utils/endpoints";
@@ -308,6 +281,7 @@ export default {
 			props.bank_id,
 			endpoints.setupCompanyBank
 		);
+		const { disableThisFields } = useViewMode();
 		const error = ref(null);
 		const unknownError = ref(null);
 		const response = ref(null);
@@ -319,7 +293,11 @@ export default {
 		const detailError = ref(null);
 		const detailSuccess = ref(null);
 
-		load();
+		onBeforeMount(async () => {
+			await load();
+
+			disableThisFields(["input", "select", "textarea"]);
+		});
 
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -370,19 +348,6 @@ export default {
 
 		const closeModal = () => {
 			emit("hideEditBank");
-		};
-
-		const makeid = (length) => {
-			var result = "";
-			var characters =
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			var charactersLength = characters.length;
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(
-					Math.floor(Math.random() * charactersLength)
-				);
-			}
-			return result;
 		};
 
 		const addBankDetail = () => {

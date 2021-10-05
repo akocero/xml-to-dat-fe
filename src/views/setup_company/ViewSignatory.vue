@@ -180,6 +180,7 @@
 
 <script>
 import getItem from "@/composables/getItem.js";
+import useViewMode from "@/composables/useViewMode.js";
 import Spinner from "@/components/Spinner";
 import { onBeforeMount, onUnmounted } from "vue";
 import BaseInputField from "@/components/BaseInputField";
@@ -197,9 +198,11 @@ export default {
 			props.signatory_id,
 			endpoints.setupCompanySignatory
 		);
+		const { disableThisFields } = useViewMode();
 
 		onBeforeMount(async () => {
 			await load();
+			disableThisFields(["input", "select", "textarea"]);
 		});
 
 		onUnmounted(() => {
