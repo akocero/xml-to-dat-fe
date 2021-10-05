@@ -17,46 +17,13 @@
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
+						@click="$emit('hideEditBank')"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 
 				<div class="modal-body">
-					<div
-						class="alert alert-danger alert-dismissible fade show"
-						role="alert"
-						v-if="detailError"
-					>
-						<strong>Error:</strong> Please fill out details field
-						<button
-							type="button"
-							class="close"
-							data-dismiss="alert"
-							aria-label="Close"
-							@click="closeDetailAlert"
-						>
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div
-						class="alert alert-info alert-dismissible fade show"
-						role="alert"
-						v-if="detailSuccess"
-					>
-						<strong>Info:</strong> Please hit save changes to save
-						additional details
-						<button
-							type="button"
-							class="close"
-							data-dismiss="alert"
-							aria-label="Close"
-							@click="closeDetailAlert"
-						>
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
 					<div class="row" v-if="bank_id && item">
 						<div class="form-group col-4">
 							<label>
@@ -66,23 +33,11 @@
 							<input
 								type="text"
 								class="form-control"
-								:class="[
-									error &&
-										error.errors.bank_code &&
-										'is-invalid',
-								]"
 								id="input_bank_code"
 								aria-describedby="emailHelp"
 								placeholder="Ex. BDO"
 								v-model="item.bank_code"
 							/>
-							<small
-								v-if="error && error.errors.bank_code"
-								id="emailHelp"
-								class="form-text text-danger"
-							>
-								{{ error.errors.bank_code[0] }}
-							</small>
 						</div>
 
 						<div class="form-group col-8">
@@ -93,21 +48,11 @@
 							<input
 								type="text"
 								class="form-control"
-								:class="[
-									error && error.errors.name && 'is-invalid',
-								]"
 								id="input_bank_name"
 								aria-describedby="emailHelp"
 								placeholder="Ex. Company 1"
 								v-model="item.name"
 							/>
-							<small
-								v-if="error && error.errors.name"
-								id="emailHelp"
-								class="form-text text-danger"
-							>
-								{{ error.errors.name[0] }}
-							</small>
 						</div>
 
 						<div class="form-group col-4">
@@ -118,44 +63,21 @@
 							<input
 								type="text"
 								class="form-control"
-								:class="[
-									error &&
-										error.errors.branch_code &&
-										'is-invalid',
-								]"
 								id="input_bank_branch_code"
 								placeholder="Ex. 1234567"
 								v-model="item.branch_code"
 							/>
-							<small
-								v-if="error && error.errors.branch_code"
-								class="form-text text-danger"
-							>
-								{{ error.errors.branch_code[0] }}
-							</small>
 						</div>
 
 						<div class="form-group col-md-8">
 							<label for="">Description </label>
 							<textarea
 								name=""
-								:class="[
-									error &&
-										error.errors.description &&
-										'is-invalid',
-								]"
 								id="input_bank_description"
 								class="form-control"
 								v-model="item.description"
 								placeholder="Ex. Banco De Oro"
 							></textarea>
-							<small
-								v-if="error && error.errors.description"
-								id="emailHelp"
-								class="form-text text-danger"
-							>
-								{{ error.errors.description[0] }}
-							</small>
 						</div>
 						<div class="col-12 d-flex align-items-center pt-4 pb-2">
 							<h5 class="h6 mb-0 pr-2">
@@ -189,29 +111,6 @@
 									>Value</label
 								>
 							</div>
-						</div>
-						<div
-							class="form-group col-md-12 d-flex"
-							v-if="addingDetail"
-						>
-							<input
-								type="text"
-								v-model="detailLabel"
-								placeholder="Ex. Account No."
-								class="form-control mr-2 w-50 text-primary"
-							/>
-							<input
-								type="text"
-								v-model="detailValue"
-								placeholder="Ex. 11111111"
-								class="form-control mr-2"
-							/>
-							<button
-								class="btn btn-sm btn-success"
-								@click="addBankDetail"
-							>
-								<i v-html="save"></i>
-							</button>
 						</div>
 						<div
 							v-for="(item, index) in item.additional_details"
@@ -282,16 +181,6 @@ export default {
 			endpoints.setupCompanyBank
 		);
 		const { disableThisFields } = useViewMode();
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
-
-		const addingDetail = ref(false);
-		const detailLabel = ref(null);
-		const detailValue = ref(null);
-		const detailError = ref(null);
-		const detailSuccess = ref(null);
 
 		onBeforeMount(async () => {
 			await load();
@@ -303,100 +192,11 @@ export default {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 
-		const handleUpdate = async () => {
-			const updatedBank = {
-				setup_company_id: item.value.setup_company_id,
-				bank_code: item.value.bank_code,
-				name: item.value.name,
-				description: item.value.description,
-				branch_code: item.value.branch_code,
-				additional_details: item.value.additional_details,
-			};
-
-			try {
-				const res = await axios.patch(
-					`${endpoints.setupCompanyBank}/${props.bank_id}`,
-					updatedBank
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
-
-				$("#update-bank-modal").modal("hide");
-
-				emit("bankUpdated", response.value);
-
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
-			}
-		};
-
 		onUnmounted(() => {
 			item.value = null;
 		});
 
-		const closeModal = () => {
-			emit("hideEditBank");
-		};
-
-		const addBankDetail = () => {
-			detailError.value = false;
-			detailSuccess.value = false;
-			if (detailLabel.value && detailValue.value) {
-				item.value.additional_details = {
-					...item.value.additional_details,
-					[detailLabel.value]: detailValue.value,
-				};
-				addingDetail.value = false;
-				detailLabel.value = null;
-				detailValue.value = null;
-				detailSuccess.value = true;
-			} else {
-				detailError.value = true;
-			}
-		};
-
-		const deleteDetail = (detail) => {
-			var data = item.value.additional_details;
-			for (var key in data) {
-				if (key === detail) {
-					delete data[detail];
-				}
-			}
-
-			detailSuccess.value = true;
-		};
-		const closeDetailAlert = () => {
-			detailError.value = false;
-			detailSuccess.value = false;
-		};
-
 		return {
-			error,
-			isPending,
-			handleUpdate,
-			closeModal,
-			deleteDetail,
-			unknownError,
-			addBankDetail,
-			addingDetail,
-			closeDetailAlert,
-			detailValue,
-			detailLabel,
-			detailError,
-			detailSuccess,
-			alert,
 			item,
 		};
 	},
