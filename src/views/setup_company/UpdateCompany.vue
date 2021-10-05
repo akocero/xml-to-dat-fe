@@ -629,7 +629,7 @@
 							>
 								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between mb-3 align-items-center"
+										class="col-12 d-flex justify-content-between align-items-end"
 									>
 										<h4 class="tab-pane-title">
 											Signatory List
@@ -650,115 +650,21 @@
 									</div>
 
 									<div class="col-md-12">
-										<div
-											class="list "
+										<CompanySignatoryTable
 											v-if="
 												item.setup_company_signatories
 													.length
 											"
-										>
-											<div
-												class="list-item signatory"
-												v-for="signatory in item.setup_company_signatories"
-												:key="signatory.id"
-											>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>CODE</label
-													>
-													<h4 class="list-value">
-														{{ signatory.code }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>PREPARED BY:</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.prepared_by
-														}}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>POSITION</label
-													>
-													<h4 class="list-value">
-														{{
-															signatory.p_position
-														}}
-													</h4>
-												</div>
-
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>STATUS</label
-													>
-													<h4 class="list-value">
-														<span
-															class="custom-badge custom-badge-success"
-															v-if="
-																signatory.active ==
-																	1
-															"
-															>Active</span
-														>
-														<span
-															class="custom-badge custom-badge-danger"
-															v-else
-															>Inactive</span
-														>
-													</h4>
-												</div>
-												<div class="list-actions">
-													<button
-														type="button"
-														class="btn btn-sm btn-light mr-2"
-														data-toggle="modal"
-														data-target="#update-signatory-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showSignatoryModal(
-																'view',
-																signatory.id
-															)
-														"
-													>
-														<i
-															class="far fa-eye"
-														></i>
-													</button>
-													<button
-														type="button"
-														class="btn btn-sm btn-light"
-														data-toggle="modal"
-														data-target="#update-signatory-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showSignatoryModal(
-																'update',
-																signatory.id
-															)
-														"
-													>
-														<i
-															class="far fa-edit"
-														></i>
-													</button>
-												</div>
-											</div>
-										</div>
+											:signatories="
+												item.setup_company_signatories
+											"
+											@handleShowSignatoryModal="
+												showSignatoryModal(
+													$event.action,
+													$event.id
+												)
+											"
+										/>
 										<div v-else>
 											No Signatory available!
 										</div>
@@ -773,7 +679,7 @@
 							>
 								<div class="row">
 									<div
-										class="col-12 d-flex justify-content-between mb-3 align-items-center"
+										class="col-12 d-flex justify-content-between align-items-end"
 									>
 										<h4 class="tab-pane-title">
 											Bank List
@@ -793,87 +699,18 @@
 									</div>
 
 									<div class="col-md-12">
-										<div
-											class="list"
+										<CompanyBankTable
+											:banks="item.setup_company_banks"
 											v-if="
 												item.setup_company_banks.length
 											"
-										>
-											<div
-												class="list-item"
-												v-for="bank in item.setup_company_banks"
-												:key="bank.id"
-											>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>BANK CODE</label
-													>
-													<h4 class="list-value">
-														{{ bank.bank_code }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>ACCOUNT NAME</label
-													>
-													<h4 class="list-value">
-														{{ bank.name }}
-													</h4>
-												</div>
-												<div class="list-col">
-													<label
-														for=""
-														class="list-label"
-														>DESCRIPTION</label
-													>
-													<h4 class="list-value">
-														{{ bank.description }}
-													</h4>
-												</div>
-												<div class="list-actions">
-													<button
-														type="button"
-														class="btn btn-sm btn-light mr-2"
-														data-toggle="modal"
-														data-target="#update-bank-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showBankModal(
-																'view',
-																bank.id
-															)
-														"
-													>
-														<i
-															class="far fa-eye"
-														></i>
-													</button>
-													<button
-														type="button"
-														class="btn btn-sm btn-light"
-														data-toggle="modal"
-														data-target="#update-bank-modal"
-														data-backdrop="static"
-														data-keyboard="false"
-														@click="
-															showBankModal(
-																'update',
-																bank.id
-															)
-														"
-													>
-														<i
-															class="far fa-edit"
-														></i>
-													</button>
-												</div>
-											</div>
-										</div>
+											@handleShowBankModal="
+												showBankModal(
+													$event.action,
+													$event.id
+												)
+											"
+										/>
 										<div v-else>
 											No bank available!
 										</div>
@@ -937,6 +774,8 @@ import ViewSignatory from "./ViewSignatory";
 import endpoints from "@/utils/endpoints";
 
 import feather from "feather-icons";
+import CompanySignatoryTable from "./CompanySignatoryTable.vue";
+import CompanyBankTable from "./CompanyBankTable.vue";
 
 export default {
 	name: "UpdateCompany",
@@ -958,6 +797,8 @@ export default {
 		ThePageHeader,
 		BaseNavigationTab,
 		ViewSignatory,
+		CompanySignatoryTable,
+		CompanyBankTable,
 	},
 	computed: {
 		alertTriangle: function() {
@@ -1001,7 +842,11 @@ export default {
 				item.value.setup_company_banks.length === 0 ||
 				item.value.setup_company_signatories.length === 0
 			) {
-				pushAlert("warning", "Please add company banks or signatories", "Pending Action");
+				pushAlert(
+					"warning",
+					"Please add company banks or signatories",
+					"Pending Action"
+				);
 			}
 		});
 

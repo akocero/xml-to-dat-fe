@@ -163,20 +163,23 @@
 </template>
 
 <script>
-import axios from "@/axios/axios-instance";
 import { ref } from "vue";
 import $ from "jquery";
 import BaseInputField from "@/components/BaseInputField";
+import useData from "@/composables/useData";
 import endpoints from "@/utils/endpoints";
 export default {
 	name: "CreateBank",
 	props: ["companyID"],
 	components: { BaseInputField },
 	setup(props, { emit }) {
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
+		const {
+			response,
+			error,
+			create,
+			loading: isPending,
+			unknownError,
+		} = useData();
 
 		const bank_code = ref("");
 		const name = ref("");
@@ -184,8 +187,6 @@ export default {
 		const description = ref("");
 
 		const handleCreate = async () => {
-			isPending.value = true;
-
 			const newBank = {
 				setup_company_id: props.companyID,
 				bank_code: bank_code.value,
@@ -194,37 +195,11 @@ export default {
 				branch_code: branch_code.value,
 			};
 
-			try {
-				const res = await axios.post(
-					endpoints.setupCompanyBank,
-					newBank
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
+			await create(endpoints.setupCompanyBank, newBank);
 
+			if (!error.value) {
 				$("#create-bank-modal").modal("hide");
-
-				bank_code.value = "";
-				name.value = "";
-				description.value = "";
-				branch_code.value = "";
-
 				emit("bankAdded", response.value);
-
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
 			}
 		};
 

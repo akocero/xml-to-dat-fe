@@ -17,7 +17,7 @@
 						class="close"
 						data-dismiss="modal"
 						aria-label="Close"
-						@click="closeModal"
+						@click="$emit('hideEditBank')"
 					>
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -275,13 +275,13 @@
 </template>
 
 <script>
-import axios from "@/axios/axios-instance";
 import getItem from "@/composables/getItem.js";
 import Spinner from "@/components/Spinner";
-import { onUnmounted, ref } from "vue";
+import { onBeforeMount, onUnmounted, ref } from "vue";
 import feather from "feather-icons";
 import $ from "jquery";
 import endpoints from "@/utils/endpoints";
+import useData from "@/composables/useData";
 
 export default {
 	name: "EditBank",
@@ -311,10 +311,13 @@ export default {
 			props.bank_id,
 			endpoints.setupCompanyBank
 		);
-		const error = ref(null);
-		const unknownError = ref(null);
-		const response = ref(null);
-		const isPending = ref(false);
+		const {
+			response,
+			error,
+			update,
+			loading: isPending,
+			unknownError,
+		} = useData();
 
 		const addingDetail = ref(false);
 		const detailLabel = ref(null);
@@ -322,7 +325,9 @@ export default {
 		const detailError = ref(null);
 		const detailSuccess = ref(null);
 
-		load();
+		onBeforeMount(async () => {
+			await load();
+		});
 
 		$(function() {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -337,56 +342,20 @@ export default {
 				branch_code: item.value.branch_code,
 				additional_details: item.value.additional_details,
 			};
+			await update(
+				`${endpoints.setupCompanyBank}/${props.bank_id}`,
+				updatedBank
+			);
 
-			try {
-				const res = await axios.patch(
-					`${endpoints.setupCompanyBank}/${props.bank_id}`,
-					updatedBank
-				);
-				response.value = res.data;
-				error.value = null;
-				unknownError.value = null;
-
+			if (!error.value) {
 				$("#update-bank-modal").modal("hide");
-
 				emit("bankUpdated", response.value);
-
-				isPending.value = false;
-			} catch (err) {
-				isPending.value = false;
-
-				if (err.message.includes("422")) {
-					error.value = err.response.data;
-					unknownError.value = null;
-				} else {
-					unknownError.value =
-						"Please check your internet connection";
-					error.value = null;
-					response.value = null;
-				}
 			}
 		};
 
 		onUnmounted(() => {
 			item.value = null;
 		});
-
-		const closeModal = () => {
-			emit("hideEditBank");
-		};
-
-		const makeid = (length) => {
-			var result = "";
-			var characters =
-				"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-			var charactersLength = characters.length;
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(
-					Math.floor(Math.random() * charactersLength)
-				);
-			}
-			return result;
-		};
 
 		const addBankDetail = () => {
 			detailError.value = false;
@@ -424,9 +393,7 @@ export default {
 			error,
 			isPending,
 			handleUpdate,
-			closeModal,
 			deleteDetail,
-			unknownError,
 			addBankDetail,
 			addingDetail,
 			closeDetailAlert,

@@ -64,7 +64,7 @@
 									<td>
 										<router-link
 											:to="{
-												name: 'view-role',
+												name: 'view-payroll-parameter',
 												params: { id: item.id },
 											}"
 											class="btn btn-sm btn-transparent"
