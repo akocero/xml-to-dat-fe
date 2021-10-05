@@ -143,11 +143,10 @@
 </template>
 
 <script>
-import axios from "@/axios/axios-instance";
 import getItem from "@/composables/getItem.js";
 import useViewMode from "@/composables/useViewMode.js";
 import Spinner from "@/components/Spinner";
-import { onBeforeMount, onUnmounted, ref } from "vue";
+import { onBeforeMount, onUnmounted } from "vue";
 import feather from "feather-icons";
 import $ from "jquery";
 import endpoints from "@/utils/endpoints";
@@ -175,7 +174,7 @@ export default {
 			});
 		},
 	},
-	setup(props, { emit }) {
+	setup(props) {
 		const { item, error: errorData, load } = getItem(
 			props.bank_id,
 			endpoints.setupCompanyBank
