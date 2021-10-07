@@ -21,10 +21,7 @@
 				:heading="
 					`${item.last_name},
 						${item.first_name} 
-						 ${item.maiden_name ? item.maiden_name : ''} ${
-						item.extension_name ? item.extension_name : ''
-					}
-						Information`
+						 ${item.maiden_name || ''} ${item.extension_name || ''}`
 				"
 				routeName="employee-management"
 				mode="edit"
@@ -1206,7 +1203,6 @@ export default {
 
 		onBeforeMount(async () => {
 			await load();
-
 			item.value.addresses = JSON.parse(item.value.addresses);
 			item.value.relatives = JSON.parse(item.value.relatives);
 			item.value.dependents = JSON.parse(item.value.dependents);
@@ -1348,7 +1344,9 @@ export default {
 			// Checking form_data values
 
 			for (var key in data) {
-				form_data.append(key, data[key]);
+				if (data[key] !== "null" && data[key] !== null) {
+					form_data.append(key, data[key]);
+				}
 			}
 
 			if (selectedProfileFile.value) {
@@ -1365,9 +1363,9 @@ export default {
 				);
 			}
 
-			for (var pair of form_data.entries()) {
-				console.log(pair[0] + ", " + pair[1]);
-			}
+			// for (var pair of form_data.entries()) {
+			// 	console.log(pair[0] + ", " + pair[1]);
+			// }
 
 			const res = await create(
 				`${endpoints.employee}/${route.params.id}?_method=PATCH`,

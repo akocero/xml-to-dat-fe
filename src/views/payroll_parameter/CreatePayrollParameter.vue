@@ -535,6 +535,46 @@
 												value: 2,
 												label: '2 - February',
 											},
+											{
+												value: 3,
+												label: '3 - March',
+											},
+											{
+												value: 4,
+												label: '4 - April',
+											},
+											{
+												value: 5,
+												label: '5 - May',
+											},
+											{
+												value: 6,
+												label: '6 - June',
+											},
+											{
+												value: 7,
+												label: '7 - July',
+											},
+											{
+												value: 8,
+												label: '8 - August',
+											},
+											{
+												value: 9,
+												label: '9 - September',
+											},
+											{
+												value: 10,
+												label: '10 - October',
+											},
+											{
+												value: 11,
+												label: '11 - November',
+											},
+											{
+												value: 12,
+												label: '12 - December',
+											},
 										]"
 										:required="false"
 									/>
@@ -567,14 +607,14 @@
 						<hr class="mb-4" />
 						<div class="row">
 							<BaseRowHeading
-								heading="Excemption Ceiling Setup"
+								heading="Exemption Ceiling Setup"
 								para="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, totam!"
 							/>
 							<div class="row col-md-8">
 								<div class="form-group col-4">
 									<BaseInputField
 										id="input_end_of_year_bonus"
-										label="13th Month Exception Ceiling"
+										label="13th Month Exemption Ceiling"
 										v-model="end_of_year_bonus"
 										:error="error"
 										:errorField="
@@ -584,6 +624,7 @@
 										placeholder="Ex. 90000"
 										:required="true"
 										type="number"
+										step=".00001"
 									/>
 								</div>
 							</div>

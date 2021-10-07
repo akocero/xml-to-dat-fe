@@ -880,7 +880,9 @@ export default {
 			};
 
 			for (var key in data) {
-				form_data.append(key, data[key]);
+				if (data[key] !== "null" && data[key] !== null) {
+					form_data.append(key, data[key]);
+				}
 			}
 
 			if (selectedFile.value) {

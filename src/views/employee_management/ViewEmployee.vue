@@ -6,7 +6,9 @@
 				:heading="
 					`${item.last_name},
 						${item.first_name} 
-						 ${item.maiden_name} ${item.extension_name}
+						 ${item.maiden_name ? item.maiden_name : ''} ${
+						item.extension_name ? item.extension_name : ''
+					}
 						Information`
 				"
 				routeName="employee-management"
