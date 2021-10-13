@@ -312,6 +312,18 @@
 								>Branch</a
 							>
 						</li>
+						<li class="nav-item">
+							<a
+								class="nav-link"
+								id="pills-bank-tab"
+								data-toggle="pill"
+								href="#pills-bank"
+								role="tab"
+								aria-controls="pills-bank"
+								aria-selected="false"
+								>Bank</a
+							>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -460,6 +472,23 @@
 						:placeholder="{
 							value: 'Ex. AP-DAV',
 							desc: 'Ex. Accounts Payable – Davao Branch',
+						}"
+					/>
+				</div>
+				<div
+					class="tab-pane fade"
+					id="pills-bank"
+					role="tabpanel"
+					aria-labelledby="pills-bank-tab"
+				>
+					<Table
+						type="bank"
+						@openModal="handleShowModal($event)"
+						title="Bank"
+						:data="data.data"
+						:placeholder="{
+							value: 'Ex. BPI',
+							desc: 'Ex. Bank Description',
 						}"
 					/>
 				</div>
