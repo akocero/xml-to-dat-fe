@@ -384,10 +384,7 @@ export default {
 		const selected_year = ref("");
 		const date_array = ref([]);
 		const custom_shift = ref(true);
-		const {
-			data: shifts,
-			fetch: loadShifts,
-		} = useFetch();
+		const { data: shifts, fetch: loadShifts } = useFetch();
 
 		onBeforeMount(async () => {
 			generateYears();

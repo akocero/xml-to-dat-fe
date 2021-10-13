@@ -11,12 +11,99 @@
 
 			<form @submit.prevent="handleSubmit" id="form_create_user">
 				<div class="row">
-					<div class="col-md-4">
+					<BaseRowHeading
+						heading="Main Description"
+						para="Input basic information of your Shift"
+					/>
+
+					<div class="row col-md-8">
+						<div class="form-group col-7">
+							<BaseInputField
+								id="input_name"
+								label="Code"
+								v-model="code"
+								:error="error"
+								:errorField="error?.errors?.code || null"
+								placeholder="Ex. admin, user, hr, payroll master"
+								:required="true"
+							/>
+						</div>
+
+						<div class="form-group col-5">
+							<BaseSelectField
+								id="input_night_shift"
+								label="Night Shift"
+								v-model="night_shift"
+								:error="error"
+								:errorField="error?.errors?.night_shift || null"
+								:options="[
+									{
+										value: 0,
+										label: 'No',
+									},
+									{
+										value: 1,
+										label: 'Yes',
+									},
+								]"
+								:required="false"
+								:emptyOption="false"
+							/>
+						</div>
+						<div class="form-group col-12">
+							<BaseInputField
+								id="input_description"
+								label="Description"
+								v-model="description"
+								:error="error"
+								:errorField="error?.errors?.description || null"
+								placeholder="Ex."
+								:required="false"
+							/>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="row">
+					<BaseRowHeading
+						heading="Pair Type"
+						para="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore rerum deserunt praesentium nihil doloribus qui veniam aperiam nam."
+					/>
+					<div class="col-md-8">
 						<div class="row">
-							<div class="form-group col-12">
+							<div class="form-group col-md-5">
+								<BaseSelectField
+									id="input_pair_type"
+									label="Pair Type"
+									v-model="pair_type"
+									:error="error"
+									:errorField="
+										error?.errors?.pair_type || null
+									"
+									:options="[
+										{
+											value: 'single_pair',
+											label: 'Single Pair',
+										},
+										{
+											value: 'multiple_pair',
+											label: 'Multiple Pairs',
+										},
+									]"
+									:required="false"
+									:emptyOption="false"
+								/>
+							</div>
+						</div>
+						<div
+							class="row"
+							id="single_pair_fields"
+							v-if="pair_type === 'single_pair'"
+						>
+							<div class="form-group col-4">
 								<BaseInputField
 									id="input_name"
-									label="Code"
+									label="Shift Begins At (From)"
 									v-model="code"
 									:error="error"
 									:errorField="error?.errors?.code || null"
@@ -24,43 +111,19 @@
 									:required="true"
 								/>
 							</div>
-							<div class="form-group col-md-12">
-								<BaseTextAreaField
-									id="input_description"
-									label="Description"
-									v-model="description"
+							<div class="form-group col-4">
+								<BaseInputField
+									id="input_name"
+									label="Shift Ends At (To)"
+									v-model="code"
 									:error="error"
-									:errorField="
-										error?.errors?.description || null
-									"
-									placeholder="Ex."
-									:required="false"
+									:errorField="error?.errors?.code || null"
+									placeholder="Ex. admin, user, hr, payroll master"
+									:required="true"
 								/>
 							</div>
-							<div class="form-group col-6">
-								<BaseSelectField
-									id="input_night_shift"
-									label="Night Shift"
-									v-model="night_shift"
-									:error="error"
-									:errorField="
-										error?.errors?.night_shift || null
-									"
-									:options="[
-										{
-											value: 0,
-											label: 'No',
-										},
-										{
-											value: 1,
-											label: 'Yes',
-										},
-									]"
-									:required="false"
-									:emptyOption="false"
-								/>
-							</div>
-							<div class="form-group col-6">
+
+							<div class="form-group col-4">
 								<BaseInputField
 									id="input_break"
 									type="number"
@@ -75,48 +138,74 @@
 								/>
 							</div>
 						</div>
-					</div>
-					<div class="col-8">
-						<label for="">Time Logs</label>
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th width="20%">Time In</th>
-									<th width="20%">Time Out</th>
-									<th>description</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr
-									v-for="time_log in time_logs"
-									:key="time_log.id"
-								>
-									<td>
-										<input
-											type="time"
-											required
-											class="table_input"
-											v-model="time_log.in"
-										/>
-									</td>
-									<td>
-										<input
-											type="time"
-											required
-											class="table_input"
-											v-model="time_log.out"
-										/>
-									</td>
-									<td>
-										<input
-											type="text"
-											class="table_input"
-											v-model="time_log.description"
-										/>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="row" v-if="pair_type === 'multiple_pair'">
+							<div class="form-group col-4">
+								<BaseInputField
+									id="input_name"
+									type="time"
+									label="Shift Begins At (From)"
+									v-model="code"
+									:error="error"
+									:errorField="error?.errors?.code || null"
+									:required="true"
+								/>
+							</div>
+							<div class="form-group col-4">
+								<BaseInputField
+									id="input_name"
+									type="time"
+									label="Shift Ends At (To)"
+									v-model="code"
+									:error="error"
+									:errorField="error?.errors?.code || null"
+									:required="true"
+								/>
+							</div>
+							<div class="col-12">
+								<label for="">Breaks</label>
+								<table class="table table-bordered">
+									<thead>
+										<tr>
+											<th width="20%">Time In</th>
+											<th width="20%">Time Out</th>
+											<th>description</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											v-for="time_log in time_logs"
+											:key="time_log.id"
+										>
+											<td>
+												<input
+													type="time"
+													required
+													class="table_input"
+													v-model="time_log.in"
+												/>
+											</td>
+											<td>
+												<input
+													type="time"
+													required
+													class="table_input"
+													v-model="time_log.out"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													class="table_input"
+													v-model="
+														time_log.description
+													"
+												/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 				<hr />
@@ -148,7 +237,7 @@ import feather from "feather-icons";
 
 import { ref, computed } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
-
+import BaseRowHeading from "@/components/BaseRowHeading";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
 import BaseInputField from "@/components/BaseInputField";
@@ -167,6 +256,7 @@ export default {
 		ThePageHeader,
 		BaseTextAreaField,
 		BaseSelectField,
+		BaseRowHeading,
 	},
 	computed: {
 		chevronRight: function() {
@@ -186,6 +276,7 @@ export default {
 		const night_shift = ref(0);
 		const break_time = ref(0);
 		const shiftAdded = ref(false);
+		const pair_type = ref("single_pair");
 		const time_logs = ref([
 			{
 				id: uuid,
@@ -264,6 +355,7 @@ export default {
 
 			abilitiesArray,
 			convertToArray,
+			pair_type,
 			// pushToAbilities,
 		};
 	},
