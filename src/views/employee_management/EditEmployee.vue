@@ -821,7 +821,7 @@
 									</div>
 								</div>
 								<hr />
-								<div class="row pb-3 pr-3">
+								<div class="row pb-3">
 									<BaseRowHeading
 										heading="Resignation Information"
 										para="You can specify resignation data of resigned employee"
@@ -1288,7 +1288,7 @@ export default {
 		const employee_ranks_array = ref([]);
 		const sub_departments_array = ref([]);
 		const branches_array = ref([]);
-		const domContentLoaded = ref(false)
+		const domContentLoaded = ref(false);
 		const {
 			data: employee_classes,
 			fetch: fetchEmployeeClass,
@@ -1309,16 +1309,16 @@ export default {
 			}
 		});
 
-		// watch(
-		// 	() => resigned.value,
-		// 	(count, prevCount) => {
-		// 		resigned.value == "1" &&
-		// 			pushAlert(
-		// 				"info",
-		// 				"Please update your employee class into <Resigned>"
-		// 			);
-		// 	}
-		// );
+		watch(
+			() => domContentLoaded.value && item.value.resigned,
+			(count, prevCount) => {
+				item.value.resigned == "1" &&
+					pushAlert(
+						"info",
+						"Please update your employee class into <Resigned>"
+					);
+			}
+		);
 
 		const {
 			image: profile_image_path,
