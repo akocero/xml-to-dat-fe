@@ -2,7 +2,7 @@
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
-				heading="New Shift Entry"
+				heading="View Shift"
 				routeName="shift"
 				mode="create"
 			/>
@@ -315,7 +315,7 @@ import { useStore } from "vuex";
 import endpoints from "@/utils/endpoints";
 import { v4 as uuid } from "uuid";
 export default {
-	name: "CreateShift",
+	name: "ViewShift",
 	components: {
 		Alert,
 		Spinner,
@@ -445,7 +445,6 @@ export default {
 				pair_type: pair_type.value,
 				shift_ends_at: shift_ends_at.value,
 				shift_begins_at: shift_begins_at.value,
-				shift_policy_id: shift_policy_id.value,
 			};
 
 			console.log(data);

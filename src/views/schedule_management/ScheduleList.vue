@@ -384,10 +384,7 @@ export default {
 		const selected_year = ref("");
 		const date_array = ref([]);
 		const custom_shift = ref(true);
-		const {
-			data: shifts,
-			fetch: loadShifts,
-		} = useFetch();
+		const { data: shifts, fetch: loadShifts } = useFetch();
 
 		onBeforeMount(async () => {
 			generateYears();
@@ -397,7 +394,7 @@ export default {
 		});
 
 		const generateYears = () => {
-			let currentYear = new Date().getFullYear();
+			let currentYear = new Date().getFullYear() - 1;
 			for (let i = 0; i < 10; i++) {
 				years_array.value.push(currentYear);
 				currentYear += 1;

@@ -2,14 +2,19 @@
 	<div class="card boiler shadow-md">
 		<div class="card-body">
 			<ThePageHeader
-				heading="New Shift Entry"
+				v-if="item"
+				:heading="item.code"
 				routeName="shift"
 				mode="create"
 			/>
 
 			<hr />
 
-			<form @submit.prevent="handleSubmit" id="form_create_user">
+			<form
+				@submit.prevent="handleSubmit"
+				id="form_create_user"
+				v-if="item"
+			>
 				<div class="row">
 					<BaseRowHeading
 						heading="Main Description"
@@ -21,7 +26,7 @@
 							<BaseInputField
 								id="input_name"
 								label="Code"
-								v-model="code"
+								v-model="item.code"
 								:error="error"
 								:errorField="error?.errors?.code || null"
 								placeholder="Ex. admin, user, hr, payroll master"
@@ -33,7 +38,7 @@
 							<BaseSelectField
 								id="input_night_shift"
 								label="Night Shift"
-								v-model="night_shift"
+								v-model="item.night_shift"
 								:error="error"
 								:errorField="error?.errors?.night_shift || null"
 								:options="[
@@ -54,7 +59,7 @@
 							<BaseInputField
 								id="input_description"
 								label="Description"
-								v-model="description"
+								v-model="item.description"
 								:error="error"
 								:errorField="error?.errors?.description || null"
 								placeholder="Ex."
@@ -65,7 +70,7 @@
 							<BaseSelectField
 								id="input_shift_policy_id"
 								label="Shift Policy"
-								v-model="shift_policy_id"
+								v-model="item.shift_policy_id"
 								:error="error"
 								:errorField="
 									error?.errors?.shift_policy_id || null
@@ -98,7 +103,7 @@
 								<BaseSelectField
 									id="input_pair_type"
 									label="Pair Type"
-									v-model="pair_type"
+									v-model="item.pair_type"
 									:error="error"
 									:errorField="
 										error?.errors?.pair_type || null
@@ -121,14 +126,14 @@
 						<div
 							class="row"
 							id="single_pair_fields"
-							v-if="pair_type === 'single_pair'"
+							v-if="item.pair_type === 'single_pair'"
 						>
 							<div class="form-group col-4">
 								<BaseInputField
 									id="input_shift_begins_at"
 									type="time"
 									label="Shift Begins At (From)"
-									v-model="shift_begins_at"
+									v-model="item.shift_begins_at"
 									:error="error"
 									:errorField="
 										error?.errors?.shift_begins_at || null
@@ -141,7 +146,7 @@
 									id="input_shift_ends_a"
 									type="time"
 									label="Shift Ends At (To)"
-									v-model="shift_ends_at"
+									v-model="item.shift_ends_at"
 									:error="error"
 									:errorField="
 										error?.errors?.shift_ends_at || null
@@ -155,7 +160,7 @@
 									id="input_break"
 									type="number"
 									label="Break"
-									v-model="break_time"
+									v-model="item.break_time"
 									:error="error"
 									:errorField="
 										error?.errors?.break_time || null
@@ -164,13 +169,16 @@
 								/>
 							</div>
 						</div>
-						<div class="row" v-if="pair_type === 'multiple_pair'">
+						<div
+							class="row"
+							v-if="item.pair_type === 'multiple_pair'"
+						>
 							<div class="form-group col-4">
 								<BaseInputField
 									id="input_shift_begins_at"
 									type="time"
 									label="Shift Begins At (From)"
-									v-model="shift_begins_at"
+									v-model="item.shift_begins_at"
 									:error="error"
 									:errorField="
 										error?.errors?.shift_begins_at || null
@@ -183,7 +191,7 @@
 									id="input_shift_ends_a"
 									type="time"
 									label="Shift Ends At (To)"
-									v-model="shift_ends_at"
+									v-model="item.shift_ends_at"
 									:error="error"
 									:errorField="
 										error?.errors?.shift_ends_at || null
@@ -204,7 +212,7 @@
 									</thead>
 									<tbody>
 										<tr
-											v-for="time_log in time_logs"
+											v-for="time_log in item.time_logs"
 											:key="time_log.id"
 										>
 											<td>
@@ -258,7 +266,7 @@
 												</button>
 											</td>
 										</tr>
-										<tr v-if="time_logs.length <= 2">
+										<tr v-if="item.time_logs.length <= 2">
 											<td colspan="3">
 												<button
 													type="button"
@@ -281,7 +289,7 @@
 						type="submit"
 						class="btn btn-custom-success"
 						v-if="!loading"
-						value="Save"
+						value="Save Changes"
 					/>
 					<button
 						class="btn btn-custom-success"
@@ -298,12 +306,13 @@
 
 <script>
 import useData from "@/composables/useData";
+import getItem from "@/composables/getItem";
 import useAlert from "@/composables/useAlert";
 
 import feather from "feather-icons";
 
-import { ref, computed } from "vue";
-import { onBeforeRouteLeave, useRouter } from "vue-router";
+import { ref, computed, onBeforeMount } from "vue";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import BaseRowHeading from "@/components/BaseRowHeading";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
@@ -311,11 +320,10 @@ import BaseInputField from "@/components/BaseInputField";
 import ThePageHeader from "@/components/layouts/ThePageHeader";
 import BaseTextAreaField from "@/components/BaseTextAreaField.vue";
 import BaseSelectField from "@/components/BaseSelectField.vue";
-import { useStore } from "vuex";
 import endpoints from "@/utils/endpoints";
 import { v4 as uuid } from "uuid";
 export default {
-	name: "CreateShift",
+	name: "EditShift",
 	components: {
 		Alert,
 		Spinner,
@@ -338,21 +346,16 @@ export default {
 		},
 	},
 	setup() {
-		const { response, error, create, loading, unknownError } = useData();
+		const route = useRoute();
+		const { item, error: errorData, load } = getItem(
+			route.params.id,
+			endpoints.setupShift
+		);
+		const { response, error, update, loading, unknownError } = useData();
 		const { pushAlert } = useAlert();
 		const router = useRouter();
-		const store = useStore();
 
-		const code = ref("");
-		const shift_begins_at = ref("");
-		const shift_ends_at = ref("");
-		const description = ref("");
-		const night_shift = ref(0);
-		const break_time = ref(0);
-		const shift_policy_id = ref("");
-		const pair_type = ref("single_pair");
-
-		const shiftAdded = ref(false);
+		const shiftUpdated = ref(false);
 		const time_logs = ref([
 			{
 				id: uuid(),
@@ -433,31 +436,29 @@ export default {
 				);
 			}
 		};
-
-		const abilitiesArray = computed(() => store.getters.getAbilities);
 		const handleSubmit = async () => {
 			const data = {
-				code: code.value,
-				description: description.value,
-				night_shift: night_shift.value,
-				break_time: break_time.value,
-				time_logs: time_logs.value,
-				pair_type: pair_type.value,
-				shift_ends_at: shift_ends_at.value,
-				shift_begins_at: shift_begins_at.value,
-				shift_policy_id: shift_policy_id.value,
+				code: item.value.code,
+				description: item.value.description,
+				night_shift: item.value.night_shift,
+				break_time: item.value.break_time,
+				time_logs: item.value.time_logs,
+				pair_type: item.value.pair_type,
+				shift_ends_at: item.value.shift_ends_at,
+				shift_begins_at: item.value.shift_begins_at,
+				shift_policy_id: item.value.shift_policy_id,
 			};
 
 			console.log(data);
 
-			await create(endpoints.setupShift, data);
+			await update(`${endpoints.setupShift}/${route.params.id}`, data);
 
 			if (!error.value) {
-				console.log("user created");
-				shiftAdded.value = true;
+				console.log("user updated");
+				shiftUpdated.value = true;
 				router.push({
 					name: "shift",
-					params: { shiftAdded: shiftAdded.value },
+					params: { shiftUpdated: shiftUpdated.value },
 				});
 				pushAlert("success", "Shift Added");
 			} else {
@@ -467,7 +468,7 @@ export default {
 		};
 
 		onBeforeRouteLeave((to, from) => {
-			if (!shiftAdded.value) {
+			if (!shiftUpdated.value) {
 				const answer = window.confirm(
 					"Do you really want to leave? you have unsaved changes!"
 				);
@@ -476,31 +477,18 @@ export default {
 			}
 		});
 
-		const convertToArray = (object) => {
-			return object.map((obj) => {
-				return obj.method;
-			});
-		};
+		onBeforeMount(async () => {
+			await load();
+		});
 
 		return {
 			handleSubmit,
 
-			code,
-			description,
-			time_logs,
-			night_shift,
-			break_time,
-			shift_begins_at,
-			shift_ends_at,
-			shift_policy_id,
+			item,
 
 			error,
 			loading,
 			response,
-
-			abilitiesArray,
-			convertToArray,
-			pair_type,
 
 			addTimeLog,
 			removeTimeLog,

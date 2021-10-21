@@ -21,7 +21,8 @@
 				:heading="
 					`${item.last_name},
 						${item.first_name} 
-						 ${item.maiden_name || ''} ${item.extension_name || ''}`
+						 ${item.maiden_name} ${item.extension_name}
+						Information`
 				"
 				routeName="employee-management"
 				mode="edit"
@@ -766,318 +767,409 @@
 									<div class="row col-8"></div>
 								</div>
 							</div>
+							<!-- hrsetup -->
 							<div
 								class="tab-pane fade"
 								id="pills-hr-setup"
 								role="tabpanel"
 								aria-labelledby="pills-hr-setup-tab"
 							>
-								<div class="row">
+								<div class="row pb-3">
 									<BaseRowHeading
-										heading="HR Setup Fields"
-										para="You can change your avatar here or
-											remove the current avatar to revert
-											to gravatar.com"
+										heading="Employee Class"
+										para="Specify your employee's class."
 									/>
-									<div class="col-8">
-										<div class="row">
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="employee_class_id"
+												label="Employee Class"
+												v-model="item.employee_class_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.employee_class_id ||
+														null
+												"
+												:options="
+													employee_classes_array || []
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-8">
+											<label for="">Tags</label><br />
+
+											<div
+												v-if="
+													employeeClassClasses &&
+														employeeClassClasses[0]
+															.classes
+												"
+											>
+												<span
+													class="custom-badge custom-badge-info"
+													v-for="tag in employeeClassClasses[0]
+														.classes"
+													:key="tag"
+												>
+													{{ tag }}
+												</span>
 											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
-											<div class="form-group col-6">
-												<BaseSelectField
-													id="input_gender"
-													label="Gender"
-													v-model="item.gender"
-													:error="error"
-													:errorField="
-														error?.errors?.gender ||
-															null
-													"
-													:options="[
-														{
-															value: 'male',
-															label: 'Male',
-														},
-														{
-															value: 'female',
-															label: 'Female',
-														},
-														{
-															value: 'others',
-															label: 'Others',
-														},
-													]"
-													:required="true"
-												/>
-											</div>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="row pb-3 pr-3">
+									<BaseRowHeading
+										heading="Resignation Information"
+										para="You can specify resignation data of resigned employee"
+									/>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="select_resigned"
+												label="Resigned"
+												v-model="item.resigned"
+												:error="error"
+												:errorField="
+													error?.errors?.resigned ||
+														null
+												"
+												:options="[
+													{
+														value: 0,
+														label: 'No',
+													},
+													{
+														value: 1,
+														label: 'Yes',
+													},
+												]"
+												:required="false"
+												:emptyOption="false"
+											/>
+										</div>
+										<div
+											class="form-group col-4"
+											v-if="item.resigned == '1'"
+										>
+											<BaseInputField
+												id="resignation_date"
+												type="date"
+												label="Resignation Date"
+												v-model="item.resignation_date"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.resignation_date ||
+														null
+												"
+												:required="false"
+											/>
+										</div>
+										<div
+											class="form-group col-4"
+											v-if="item.resigned == '1'"
+										>
+											<BaseSelectField
+												id="separation_reason"
+												label="Reason of Separation"
+												v-model="item.separation_reason"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.separation_reason ||
+														null
+												"
+												:options="[
+													{
+														value: 'resigned',
+														label: 'Resigned',
+													},
+													{
+														value: 'terminated',
+														label: 'Terminated',
+													},
+													{
+														value: 'transferred',
+														label: 'Transferred',
+													},
+													{
+														value: 'retired',
+														label: 'Retired',
+													},
+													{
+														value: 'death',
+														label: 'Death',
+													},
+												]"
+												:required="false"
+											/>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="row pb-3">
+									<BaseRowHeading
+										heading="General Information"
+										para="Update employee's HR general information."
+									/>
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="employee_rank_id"
+												label="Employee Rank"
+												v-model="item.employee_rank_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.employee_rank_id ||
+														null
+												"
+												:options="
+													employee_ranks_array || []
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="branch_id"
+												label="Branch Code"
+												v-model="item.branch_id"
+												:error="error"
+												:errorField="
+													error?.errors?.branch_id ||
+														null
+												"
+												:options="branches_array || []"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="region"
+												label="Region"
+												v-model="item.region"
+												:error="error"
+												:errorField="
+													error?.errors?.region ||
+														null
+												"
+												:required="false"
+												placeholder="Ex. Metro Manila"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="cost_center_id"
+												label="Cost Center Code"
+												v-model="item.cost_center_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.cost_center_id || null
+												"
+												:options="
+													cost_centers_array || []
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="department_id"
+												label="Department"
+												v-model="item.department_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.department_id || null
+												"
+												:options="
+													departments_array || []
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="sub_department_id"
+												label="Sub-department"
+												v-model="item.sub_department_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.sub_department_id ||
+														null
+												"
+												:options="
+													sub_departments_array || []
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="date_employed"
+												type="date"
+												label="Date Employed"
+												v-model="item.date_employed"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.date_employed || null
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="last_merit"
+												type="date"
+												label="Last Merit"
+												v-model="item.last_merit"
+												:error="error"
+												:errorField="
+													error?.errors?.last_merit ||
+														null
+												"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="nationality"
+												label="Nationality"
+												v-model="item.nationality"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.nationality || null
+												"
+												:required="false"
+											/>
+										</div>
+
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="dimension_id"
+												label="Dimension"
+												v-model="item.dimension_id"
+												:error="error"
+												:errorField="
+													error?.errors
+														?.dimension_id || null
+												"
+												:options="
+													dimensions_array || []
+												"
+												:required="false"
+											/>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="row pb-3">
+									<BaseRowHeading
+										heading="Government Information"
+										para="Update employee's HR government information."
+									/>
+
+									<div class="row col-8">
+										<div class="form-group col-4">
+											<BaseInputField
+												id="tin_no"
+												label="Tin No."
+												v-model="item.tin_no"
+												:errorField="
+													error?.errors
+														?.amount_except || null
+												"
+												:required="false"
+												placeholder="Ex. 1234567890"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="hdmf_no"
+												label="PAG-IBIG No."
+												v-model="item.hdmf_no"
+												:errorField="
+													error?.errors?.hdmf_no ||
+														null
+												"
+												:required="false"
+												placeholder="Ex. 000111222333"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="phic_no"
+												label="PhilHealth No."
+												v-model="item.phic_no"
+												:errorField="
+													error?.errors?.phic_no ||
+														null
+												"
+												:required="false"
+												placeholder="Ex. 111222333444"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="tax_branch"
+												label="Tax Branch"
+												v-model="item.tax_branch"
+												:errorField="
+													error?.errors?.tax_branch ||
+														null
+												"
+												:required="false"
+												placeholder="Ex. CEBU"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseSelectField
+												id="tax_status"
+												label="Tax Status"
+												v-model="item.tax_status"
+												:errorField="
+													error?.errors?.tax_status ||
+														null
+												"
+												:options="[
+													{
+														value: 'single',
+														label: 'Single',
+													},
+													{
+														value: 'married',
+														label: 'Married',
+													},
+													{
+														value: 'zero_exemption',
+														label: 'Zero Exemption',
+													},
+												]"
+												:required="false"
+											/>
+										</div>
+										<div class="form-group col-4">
+											<BaseInputField
+												id="amount_except"
+												label="Amount Exception"
+												v-model="item.amount_except"
+												:errorField="
+													error?.errors
+														?.amount_except || null
+												"
+												:required="false"
+												placeholder="Ex. 9000.99"
+											/>
 										</div>
 									</div>
 								</div>
@@ -1110,7 +1202,7 @@
 </template>
 
 <script>
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount, watch } from "vue";
 import feather from "feather-icons";
 import EmployeeRelativeModal from "./EmployeeRelativeModal.vue";
 import EmployeeDependentModal from "./EmployeeDependentModal.vue";
@@ -1133,10 +1225,12 @@ import useData from "@/composables/useData";
 import useImage from "@/composables/useImage";
 import useAlert from "@/composables/useAlert";
 import getItem from "../../composables/getItem";
+import useFetch from "@/composables/useFetch";
+import useValidArray from "@/composables/useValidArray";
 import endpoints from "@/utils/endpoints";
 
 export default {
-	name: "CreateCompany",
+	name: "EditEmployee",
 	components: {
 		Alert,
 		Spinner,
@@ -1181,11 +1275,50 @@ export default {
 		const router = useRouter();
 		const route = useRoute();
 		const { error, response, loading, create, unknownError } = useData();
-		const { item, error: errorData, load, loading: isLoading } = getItem(
+		const { item, error: errorData, load } = getItem(
 			route.params.id,
 			endpoints.employee
 		);
+		const { convertToValidArray } = useValidArray();
+		// const employee_class_id = ref("");
+		const employee_classes_array = ref([]);
+		const cost_centers_array = ref([]);
+		const departments_array = ref([]);
+		const dimensions_array = ref([]);
+		const employee_ranks_array = ref([]);
+		const sub_departments_array = ref([]);
+		const branches_array = ref([]);
+		const domContentLoaded = ref(false)
+		const {
+			data: employee_classes,
+			fetch: fetchEmployeeClass,
+		} = useFetch();
+		const { data: cost_centers, fetch: fetchCostCenter } = useFetch();
+		const {
+			data: employee_dropdowns,
+			fetch: fetchEmployeeDropdown,
+		} = useFetch();
 		const { pushAlert } = useAlert();
+
+		const employeeClassClasses = computed(() => {
+			if (domContentLoaded.value) {
+				return employee_classes.value.data.filter(
+					(employee_class_item) =>
+						employee_class_item.id == item.value.employee_class_id
+				);
+			}
+		});
+
+		// watch(
+		// 	() => resigned.value,
+		// 	(count, prevCount) => {
+		// 		resigned.value == "1" &&
+		// 			pushAlert(
+		// 				"info",
+		// 				"Please update your employee class into <Resigned>"
+		// 			);
+		// 	}
+		// );
 
 		const {
 			image: profile_image_path,
@@ -1201,13 +1334,61 @@ export default {
 			deleteImage: deleteSignatureImage,
 		} = useImage();
 
+		const filterDataBaseOnType = (data, type) => {
+			return data.filter((item) => {
+				return item.type === type;
+			});
+		};
+
 		onBeforeMount(async () => {
+			domContentLoaded.value = false;
 			await load();
+
 			item.value.addresses = JSON.parse(item.value.addresses);
 			item.value.relatives = JSON.parse(item.value.relatives);
 			item.value.dependents = JSON.parse(item.value.dependents);
 			// console.log(item.value.addresses)
-			console.log(item.value);
+			console.log("item", item.value);
+
+			await fetchEmployeeClass(endpoints.setupEmployeeEmployeeClass);
+			await fetchCostCenter(endpoints.setupEmployeeCostCenter);
+			await fetchEmployeeDropdown(
+				endpoints.setupEmployeeEmployeeDropdown
+			);
+			console.log("mount", employee_classes.value);
+
+			employee_classes_array.value = convertToValidArray(
+				employee_classes.value.data
+			);
+			cost_centers_array.value = convertToValidArray(
+				cost_centers.value.data
+			);
+			departments_array.value = convertToValidArray(
+				filterDataBaseOnType(
+					employee_dropdowns.value.data,
+					"department"
+				)
+			);
+			dimensions_array.value = convertToValidArray(
+				filterDataBaseOnType(employee_dropdowns.value.data, "dimension")
+			);
+			employee_ranks_array.value = convertToValidArray(
+				filterDataBaseOnType(
+					employee_dropdowns.value.data,
+					"employee_rank"
+				)
+			);
+			sub_departments_array.value = convertToValidArray(
+				filterDataBaseOnType(
+					employee_dropdowns.value.data,
+					"sub_department"
+				)
+			);
+			branches_array.value = convertToValidArray(
+				filterDataBaseOnType(employee_dropdowns.value.data, "branch")
+			);
+
+			domContentLoaded.value = true;
 		});
 
 		const forEditRelative = ref("");
@@ -1334,19 +1515,38 @@ export default {
 				civil_status: item.value.civil_status,
 				extension_name: item.value.extension_name,
 				gender: item.value.gender,
+				tax_branch: item.value.tax_branch,
+				tax_code: item.value.tax_code,
+				amount_except: item.value.amount_except,
+				tin_no: item.value.tin_no,
+				hdmf_no: item.value.hdmf_no,
+				phic_no: item.value.phic_no,
+				date_employed: item.value.date_employed,
+				last_merit: item.value.last_merit,
+				nationality: item.value.nationality,
+				date_employed: item.value.date_employed,
+				resigned: item.value.resigned,
+				resignation_date: item.value.resignation_date,
+				separation_reason: item.value.separation_reason,
 				addresses: JSON.stringify(item.value.addresses),
 				relatives: JSON.stringify(item.value.relatives),
 				dependents: JSON.stringify(item.value.dependents),
 				active: 1,
+
+				employee_class_id: item.value.employee_class_id,
+				cost_center_id: item.value.cost_center_id,
+				dimension_id: item.value.dimension_id,
+				employee_rank_id: item.value.employee_rank_id,
+				department_id: item.value.department_id,
+				sub_department_id: item.value.sub_department_id,
+				branch_id: item.value.branch_id,
 			};
 
-			console.log(data);
+			console.log("data to send", data);
 			// Checking form_data values
 
 			for (var key in data) {
-				if (data[key] !== "null" && data[key] !== null) {
-					form_data.append(key, data[key]);
-				}
+				form_data.append(key, data[key]);
 			}
 
 			if (selectedProfileFile.value) {
@@ -1363,9 +1563,9 @@ export default {
 				);
 			}
 
-			// for (var pair of form_data.entries()) {
-			// 	console.log(pair[0] + ", " + pair[1]);
-			// }
+			for (var pair of form_data.entries()) {
+				console.log(pair[0] + ", " + pair[1]);
+			}
 
 			const res = await create(
 				`${endpoints.employee}/${route.params.id}?_method=PATCH`,
@@ -1485,6 +1685,17 @@ export default {
 			forEditRelative,
 			forEditAddress,
 			forEditDependent,
+
+			employee_classes_array,
+			cost_centers_array,
+			departments_array,
+			dimensions_array,
+			employee_ranks_array,
+			sub_departments_array,
+			branches_array,
+
+			employeeClassClasses,
+			domContentLoaded,
 		};
 	},
 };

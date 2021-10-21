@@ -198,6 +198,18 @@ const routes = [
 				component: () =>
 					import("@/views/setup_schedule_shift/CreateShift.vue"),
 			},
+			{
+				path: "setup/shift/view/:id",
+				name: "view-shift",
+				component: () =>
+					import("@/views/setup_schedule_shift/ViewShift.vue"),
+			},
+			{
+				path: "setup/shift/edit/:id",
+				name: "edit-shift",
+				component: () =>
+					import("@/views/setup_schedule_shift/EditShift.vue"),
+			},
 		],
 	},
 ];
