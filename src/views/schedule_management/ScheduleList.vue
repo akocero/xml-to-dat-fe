@@ -394,7 +394,7 @@ export default {
 		});
 
 		const generateYears = () => {
-			let currentYear = new Date().getFullYear();
+			let currentYear = new Date().getFullYear() - 1;
 			for (let i = 0; i < 10; i++) {
 				years_array.value.push(currentYear);
 				currentYear += 1;
