@@ -50,7 +50,9 @@
 								<tr class="text-secondary">
 									<th class="text-center">Shift Code</th>
 									<th class="text-center">Description</th>
-									<th width="12%">Actions</th>
+									<th width="12%" class="text-center">
+										Actions
+									</th>
 								</tr>
 							</thead>
 							<tbody v-if="!isPending && data?.data?.length">
@@ -58,9 +60,34 @@
 									<td class="text-center">
 										{{ item.code }}
 									</td>
-									<th class="text-center">
+									<td class="text-center">
 										{{ item.description }}
-									</th>
+									</td>
+									<td class="text-center">
+										<router-link
+											:to="{
+												name: 'view-shift',
+												params: { id: item.id },
+											}"
+											class="btn btn-sm btn-transparent"
+										>
+											<i
+												class="far fa-eye text-secondary"
+											></i>
+										</router-link>
+										<!-- <router-link to="create-boiler" class="btn btn-custom-primary">Create User</router-link> -->
+										<router-link
+											:to="{
+												name: 'edit-shift',
+												params: { id: item.id },
+											}"
+											class="btn btn-sm btn-transparent"
+										>
+											<i
+												class="far fa-edit text-secondary"
+											></i>
+										</router-link>
+									</td>
 								</tr>
 							</tbody>
 							<tbody v-else>
