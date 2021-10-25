@@ -210,6 +210,22 @@ const routes = [
 				component: () =>
 					import("@/views/setup_schedule_shift/EditShift.vue"),
 			},
+			{
+				path: "setup/bank",
+				name: "bank",
+				component: () => import("@/views/setup_bank/SetupBankList.vue"),
+			},
+			{
+				path: "setup/bank/create",
+				name: "create-bank",
+				component: () =>
+					import("@/views/setup_bank/CreateSetupBank.vue"),
+			},
+			{
+				path: "setup/bank/edit/:id",
+				name: "edit-bank",
+				component: () => import("@/views/setup_bank/EditSetupBank.vue"),
+			},
 		],
 	},
 ];
