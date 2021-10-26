@@ -29,6 +29,7 @@ import { ref } from "vue";
 import useFetch from "@/composables/useFetch";
 import Spinner from "@/components/Spinner.vue";
 import { useStore } from "vuex";
+import endpoints from "@/utils/endpoints";
 
 export default {
 	name: "SelectCompany",
@@ -38,7 +39,7 @@ export default {
 		const { data, error, fetch, isPending } = useFetch();
 		const store = useStore();
 
-		fetch("setup/user/companies/" + props.user);
+		fetch(endpoints.setupUserCompany + "/" + props.user);
 
 		const handleClick = (item) => {
 			store.commit("setCompany", item);

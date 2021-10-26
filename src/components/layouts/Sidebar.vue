@@ -167,6 +167,21 @@
 								</router-link>
 							</li>
 						</ul>
+						<ul
+							class="nav nav-treeview"
+							v-if="userCan('setup:role:list')"
+						>
+							<li class="nav-item">
+								<router-link
+									:to="{ name: 'bank' }"
+									class="nav-link"
+								>
+									<i class="nav-icon far pr-2">&#9679;</i>
+									<!-- <i class="far fa-circle nav-icon"></i> -->
+									<p>Bank</p>
+								</router-link>
+							</li>
+						</ul>
 					</li>
 
 					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
