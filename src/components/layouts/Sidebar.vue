@@ -20,8 +20,8 @@
 				<div class="info">
 					<a href="#" class="d-block">{{ user.full_name }}</a>
 					<small class="text-white role">{{
-						user.login_type === "admin"
-							? "administrator"
+						user.login_type === 'admin'
+							? 'administrator'
 							: user.role.name
 					}}</small>
 				</div>
@@ -83,16 +83,15 @@
 						>
 							<li class="nav-item">
 								<router-link
-									:to="{ name: 'user' }"
+									:to="{ name: 'setup_license' }"
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
-									<p>User</p>
+									<p>License</p>
 								</router-link>
 							</li>
 						</ul>
-						<ul
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:company:list')"
 						>
@@ -102,12 +101,11 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Company</p>
 								</router-link>
 							</li>
-						</ul>
-						<ul
+						</ul> -->
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:employee:list')"
 						>
@@ -117,12 +115,11 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Employee</p>
 								</router-link>
 							</li>
-						</ul>
-						<ul
+						</ul> -->
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:role:list')"
 						>
@@ -132,12 +129,11 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Role</p>
 								</router-link>
 							</li>
-						</ul>
-						<ul
+						</ul> -->
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:role:list')"
 						>
@@ -147,12 +143,11 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Payroll Parameter</p>
 								</router-link>
 							</li>
-						</ul>
-						<ul
+						</ul> -->
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:role:list')"
 						>
@@ -162,12 +157,11 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Schedule Shift</p>
 								</router-link>
 							</li>
-						</ul>
-						<ul
+						</ul> -->
+						<!-- <ul
 							class="nav nav-treeview"
 							v-if="userCan('setup:role:list')"
 						>
@@ -177,14 +171,13 @@
 									class="nav-link"
 								>
 									<i class="nav-icon far pr-2">&#9679;</i>
-									<!-- <i class="far fa-circle nav-icon"></i> -->
 									<p>Bank</p>
 								</router-link>
 							</li>
-						</ul>
+						</ul> -->
 					</li>
 
-					<li class="nav-header ml-2 mt-2">DATA ENTRY</li>
+					<!-- <li class="nav-header ml-2 mt-2">DATA ENTRY</li>
 					<li class="nav-item" v-if="userCan('employee:list')">
 						<router-link
 							:to="{ name: 'employee-management' }"
@@ -212,6 +205,80 @@
 								Schedule Management
 							</p>
 						</router-link>
+					</li> -->
+
+					<li class="nav-header ml-2 mt-2">REPORTS</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'reports_withholding' }"
+							class="nav-link"
+						>
+							<i
+								v-html="users"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								Withholding Tax
+							</p>
+						</router-link>
+					</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'schedule-management' }"
+							class="nav-link"
+						>
+							<i
+								v-html="iCalendar"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								VAT
+							</p>
+						</router-link>
+					</li>
+
+					<li class="nav-header ml-2 mt-2">FORMS</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'employee-management' }"
+							class="nav-link"
+						>
+							<i
+								v-html="users"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								Withholding Tax
+							</p>
+						</router-link>
+					</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'schedule-management' }"
+							class="nav-link"
+						>
+							<i
+								v-html="iCalendar"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								Final Withholding Tax
+							</p>
+						</router-link>
+					</li>
+					<li class="nav-item" v-if="userCan('employee:list')">
+						<router-link
+							:to="{ name: 'schedule-management' }"
+							class="nav-link"
+						>
+							<i
+								v-html="iCalendar"
+								class="nav-icon nav-icon fas pr-2"
+							></i>
+							<p>
+								VAT
+							</p>
+						</router-link>
 					</li>
 				</ul>
 			</nav>
@@ -221,69 +288,69 @@
 	</aside>
 </template>
 <script>
-import feather from "feather-icons";
-import { computed } from "vue";
-import { useStore } from "vuex";
-import useAbility from "@/composables/useAbility";
+import feather from 'feather-icons';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
+import useAbility from '@/composables/useAbility';
 export default {
-	name: "Sidebar",
+	name: 'Sidebar',
 	computed: {
 		chevronLeft: function() {
-			return feather.icons["chevron-left"].toSvg({
-				width: 16,
+			return feather.icons['chevron-left'].toSvg({
+				width: 16
 			});
 		},
 		tool: function() {
-			return feather.icons["tool"].toSvg({
-				width: 20,
+			return feather.icons['tool'].toSvg({
+				width: 20
 			});
 		},
 		home: function() {
-			return feather.icons["home"].toSvg({
-				width: 20,
+			return feather.icons['home'].toSvg({
+				width: 20
 			});
 		},
 		settings: function() {
-			return feather.icons["settings"].toSvg({
-				width: 20,
+			return feather.icons['settings'].toSvg({
+				width: 20
 			});
 		},
 		database: function() {
-			return feather.icons["database"].toSvg({
-				width: 20,
+			return feather.icons['database'].toSvg({
+				width: 20
 			});
 		},
 		messageCircle: function() {
-			return feather.icons["message-circle"].toSvg({
-				width: 20,
+			return feather.icons['message-circle'].toSvg({
+				width: 20
 			});
 		},
 		bell: function() {
-			return feather.icons["bell"].toSvg({
-				width: 20,
+			return feather.icons['bell'].toSvg({
+				width: 20
 			});
 		},
 		fileText: function() {
-			return feather.icons["file-text"].toSvg({
-				width: 20,
+			return feather.icons['file-text'].toSvg({
+				width: 20
 			});
 		},
 		users: function() {
-			return feather.icons["users"].toSvg({
-				width: 20,
+			return feather.icons['users'].toSvg({
+				width: 20
 			});
 		},
 		iCalendar: function() {
-			return feather.icons["calendar"].toSvg({
-				width: 20,
+			return feather.icons['calendar'].toSvg({
+				width: 20
 			});
-		},
+		}
 	},
 	setup() {
 		const store = useStore();
 		const user = computed(() => store.getters.getUser);
 		const company = computed(() => store.getters.getCompany);
-		const user_name_array = user.value.full_name.split(" ");
+		const user_name_array = user.value.full_name.split(' ');
 		const { userCan } = useAbility();
 		//console.log(user_name_array)
 		const userInitial = `${user_name_array[0].substr(
@@ -304,9 +371,9 @@ export default {
 			user,
 			userInitial,
 			company,
-			userCan,
+			userCan
 		};
-	},
+	}
 };
 </script>
 <style scoped>

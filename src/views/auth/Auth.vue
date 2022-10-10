@@ -2,12 +2,13 @@
 	<div class="row auth-container">
 		<div class="col-8 bg-navy-blue auth-right">
 			<div class="content pt-5">
-				<img
+				<!-- <img
 					src="@/assets/images/Payroll-Pro-Logo-white.png"
 					alt=""
 					class="pec-logo"
-				/>
-				<p class="mssc">By Mustard Seed Systems Corporation</p>
+				/> -->
+				<h2 class="text-white">XML to DAT Converter</h2>
+				<p class="">By Mustard Seed Systems Corporation</p>
 				<h4 class="h6 pb-2">Version 1.0.1</h4>
 				<!-- <p>
 					Lorem, ipsum dolor sit amet consectetur adipisicing elit.
@@ -38,7 +39,7 @@
 							placeholder="Enter email"
 							v-model="login_id"
 							:class="[
-								error && error.errors?.login_id && 'is-invalid',
+								error && error.errors?.login_id && 'is-invalid'
 							]"
 						/>
 						<i v-html="mailIcon" class="input-icon"></i>
@@ -62,7 +63,7 @@
 							placeholder="Password"
 							v-model="password"
 							:class="[
-								error && error.errors?.password && 'is-invalid',
+								error && error.errors?.password && 'is-invalid'
 							]"
 						/>
 						<i
@@ -115,41 +116,41 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import useLogin from "@/composables/useLogin";
-import useAlert from "@/composables/useAlert";
-import Alert from "@/components/Alert";
-import SelectCompany from "./SelectCompany";
-import { useStore } from "vuex";
-import feather from "feather-icons";
+import { ref, computed } from 'vue';
+import useLogin from '@/composables/useLogin';
+import useAlert from '@/composables/useAlert';
+import Alert from '@/components/Alert';
+import SelectCompany from './SelectCompany';
+import { useStore } from 'vuex';
+import feather from 'feather-icons';
 
 export default {
-	name: "Auth",
+	name: 'Auth',
 
 	components: {
 		Alert,
-		SelectCompany,
+		SelectCompany
 	},
 	computed: {
 		mailIcon: function() {
-			return feather.icons["mail"].toSvg({
-				width: 18,
+			return feather.icons['mail'].toSvg({
+				width: 18
 			});
 		},
 		eye: function() {
-			return feather.icons["eye"].toSvg({
-				width: 19,
+			return feather.icons['eye'].toSvg({
+				width: 19
 			});
 		},
 		eyeOff: function() {
-			return feather.icons["eye-off"].toSvg({
-				width: 19,
+			return feather.icons['eye-off'].toSvg({
+				width: 19
 			});
-		},
+		}
 	},
 	setup() {
-		const login_id = ref("");
-		const password = ref("");
+		const login_id = ref('');
+		const password = ref('');
 		const showPassword = ref(false);
 		const store = useStore();
 		const { response, error, login, isPending } = useLogin();
@@ -160,19 +161,19 @@ export default {
 
 			const data = {
 				login_id: login_id.value.toLowerCase(),
-				password: password.value,
+				password: password.value
 			};
 
-			await login("auth", data);
+			await login('auth', data);
 			if (error.value) {
 				console.log(error.value);
-				pushAlert("error", "Email or Password is Incorrect!");
+				pushAlert('error', 'Email or Password is Incorrect!');
 			} else {
 				// user.value = response.value
 				// console.log(response.value.login_id)
-				store.commit("setUser", response.value.user);
-				store.commit("setToken", response.value.token);
-				pushAlert("success", "Choose a Company");
+				store.commit('setUser', response.value.user);
+				store.commit('setToken', response.value.token);
+				pushAlert('success', 'Choose a Company');
 				//   router.push({path: '/app/dashboard'} )
 				// window.location = "http://localhost:8080/app/dashboard";
 			}
@@ -180,13 +181,13 @@ export default {
 
 		const handleShowPassword = (e) => {
 			// console.log(e.target)
-			var x = document.getElementById("password");
-			if (x.type === "password") {
+			var x = document.getElementById('password');
+			if (x.type === 'password') {
 				showPassword.value = true;
-				x.type = "text";
+				x.type = 'text';
 			} else {
 				showPassword.value = false;
-				x.type = "password";
+				x.type = 'password';
 			}
 		};
 
@@ -205,9 +206,9 @@ export default {
 			handleCloseModal,
 			user,
 			showPassword,
-			handleShowPassword,
+			handleShowPassword
 		};
-	},
+	}
 };
 </script>
 
@@ -224,7 +225,7 @@ export default {
 }
 .auth-right {
 	/* background-color: #04164767; */
-	background-image: url("../../assets/images/Corporate.jpg");
+	background-image: url('../../assets/images/Corporate.jpg');
 	background-size: cover;
 	background-repeat: no-repeat;
 }
@@ -235,7 +236,7 @@ export default {
 }
 
 .auth-right::after {
-	content: "";
+	content: '';
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -253,6 +254,11 @@ export default {
 	position: relative;
 	/* height: calc(100% - 5rem); */
 	z-index: 100;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	justify-content: center;
+	margin-top: -8rem;
 	/* margin-top: 5rem; */
 	/* margin-left: 2rem; */
 	/* color: white; */
@@ -272,7 +278,8 @@ export default {
 
 .auth-right .content p,
 .auth-right .content h5,
-.auth-right .content h4 {
+.auth-right .content h4,
+.auth-right .content h2 {
 	color: white;
 	width: 70%;
 	margin: 0 auto;
@@ -281,5 +288,10 @@ export default {
 
 .auth-right .content h5 {
 	padding-top: 3rem;
+}
+
+.auth-right .content h2 {
+	font-size: 4rem;
+	/* margin-left: 10px; */
 }
 </style>
