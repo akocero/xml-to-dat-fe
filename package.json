@@ -1,37 +1,37 @@
 {
-  "name": "pec-fe",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
-  },
-  "dependencies": {
-    "admin-lte": "^3.1.0",
-    "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
-    "core-js": "^3.6.5",
-    "feather-icons": "^4.28.0",
-    "jquery": "^3.6.0",
-    "js-cookie": "^2.2.1",
-    "moment": "^2.29.1",
-    "uuid": "^8.3.2",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "sass": "^1.55.0",
-    "sass-loader": "^8.0.2"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+	"name": "xml-to-dat",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build"
+	},
+	"dependencies": {
+		"admin-lte": "^3.1.0",
+		"axios": "^0.21.1",
+		"bootstrap": "^4.6.0",
+		"core-js": "^3.6.5",
+		"feather-icons": "^4.28.0",
+		"jquery": "^3.6.0",
+		"js-cookie": "^2.2.1",
+		"moment": "^2.29.1",
+		"uuid": "^8.3.2",
+		"vue": "^3.0.0",
+		"vue-router": "^4.0.0-0",
+		"vuex": "^4.0.0-0"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-babel": "~4.5.0",
+		"@vue/cli-plugin-router": "~4.5.0",
+		"@vue/cli-plugin-vuex": "~4.5.0",
+		"@vue/cli-service": "~4.5.0",
+		"@vue/compiler-sfc": "^3.0.0",
+		"sass": "^1.55.0",
+		"sass-loader": "^8.0.2"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not dead"
+	]
 }
